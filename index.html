@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La Tortue</title>
+<meta name="description" content="Des réflexions sur la société, la philosophie, la sociologie, la littérature et l’actualité, nourries par l’analyse et les données.">
+<link rel="stylesheet" href="charte.css">
+<script src="menu.js" defer></script>
+<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+<link rel="shortcut icon" href="favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="La Tortue" />
+<link rel="manifest" href="favicon/site.webmanifest" /></head>
+<body>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contacts.html">Contacts</a>
+        <a href="newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <section class="intro">
+      <h1>La Tortue qui pense</h1>
+      <div class="ornement"></div>
+      <p>À cet endroit, vous trouverez des réflexions de toutes sortes sur notre monde et les mécanismes sous-jacents qui l'organisent. Bonne lecture !</p>
+    </section>
+
+      <p class="etiquette">Édito</p>
+      <div class="lecture-texte">
+        <p>Dans une enquête publiée le 19 octobre, Médiapart révèle le témoignage troublant d’un commissaire du renseignement. Ce dernier affirme avoir reçu la consigne explicite d’imputer le mouvement social à La France insoumise : « On nous demande d’écrire que la France insoumise (LFI) est derrière le mouvement ». Si elle est avérée, cette directive résonne directement avec l'allocution présidentielle du 18 octobre 2026, illustrant une dérive autoritaire et un durcissement du contrôle démocratique.</p>
+        <p><a href="articles/decryptage-discours-presidentiel.html" class="lien">Consulter notre analyse du discours présidentiel.</a></p>
+        <p>Ce type de dérive évoque inévitablement l'un des plus grands scandales politiques du XX<sup>e</sup> siècle : l'affaire du Watergate. Si l'histoire a surtout retenu le cambriolage du siège du Parti démocrate par les hommes de Richard Nixon en 1972, le véritable scandale d'État résidait dans l'usage détourné des institutions. L'administration américaine avait en effet exigé du FBI et de la CIA qu'ils espionnent ses opposants, fabriquent des récits compromettants et étouffent des affaires pour maintenir son pouvoir.</p>
+        <p>Face à une enquête fédérale qui menaçait de remonter jusqu'à son comité de réélection, la Maison-Blanche est directement intervenue pour bloquer les investigations. <i>« Très bien. Très bien, parfait. [...] Appelez-le. Vous avez compris ? Jouez la carte de la fermeté. C'est comme ça qu'ils jouent, et c'est comme ça qu'on va jouer »</i>, ordonnait ainsi Nixon à son chef de cabinet Bob Haldeman, lors d'un entretien capté par le système d'enregistrement secret du Bureau ovale. Révélée par la commission d'enquête du Sénat puis rendue publique sous la contrainte de la Cour suprême en 1974, la preuve irréfutable de cet abus de pouvoir contraindra le président américain à la démission.</p>
+        <p>Notons à ce titre que la France insoumise (LFI) a annoncé saisir la Cour de justice de la République contre le ministre de l’Intérieur Laurent Nuñez pour abus d’autorité.</p>
+      </div>
+
+    <main id="articles" style="margin-top: 5rem;">
+      <p class="etiquette">Derniers articles</p>
+      <div class="liste">
+        <article class="article-row">
+          <a class="article" href="articles/le-hussard.html">
+            <span class="date">23 octobre 2026</span>
+            <span class="article-corps">
+              <h2>Littérature &amp; Politique sur Internet : étude de cas du Hussard</h2>
+              <span class="article-description" id="description-hussard" aria-hidden="true">
+                Le Hussard est une chaine de vulgarisation littéraire, ou en tout cas, elle prétend l'être. Qu'en est-il vraiment ? Quels sont les mécanismes à l'oeuvre sous ses titres polémiques ? Nous nous proposons de les explorer dans cet article à travers une analyse de réseaux.              </span>
+            </span>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-hussard">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/decryptage-discours-presidentiel.html">
+            <span class="date">20 octobre 2026</span>
+            <span class="article-corps">
+              <h2>Décryptage du discours présidentiel du 18 octobre 2026</h2>
+              <span class="article-description" id="description-discours-presidentiel" aria-hidden="true">
+                Au lendemain des manifestations violentes du 17 octobre 2026, l’allocution solennelle du Président de la République prétend ramener le calme. Mais à travers un cadrage centré sur le maintien de l’ordre et l’évitement des causes profondes de la colère sociale, le discours présidentiel opère un verrouillage démocratique inquiétant. Analyse d’une stratégie de langage qui préfère la répression au dialogue.
+              </span>
+            </span>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-discours-presidentiel">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/thelyson-orelien.html">
+            <span class="date">12 octobre 2026</span>
+            <span class="article-corps">
+              <h2>Thélyson Orélien, un scandale littéraire ? Une analyse statistique</h2>
+              <span class="article-description" id="description-thelyson" aria-hidden="true">
+                Dans cet article, nous verrons comment le livre de Thélyson Orélien a pu faire partie de la première sélection du Goncourt.
+              </span>
+            </span>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-thelyson">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/manifestations-lyceennes.html">
+            <span class="date">10 octobre 2026</span>
+            <span class="article-corps">
+              <h2>Revendications lycéennes et traitement médiatique : une lutte asymétrique</h2>
+              <span class="article-description" id="description-manifestations" aria-hidden="true">
+                Retour sur le traitement médiatique du mouvement lycéen dans les journaux télévisés nationaux.
+              </span>
+            </span>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-manifestations">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+      </div>
+      <p class="suite"><a href="articles.html">Tous les articles</a></p>
+    </main>
+
+    <main id="articles-a-venir" style="margin-top: 5rem;">
+      <p class="etiquette">Articles à venir</p>
+      <div class="liste">
+        <a class="article" href="error.html">
+          <span class="date">À venir</span>
+          <h2>Une analyse économique du jeu Wikimasters</h2>
+          <span class="fleche">→</span>
+        </a>
+        <a class="article" href="error.html">
+          <span class="date">À venir</span>
+          <h2>Que cache le retour de la condamnation à mort publique aux États-Unis ?</h2>
+          <span class="fleche">→</span>
+        </a>
+        <a class="article" href="error.html">
+          <span class="date">À venir</span>
+          <h2>Les sites Internet de classements, objectifs ?</h2>
+          <span class="fleche">→</span>
+        </a>
+        <a class="article" href="error.html">
+          <span class="date">À venir</span>
+          <h2>La non-violence, un privilège ?</h2>
+          <span class="fleche">→</span>
+        </a>
+      </div>
+    </main>
+
+
+
+  
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
+            <li><a href="report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+    </div>
+</body>
+
+
+</html>

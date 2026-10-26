@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Page en préparation — La Tortue</title>
+  <meta name="description" content="Cette page est en cours de préparation et sera publiée prochainement.">
+  <link rel="stylesheet" href="../charte.css">
+  <script src="../menu.js" defer></script>
+  <style>
+    /* Pas de lettrine sur une page juridique */
+    .billet-texte > p:first-of-type::first-letter {
+      float: none; margin: 0; font-size: inherit; line-height: inherit; color: inherit;
+    }
+  </style>
+<link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+<link rel="shortcut icon" href="../favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png" />
+<link rel="manifest" href="../favicon/site.webmanifest" />
+</head>
+<body>
+
+  <div class="page page--lecture">
+
+    <header>
+      <a class="marque" href="../index.html">
+        <img class="logo" src="../logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="../index.html#articles">Articles</a>
+        <a href="../a-propos.html">À propos</a>
+        <a href="../contacts.html">Contacts</a>
+        <a href="../newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <main>
+
+    <div class="billet-entete">
+      <h1>Page en préparation</h1>
+    </div>
+
+    <div class="billet-texte">
+
+      <p>Cette page est en cours de préparation. Elle sera publiée prochainement. Pour toute demande d’information, vous pouvez écrire à <a class="lien" href="mailto:latortuequipense@yahoo.com">latortuequipense@yahoo.com</a>.</p>
+      <p><a class="lien" href="../index.html#articles-a-venir">Retourner à l'accueil</a></p>
+
+    </div>
+
+    </main>
+
+      <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+  </div>
+
+</body>
+</html>

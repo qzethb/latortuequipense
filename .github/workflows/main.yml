@@ -1,0 +1,39 @@
+name: IndexNow Submission
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  indexnow:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Submit URLs to IndexNow
+        run: |
+          payload=$(python3 - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+
+          namespace = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          sitemap = ET.parse("sitemap.xml")
+          urls = [node.text for node in sitemap.findall(".//sm:loc", namespace)]
+
+          print(json.dumps({
+              "host": "latortuequipense.fr",
+              "key": "7f0ba42245a045668ce86277ba63e306",
+              "keyLocation": "https://latortuequipense.fr/7f0ba42245a045668ce86277ba63e306.txt",
+              "urlList": urls,
+          }))
+          PY
+          )
+
+          curl --fail-with-body --silent --show-error \
+               -H "Content-Type: application/json; charset=utf-8" \
+               -d "$payload" \
+               "https://api.indexnow.org/IndexNow"

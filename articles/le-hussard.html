@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le Hussard : littérature, politique et réseaux — La Tortue</title>
+<meta name="description" content="Le Hussard se présente comme une chaîne de vulgarisation littéraire. Que révèlent ses titres polémiques ? Une analyse de réseaux explore les mécanismes à l’œuvre.">
+<meta name="keywords" content="Le Hussard, YouTube, extrême droite, droite identitaire, métapolitique, bataille culturelle, théorie des graphes, analyse de réseau, Gephi, littérature, Hussards, sas de légitimation">
+<link rel="stylesheet" href="../charte.css">
+<script src="../menu.js" defer></script>
+<link rel="stylesheet" href="../article.css">
+<script src="../schema-descriptions.js" defer></script>
+<link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+<link rel="shortcut icon" href="../favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png" />
+<link rel="manifest" href="../favicon/site.webmanifest" />
+</head>
+<body>
+  <div class="progression" aria-hidden="true"></div>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="../index.html">
+        <img class="logo" src="../logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="../index.html#articles">Articles</a>
+        <a href="../a-propos.html">À propos</a>
+        <a href="../a-propos.html#contact">Contact</a>
+        <a href="../newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <article>
+      <div class="billet-entete">
+        <h1>Littérature &amp; Politique sur Internet : étude de cas du Hussard</h1>
+        <div class="ornement"></div>
+        <p class="sous-titre">Analyse du positionnement idéologique, de la cartographie des réseaux et de l'espace des commentaires d'une chaîne YouTube</p>
+        <p class="billet-meta"><time datetime="2026-10-23">23 octobre 2026</time><span>10 min de lecture</span></p>
+        <div class="billet-actions">
+          <button type="button" onclick="window.print()">
+            Télécharger l’article en PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="billet-texte">
+<p>Sous ses airs de vitrine culturelle dédiée aux belles-lettres et au panache français, la chaîne YouTube <em>Le Hussard</em> est quasi unanimement étiquetée à l’extrême droite. Pourtant, la « propagande » politique directe n’y occupe qu’une fraction marginale du temps d’antenne. D’où vient alors cet ancrage ? Bien plus qu’un simple espace de vulgarisation littéraire, <em>Le Hussard</em> fonctionne en réalité comme un subtil « sas de légitimation », faisant le pont entre l’amour de la culture classique et l’écosystème de la droite radicale.</p>
+<h2>Les chaînes du Hussard</h2>
+<p><em>Le Hussard</em> est donc une chaîne YouTube, qui produit régulièrement des vidéos (330 à ce jour depuis 2021) sur la littérature (l’objectif affiché est d’ailleurs de faire de la « vulgarisation littéraire », mais à l’aune des grands débats de société, de l’histoire des idées et de la politique, en adoptant un ton pamphlétaire, critique, polémique et très ancré à droite). Elle dispose d’une certaine notoriété, puisqu’elle cumule pas moins de 100 000 abonnés. Une chaîne parallèle intitulée <em>L’Empire des lettres</em> existe et sert essentiellement de relais pour prolonger les thématiques de la chaîne principale avec des discussions de fond, souvent aux côtés d’autres intervenants, comme <em>Mos Majorum</em>. En 2023 est créée une maison d’édition, <em>La Giberne</em>.</p>
+<h2>Quel bord politique ?</h2>
+<p>Il paraît assez évident au premier abord lorsqu’on clique sur la chaîne du <em>Hussard</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> : « Ces wokes musulmans inventent la « halal romance » : j’ai mené l’enquête ! », « Sylvain Tesson dézingue les gauchistes de France Inter ! », ainsi de suite. En réalité ce n’est pas le cas. Les titres volontairement polémiques sont répandus sur YouTube, ils font partie d’une stratégie normale de visibilité et ne traduisent pas nécessairement leur contenu. Par exemple, si nous prenons au hasard la dernière vidéo produite, intitulée « Le zadiste Damasio découvre le réel : il vire à droite ? (Va-t-il survivre ?) », sur 46 minutes (publicité et placement de produits compris), un peu moins de cinq ou six, segmentées dans l’ensemble du script, s’inscrivent dans un positionnement politique. En cela, contrairement à ce qu’aurait pu suggérer tout l’emballage provocateur, ce qu’on pourrait qualifier de « propagande politique » n’intervient qu’en de rares endroits (entre un huitième et un dixième du temps total). Il n’y a pas de démonstration programmatique continue (hormis pour l’islamophobie, qui est, on le rappelle, punie par les articles 24, 33 et 32 de la loi du 29 juillet 1881 sur la liberté de la presse), il s’agit plutôt d’une orientation de combat (en témoigne le vocabulaire) qui fonctionne par opposition, critique systématique et rejet de la gauche. Or, cela ne signifie pas nécessairement un bord politique à droite, l’extrême droite, à une droite identitaire, à une droite radicale, etc., ni n’indique du degré de radicalité (hormis, encore une fois, pour l’islamophobie).</p>
+<h2>Alors pourquoi Le Hussard est-il situé à droite et à l’extrême-droite identitaire ?</h2>
+<p>Lorsqu’on déporte le regard hors de la sphère YouTube pour observer la manière dont la chaîne est qualifiée par des observateurs extérieurs, on constate pourtant un consensus quasi systématique pour l’ancrer à droite. Cet étiquetage transparaît dès les annuaires spécialisés<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, qui la présentent volontiers comme une structure associant littérature, culture et « commentaire politique sur un ton combatif », un positionnement que l’on retrouve sur la plateforme <em>A Droite</em><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> à travers des sélections de vidéos explicitement anti-gauche telles que « Comment la gauche est devenue un réseau de prédateurs ? » ou « Comment guérir le gauchisme ? ». Ce profil conservateur et antimoderniste se lit également dans l’analyse de <em>Table Bleue</em><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, qui la dépeint en pamphlétaire hostile à la modernité littéraire et au politiquement correct, quand des espaces comme <em>Zone Critique</em><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> choisissent au contraire de souligner, lors d’un entretien, son ancrage littéraire et son recours aux « enjeux contemporains » sans formuler d’étiquette partisane stricte. Enfin, du côté des espaces communautaires ou de discussion, si les utilisateurs de <em>r/SalonDesDroites</em><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> l’intègrent parmi les créateurs de leur bord tout en insistant sur son contenu littéraire, ceux de <em>r/TropPeurDeDemander</em><a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a> se montrent plus sévères, la comparant aux débuts du <em>Raptor</em> et lui reprochant un style polémique traversé d’attaques parfois personnelles.</p>
+<h2>Problématique et thèse</h2>
+<p>Ainsi, et ce sera notre hypothèse, le positionnement à une droite identitaire et radicale de la chaîne de L. (propriétaire des chaînes associées au <em>Hussard</em>), ne vient peut-être pas du contenu des vidéos explicite, mais plutôt des signaux invisibles mis en place par le vidéaste (qui fonctionnent comme points de ralliement, au sens des conventions de Schelling, et on trouve là une deuxième explication des titres), du public qui regarde les vidéos, et de sa position géographique très particulière au sein de l’écosystème YouTube. Et à propos de ces signaux…</p>
+<h2>… Projet littéraire et filiation avec l’extrême-droite</h2>
+<p>Si on peut comprendre à mesure que l’on regarde les vidéos de la chaîne, le soubassement théorique qui fonde sa conception de la littérature, on peut également en trouver les principes explicites dans la section <em>À-propos</em> de la maison d’édition associée puisque celle-ci entend « rendre à la littérature française un peu de la flamboyance qui a fait ses grandes heures » face « à la morosité d’un style postmoderne et dépourvu de panache »<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. Cette insistance sur la forme et l’élégance s’inscrit en réalité dans toute une filiation : ainsi Vincent Berthelier dans un article « Le style, c’est la droite ? » paru en 2022 écrit « Si, parmi les Hussards, Jacques Laurent, Roger Nimier ou Antoine Blondin cherchent tant à discréditer toute forme d’engagement littéraire et à déplacer l’attention sur les qualités stylistiques de la littérature de droite, c’est d’abord pour minimiser l’engagement vichyste ou hitlérien de la droite littéraire sous l’Occupation et pour réhabiliter leurs aînés (Louis-Ferdinand Céline, Paul Morand, Jacques Chardonne, Pierre Drieu La Rochelle, etc.) en les présentant comme des stylistes. »<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> Or ces figures ne sont pas neutres dans les milieux identitaires : les travaux de Pauline Picco, publiés dans <em>Les Liaisons dangereuses. Les extrêmes droites en France et en Italie (1960-1940)</em> montrent un Adriano Romualdi célébrant Drieu-la-Rochelle comme défenseur d’une « Europe aryenne »<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>, un Louis-Ferdinand Céline persécuté par la « franc-maçonnerie littéraire » selon les mots du quotidien <em>Secolo</em>, etc. Remarquons, au passage que notre étude de cas porte précisément sur une chaîne dont le nom est <em>Le Hussard</em>, ce même nom que Bernard Frank utilisa pour qualifier Antoine Blondin et Jacques Laurent.</p>
+<h2>De fait, une chaîne qui sert de porte d’entrée vers une droite idéologique et identitaire</h2>
+<p>Toutefois, prendre isolément la chaîne du Hussard serait une erreur. En réalité, elle s’inscrit dans tout un écosystème. Dans l’extrait du graphe présenté ci-dessous, l’analyse du positionnement des chaînes permet d’identifier la distance et les liens qui les relient. On distingue, après spatialisation géographique deux grandes sphères : la première, que l’on qualifiera de « droite identitaire et idéologique », s’organise autour d’une figure structurante, <em>Métapolitique</em>, ainsi que d’un sous-pôle incarné par <em>L’Œil de l’élite</em> ; la seconde, que l’on nommera « culture et contre-culture identitaire », rassemble trois acteurs majeurs que sont le pôle <em>Le Hussard</em> et <em>L’Empire des lettres</em> (géré par F. L.), l’écosystème <em>Maudin</em> (<em>Maudin Malin</em>, <em>Radio Maudin</em> et <em>Le Musée Maudin</em>, détenu par X.), et enfin la chaîne <em>Mos Majorum</em>, qui vient compléter ce réseau.</p>
+<figure><img src="../images/le-hussard-1.png" alt="Extrait du graphe des chaînes YouTube après spatialisation. Une ellipse jaune, « Droite identitaire et idéologique », regroupe notamment Métapolitique et L’Œil de l’élite ; une ellipse bleue, « Culture et contre-culture identitaire », regroupe Le Hussard, L’Empire des lettres, Radio Maudin, Le Musée Maudin et Mos Majorum. Les deux ellipses se chevauchent." width="1025" height="656" loading="lazy"><figcaption>Extrait du graphe des chaînes YouTube : deux sphères, « droite identitaire et idéologique » et « culture et contre-culture identitaire »</figcaption></figure>
+<p>Comment s’illustre cette fonction transitoire qu’occupe la chaîne du Hussard ? Nous nous sommes pour cela intéressés aux points les plus proches de son réseau que voici relevés : <em>Quotidien</em>, <em>Des Logocrates</em>, <em>Corentin P. Bürki</em>, <em>Thinkerview</em>, <em>Avekin</em> <em>Hëf</em>, <em>NayR Essayiste JV</em> et <em>FORA.tv</em>. Si nous pouvons écarter d’emblée <em>Quotidien</em> (biais du logiciel dû à une vidéo de L. sur l’émission), il ne reste aucune chaîne affiliée directement à une droite radicale, au contraire : <em>Thinkerview</em> produit des interviews sur le modèle de <em>Legend</em>, et reçoit des publics de tous bords politiques. Idem pour <em>Des Logocrates</em>, chaîne d’analyse littéraire, de rhétorique et de discours philosophique dont le prisme est axé sur la langue et le débat d’idées, souvent ancré dans une tradition humaniste ou classique sans affichage partisan direct. Les autres chaînes relèvent de la création culturelle, artistique, ou de la pop-culture.</p>
+<figure><img src="../images/le-hussard-2.png" alt="Extrait du graphe : le nœud Le Hussard, au centre, relié par des flèches à L’Empire des lettres, Thinkerview, Des Logocrates, Avekin Hëf, Quotidien, Métapolitique, Ralph Müller et Maudin Malin." width="1330" height="846" loading="lazy"><figcaption>Les chaînes les plus proches du Hussard dans le graphe (extrait du graphe)</figcaption></figure>
+<p>Cela s’explique par un socle d’intérêts partagés : les belles-lettres, l’exigence de la forme, le théâtre, la philosophie ou encore le débat d’idées. Le rapprochement entre ces différentes chaînes, opéré par YouTube (et les acteurs présents sur YouTube, y compris les youtubeurs), découle ainsi d’une continuité naturelle visant à satisfaire un public amateur d’art et de critique culturelle. Une fois le spectateur capturé dans l’écosystème du <em>Hussard</em>, il est possible (mais non avéré) que le jeu des recommandations algorithmiques et la proximité idéologique l’orientent progressivement vers un second cercle du réseau, composé de chaînes métapolitiques plus explicites (<em>Maudin</em>, <em>Mos Majorum</em> ou <em>Métapolitique</em>).</p>
+<h2>Quelle proximité idéologique du spectateur avec une extrême-droite radicale ?</h2>
+<p>Pour montrer cette fonction transitoire, on s’intéresse ici à l’une des vidéos<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a> du <em>Hussard</em> dont nous avons étudié les commentaires. On constate, au premier abord, un positionnement global à droite du public, sinon à l’extrême-droite, la distinction entre les deux se faisant par la présence ou non d’essentialisme racial, du complotisme, de tropes racistes ou antisémites :</p>
+<figure><img src="../images/le-hussard-3.png" alt="Histogramme de la somme des likes selon le positionnement politique des commentaires : la catégorie D dépasse 1 000 likes, XD atteint environ 220 et C environ 120 ; G et XG sont à zéro." width="678" height="410" loading="lazy"><figcaption>Somme des likes par positionnement politique du commentaire (XD, D, C, G et XG)</figcaption></figure>
+<figure><img src="../images/le-hussard-4.png" alt="Histogramme du nombre de commentaires selon leur caractère politique : environ 102 commentaires D, 52 XD, 35 C, 3 G et 1 XG." width="680" height="410" loading="lazy"><figcaption>Nombre de commentaires selon leur caractère politique (XG, G, C, D et XD)</figcaption></figure>
+<p>5,6 % du total des 300 commentaires analysés présentent des accointances complotistes, et 22 % ont un caractère insultant. Plus généralement, si 35 % des commentaires ne présentent pas d’opinions politiques identifiables, sans charges idéologiques et 20 % expriment une position claire, sans dénigrement personnel durable, 18 % de ces commentaires sont soit sarcastiques, soit méprisants, soit insultants, envers une personne, 11 % étendent ce sarcasme, ce mépris ou ces insultes à un collectif, et 15 % mentionnent des tropes antisémites ou racistes, font de l’essentialisme ethnique ou fantasment une violence.</p>
+<p>On peut ainsi conclure, de façon très prudente, sur une seule vidéo et par extrapolation des commentaires, qu’une proportion significative (20 à 50 %) de l’audience de la chaîne consomme le contenu du <em>Hussard</em> sous un angle purement culturel ou esthétique sans manifester d’ancrage partisan explicite. En revanche, la présence, elle aussi significative des tropes évoqués ci-dessus, montre une perméabilité de cet espace à une idéologie identitaire radicale. L’esthétisme mis en avant par la chaîne joue ainsi un rôle de sas de légitimation : en attirant un auditoire amateur de culture, il y a création d’un espace où les positions les plus extrémistes trouvent à la fois résonance et validation.</p>
+<h2>Et quid de la bataille culturelle ?</h2>
+<p>Durant mes recherches, j’ai été étonné de constater cette citation dans l’onglet discussion de la page Wikipédia des hussards<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> : « Il semble que l’article, parfaitement incohérent à l’heure actuelle, ait connu deux vagues successives de rédacteurs. Les premiers, insuffisamment informés (ou motivés par l’envie de donner à leurs désirs politico-littéraires un semblant de réalité), partant du principe que les « Hussards » étaient, vraiment, un « mouvement littéraire » avec un « chef de file ». Une seconde vague de rédacteurs, beaucoup plus sérieux, a – sur quelques années (j’ai remonté l’historique) – montré, citations et preuves à l’appui, qu’il n’y avait jamais eu de « mouvement hussard » et encore moins de « chef de file » ! ».</p>
+<p>Lorsque l’on remonte le fil de l’historique, on note par exemple en 2017 ce passage : « Ce groupe supposé s’est constitué au hasard des rencontres littéraires (chez des éditeurs notamment) et se réunissait dans des cafés du quartier de Saint-Germain-des-Prés dès la fin des années 1940. Ces amis vivaient dans de petits hôtels très modestes aux alentours de l’église de Saint-Germain, qui n’avaient que des clients permanents payant au mois. Ces écrivains passaient une partie de leur journée à écrire dans les différents bistros qui voulaient bien d’eux. Ils se retrouvaient au Bar du Pont-Royal, au Bar Bac ou, un temps, au siège des éditions Gallimard, et le soir « Aux Assassins », un petit restaurant de la rue Jacob disparu aujourd’hui (il avait été le théâtre d’un crime au début du siècle). Ces réunions informelles accueillaient beaucoup de monde extérieur à la littérature, notamment des peintres et des artistes. » On ne peut que remarquer le ton romancé, le goût de l’anecdote (« les chambres d’hôtel », le fait divers de la rue Jacob). Description contestable par ailleurs, puisqu’un autre contributeur rapporte un contre-récit issu de Michel Déon lui-même : « Nimier et Laurent ne s’aimaient guère, de même que Blondin et Laurent. »<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a></p>
+<p>Y a-t-il eu, comme le prétend l’utilisateur mentionné ci-dessus, une tentative hagiographique de transformation de la réalité ? On ne peut pas l’établir clairement. Le décalage, toutefois, entre cette première version, et les corrections ajoutées, interpelle. Si c’est le cas, nous avons une parfaite illustration de ce que pourrait être « la bataille culturelle » que théorise Gramsci. Elle dote la droite identitaire d’un panthéon esthétique prestigieux, désirable et dégagé de tout soupçon de lourdeur idéologique, en même temps qu’une continuité historique fictive dans laquelle des créateurs contemporains comme <em>Le Hussard</em> peuvent s’inscrire pour légitimer leur propre posture.</p>
+<h2>Conclusion</h2>
+<p>En somme, juger la chaîne <em>Le Hussard</em> au seul volume de son discours « propagandiste » politique direct serait une erreur. Si l’analyse littéraire (et politique) occupe l’essentiel du temps d’antenne, l’ancrage à la droite identitaire s’exerce davantage par une mécanique métapolitique plus subtile. La chaîne agit comme un sas de légitimation. Positionnée à la frontière entre la critique culturelle classique et la sphère radicale (<em>Maudin</em>, <em>Mos Majorum</em>), elle capte un public amateur de belles-lettres et crée un espace poreux aux idées identitaires, et plutôt très vindicatif.</p>
+<h2 id="annexe">Annexe</h2>
+<p>L’analyse des commentaires et la collecte des informations nécessaires à la construction du graphe représentent un volume de données trop important pour être rapporté ici. Si vous souhaitez obtenir ces bases de données (uniquement au format .csv pour le graphe et au format .xlsx pour les commentaires), vous pouvez envoyer un message à l’adresse <a href="mailto:latortuequipense@yahoo.com">latortuequipense@yahoo.com</a>. Vous pouvez également consulter ou télécharger le <a href="../pj/Graphe.pdf">graphe complet en haute résolution (PDF)</a>.</p>
+      </div>
+
+      <section class="notes" aria-label="Notes">
+<ol>
+<li id="fn1"><a href="https://www.youtube.com/@LeHussard">Le Hussard - YouTube</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn2"><a href="https://adroite.org/chaines/le-hussard">Le Hussard - chaîne YouTube | A Droite</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn3"><a href="https://adroite.org/videos/comment-la-gauche-est-devenue-un-reseau-de-predateurs">Comment la gauche est devenue un réseau de prédateurs ? - vidéo | A Droite</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn4"><a href="https://tablebleue.ch/le-hussard/">Le Hussard - Table Bleue</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn5"><a href="https://zone-critique.com/critiques/le-hussard-entretien-litterature/">Le Hussard : « La guerre est le grand motif littéraire » - Zone Critique</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn6"><a href="https://www.reddit.com/r/SalonDesDroites/comments/1j8o054/quel_youtubeur_de_droite_vous_suivez/">Reddit - Le cœur d’Internet</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn7"><a href="https://www.reddit.com/r/TropPeurDeDemander/comments/1ow170s/que_regarde_les_jeunes_personnes_politis%C3%A9es_%C3%A0/">Que regarde les « jeunes » personnes politisées à droite pour se distraire intellectuellement ? : r/TropPeurDeDemander</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn8"><a href="https://www.lagiberne.fr/a-propos">Qui sommes-nous ? - Éditions La Giberne</a><a href="#fnref8" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn9"><a href="https://laviedesidees.fr/Le-style-c-est-la-droite">Le style, c’est la droite ? - La Vie des idées</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn10"><a href="https://books.openedition.org/pur/46757">Liaisons dangereuses - Chapitre VII. Des passerelles idéologiques pour penser un monde commun - Presses universitaires de Rennes</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn11"><a href="https://www.youtube.com/watch?v=Zhyy0LLt8hI&amp;t=11s">WF11 3 EA DITL Landscape No Hook</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn12"><a href="https://fr.wikipedia.org/wiki/Les_Hussards_(mouvement_litt%C3%A9raire)">Les Hussards (mouvement littéraire) — Wikipédia</a><a href="#fnref12" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn13"><a href="https://fr.wikipedia.org/wiki/Les_Hussards_(mouvement_litt%C3%A9raire)">Les Hussards (mouvement littéraire) — Wikipédia</a><a href="#fnref13" class="footnote-back" role="doc-backlink">↩</a></li>
+</ol>
+      </section>
+    </article>
+
+    <div class="billet-fin">
+      <div class="ornement"></div>
+      <a class="lien" href="../index.html">Retour à l’accueil</a>
+    </div>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+
+  </div>
+</body>
+</html>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Littérature & Politique sur Internet : étude de cas du Hussard",
+  "datePublished": "2026-10-23T08:00:00+02:00",
+  "dateModified": "2026-10-23T10:30:00+02:00"
+}
+</script>

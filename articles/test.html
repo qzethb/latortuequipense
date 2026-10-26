@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Des cartes, des clics et des millions : l'économie folle de Wikimasters — La Tortue</title>
+<meta name="description" content="Une approche théorique et empirique de la valeur des cartes virtuelles de Wikimasters, le jeu de cartes à collectionner construit sur Wikipédia.">
+<link rel="stylesheet" href="../charte.css">
+<script src="../menu.js" defer></script>
+<link rel="stylesheet" href="../article.css">
+<script src="../schema-descriptions.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.js" integrity="sha384-CwjPRVHTvLiMBFjEoij+QZViMV5rhTOIp7CJzl24JEqpRDA1sJFHVXXLURktbYYp" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.billet-texte'), { throwOnError: false })"></script>
+<link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+<link rel="shortcut icon" href="../favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png" />
+<link rel="manifest" href="../favicon/site.webmanifest" />
+</head>
+<body>
+  <div class="progression" aria-hidden="true"></div>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="../index.html">
+        <img class="logo" src="../logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="../index.html#articles">Articles</a>
+        <a href="../a-propos.html">À propos</a>
+        <a href="../a-propos.html#contact">Contact</a>
+        <a href="../newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <article>
+      <div class="billet-entete">
+        <h1>Des cartes, des clics et des millions&#8202;: l'économie folle de Wikimasters</h1>
+        <div class="ornement"></div>
+        <p class="sous-titre">Une approche théorique et empirique de la valeur des cartes virtuelle</p>
+        <p class="billet-meta"><time datetime="2026-10-17">17 octobre 2026</time><span>19&nbsp;min de lecture</span></p>
+        <div class="billet-actions">
+          <button type="button" onclick="window.print()">
+            Télécharger l'article en PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="billet-texte">
+
+        <h2>Présentation de Wikimasters</h2>
+
+        <p>Wikimasters est un site Internet qui convertit l'ensemble des pages françaises de l'encyclopédie en ligne Wikipédia en cartes à collectionner (on parle en anglais de «&nbsp;TCG&nbsp;» ou <em>Trading Card Game</em>). Développé en mars 2026 par Naïm Ouellet<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, le jeu connait un immense succès en septembre 2026, atteignant presque 200&#8239;000 joueurs quotidiens.</p>
+
+        <h2>Principe du jeu</h2>
+
+        <p>Toutes les dix minutes, le joueur obtient un paquet de cinq cartes dont la rareté dépend la visibilité de la page Wikipédia associée. Il en existe six niveaux&#8239;: légendaire (L), ultra-rare (UR), super-rare (SR), peu commune (PC), commune (C). Le joueur a alors le choix de conserver la carte, de la défausser contre une unité de monnaie (les Wikibidous), de la mettre aux enchères, de la gagner au cours d'une bataille ou de l'échanger. De fait, en plus de ces niveaux de rareté, la carte a en outre des statistiques de combat (plafonnées à 10&#8239;000) qui se fondent sur la qualité et la longueur de l'article Wikipédia.</p>
+
+        <h2>Formalisation économique</h2>
+
+        <p>La possibilité de défausser une carte contre une unité de monnaie permet, de fait, la formation d'un prix plancher équivalent à 1 Wikibidous&#8239;: on parle alors d'un «&nbsp;robinet de monnaie<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>&nbsp;» (l'échange de monnaie virtuelle contre une monnaie réelle, sans qu'il n'y ait de destruction virtuelle en constitue également un). Plus généralement, le marché aux enchères de Wikimasters correspond à l'enchère anglaise ascendante que théorise Vickrey&#8239;: l'information y est transparente (on reviendra là-dessus plus tard dans l'article), c'est-à-dire que tout le monde peut voir l'offre qu'autrui propose, et chacun va miser davantage jusqu'à l'abandon de tous les concurrents (on parle alors parfois de la «&nbsp;malédiction du vainqueur&nbsp;»). Le vendeur attribue, quant à lui, un prix de réserve optimal<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> à sa carte en dessous duquel il refuse de la céder&#8239;: c'est l'équivalent économique de la mise de départ.</p>
+
+        <h2>Valeur d'une carte</h2>
+
+        <p>Adam Smith distingue du prix naturel d'une marchandise (c'est-à-dire la rémunération du travail, du capital et de la terre) le prix du marché, déterminé par les lois classiques de l'offre et de la demande<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Ce que le jeu fournit de plus proche d'un coût de production, si l'on transpose ce modèle, est le temps de tirage nécessaire pour obtenir une carte&#8239;; la visibilité de la page Wikipédia entre à la fois du côté de la demande puisqu'elle produit une désirabilité et à la fois du côté de l'offre puisque la rareté est administrée.</p>
+
+        <h2>Approche mathématique de la valeur d'une carte</h2>
+
+        <p>L'on se propose, dès lors de déterminer le coût de recherche d'une carte de rareté <em>r</em> que l'on considère substituable à n'importe quelle autre carte de rareté équivalente. Puisque le jeu permet de gagner cinq cartes toutes les dix minutes, un joueur peut obtenir environ 30 Wikibidous par heure ou 1 Wikibidous toutes les deux minutes&#8239;; lorsqu'il décide de conserver la carte, il perd 1 Wikibidous, c'est le coût d'opportunité du tirage. Un joueur qui cherche une carte générique de rareté ne paiera donc pas sur le marché un montant supérieur à l'effort moyen nécessaire pour l'obtenir par lui-même. De fait, si la probabilité d'apparition d'une carte de rareté \(r\) lors d'un tirage est \(p_r\), il faut en moyenne \(1/p_r\) tirages pour en obtenir une. Le coût de recherche espéré \(C_r\), exprimé en Wikibidous, s'établit alors à&#8239;:</p>
+
+        <div class="formule">\[ C_r = \frac{1}{p_r} \]</div>
+
+        <p>\(C_r\) est un prix plafond pour les cartes génériques de rareté \(r\), puisque dès lors que la carte est substituable, aucun acheteur ne paiera plus cher sur le marché secondaire que le coût d'obtention par le tirage direct. En revanche, ce plafond s'effondre dès que l'on recherche une page spécifique \(i\). Dans un catalogue de \(N\) pages (soit près de 2,78 millions de cartes), la probabilité de tirer une carte précise par simple hasard devient extrêmement faible (\(p_i = 1/N\)). Le coût de recherche individuel s'élève alors à&#8239;:</p>
+
+        <div class="formule">\[ C_i = \frac{1}{p_i} = N \approx 2{,}78 \times 10^{6} \text{ Wikibidous} \]</div>
+
+        <p>Soit presque dix ans de tirages ininterrompus. Il est manifestement impossible d'obtenir une carte ciblée par le seul tirage aléatoire&#8239;: le prix d'une carte sur le marché dépend alors exclusivement de la demande, qui dépend elle-même de la notoriété de la page Wikipédia associée, de la rareté-stock de la carte et de l'attrait qu'elle exerce sur les collectionneurs. Il en résulte dès lors une structure de prix à deux niveaux&#8239;: l'un générique par rareté, ancré par le coût de la recherche qui fixe le prix plancher des cartes ordinaires et l'autre différencié par carte, déconnecté du coût de recherche, qui dépend de la notoriété et de la préférence des joueurs. Remarquons, de fait, que le coût de recherche d'une carte légendaire est de 1643 Wikibidous et que son prix médian sur le marché des enchères est de 1302 Wikibidous.</p>
+
+        <h2>Fixation théorique du prix</h2>
+
+        <p>Moshe Adler, lorsqu'il reprend en 1985 la théorie des Superstars de Sherwin Rosen<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>, explique la différence de valeur d'un bien à l'autre par un «&nbsp;capital de consommation<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>&nbsp;»&#8239;: c'est-à-dire que les joueurs préfèreront l'achat d'une carte dont ils peuvent discuter et parler (chose rendue possible sur la plateforme grâce à un système de vitrine et de réseau social). On attend donc une relation convexe entre la notoriété et le prix d'une carte sur le marché aux enchères, d'autant que ce prix est possiblement accentué par des effets d'entrainement et une consommation ostentatoire, les joueurs cherchant à spéculer sur les cartes les plus rares&#8239;:<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a></p>
+
+        <figure><img src="../images/wikimasters-1.png" alt="Nuage de points en échelles logarithmiques du prix final des cartes simulées en fonction de la notoriété (vues mensuelles, de 1 à un million) : les points verts s'alignent le long de la droite rouge de pente théorique α = 1,66 (effet superstar), sur une plage de prix allant de 1 à 10 000 000 000 de Wikibidous." width="800" height="600" loading="lazy"><figcaption>Élasticité-prix théorique de l'effet superstar</figcaption></figure>
+
+        <p>On s'intéresse donc à l'élasticité-prix d'une carte à mesure que sa visibilité et sa popularité augmente. Le modèle ci-dessus est théorique, avec un coefficient de pente plus ou moins égal à 1,66<a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a>. Une carte qui fait 200 vues mensuelles devrait se vendre à près de 1&#8239;000 Wikibidous. Les joueurs ici sauront que c'est rarement le cas. En réalité, moins la carte fait de vues, moins elle se vend chère, mais surtout, moins elle est trouvable sur le marché&#8239;!</p>
+
+        <h2>Pourquoi certaines cartes communes n'apparaissent jamais sur le marché aux enchères&#8239;?</h2>
+
+        <p>Puisque le détenteur est assuré de pouvoir défausser sa carte contre une unité de monnaie, il ne mettre en vente cette carte que si le gain net espéré de l'enchère dépasse celui de cette défausse. De fait, on obtient la formule suivante&#8239;:</p>
+
+        <div class="formule">\[ \mathbb{E}[R_i \mid n_i] - c \geq g \]</div>
+
+        <p>Avec \(R_i\) la recette attendue de l'enchère, \(n_i\) le nombre d'enchérisseurs<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a>, \(g\) le gain certain en défaussant et \(c\) le coût de mise en vente. On peut traduire la chose graphiquement, et ainsi obtenir la probabilité qu'un marché existe en fonction de la notoriété d'une carte.</p>
+
+        <figure><img src="../images/wikimasters-2.png" alt="Courbe de la probabilité qu'un marché existe pour une carte en fonction de sa notoriété (vues mensuelles, échelle logarithmique de 1 à 100 000) : la courbe sigmoïde, de forme P(nᵢ > 0) = Λ(α + β ln vᵢ), croît de 0,2 pour 25 vues mensuelles à 0,8 au-delà de mille vues mensuelles, en franchissant le seuil de 0,5 en cours de route." width="800" height="600" loading="lazy"><figcaption>Probabilité d'existence d'un marché selon la notoriété (modèle théorique)</figcaption></figure>
+
+        <p>Pour 25 vues mensuelles sur une page Wikipédia, la probabilité que la carte soit mise en vente, est, à terme, de 0.2. Lorsqu'elle dépasse les mille vues mensuelles, celle-ci monte à 0.8.</p>
+
+        <h2>Confrontation à la réalité</h2>
+
+        <p>Qu'en est-il avec la réalité&#8239;? Pour étudier ce marché, nous avons constitué un échantillon d'une centaine de cartes réparties en 4 catégories&#8239;: les célébrités et les franchises, les savoirs scolaires, ce qui est relatif à Internet, et enfin, ce qui relève de la niche. De fait, la moitié des cartes sont légendaires, contre 0.06&#8239;% du catalogue. Il s'agit donc d'analyser les mécanismes, les résultats ci-dessous ne renseignant pas sur les niveaux de population. Il aurait fallu pour cela construire un tirage aléatoire stratifié par rareté et avec pondération.</p>
+
+        <figure><img src="../images/wikimasters-3.png" alt="Nuage de points en échelles logarithmiques du prix, ou de la mise de départ, aux enchères en fonction de la popularité Wikipédia (vues mensuelles, d'environ cent à un million) : les points violets sont les cartes avec un marché actif, les croix grises les cartes sans marché ; la courbe rouge de régression, fantômes inclus, croît avec la popularité, tandis que la courbe bleue pointillée, fantômes exclus, suit une tendance inverse." width="1200" height="800" loading="lazy"><figcaption>Popularité Wikipédia et prix aux enchères, selon le volume de cartes en circulation</figcaption></figure>
+
+        <p>Quelle conclusion pouvons-nous tirer de ce graphique&#8239;? D'abord, une grande tendance&#8239;: si la pente de la relation prix-popularité, fantôme inclus, est de 1.118 contre 1.66 pour notre modèle théorique, elle monte à 1.735 dès lors que l'on ignore les valeurs inférieures à 10&#8239;000 vues mensuelles, soit une différence bien inférieure. Cela veut en fait dire qu'en dessous de 10&#8239;000 vues, les valeurs observées des cartes sont très inférieures à celles simulées d'après le modèle. En revanche, après 10&#8239;000 vues, ce même modèle devient plutôt significatif.</p>
+
+        <p>Nous remarquerons toutefois deux courbes&#8239;: l'une, rouge, qui tient compte des cartes fantômes et qui ne sont pas trouvables sur le marché aux enchères et une deuxième, en bleu pointillé, qui ne tient pas compte de ces cartes fantômes. La particularité de cette dernière est qu'elle suit une tendance inverse à la courbe rouge, la valeur des cartes augmentant avec une popularité décroissante. C'est là que nous devons introduire une nouvelle distinction entre une désirabilité et une popularité, cette nouvelle pente se justifiant sans doute par des collectionneurs de niche à forte valeur idiosyncratique et dont nous avons déjà parlé dans un paragraphe précédent.</p>
+
+        <figure><img src="../images/wikimasters-4.png" alt="Boîtes à moustaches horizontales des résidus (en log10) du modèle prix-popularité selon quatre catégories de cartes — célébrités et franchises (n = 24), Internet et mèmes (n = 7), niche (n = 5), savoirs scolaires (n = 21) — avec la médiane marquée par un trait noir : les médianes sont proches de zéro, avec des écarts notables, par exemple Leonardo da Vinci à environ 2 et Hitler à environ 1,5." width="1200" height="800" loading="lazy"><figcaption>Écarts des prix selon la nature de la carte</figcaption></figure>
+
+        <p>Il en va de même pour la probabilité d'existence d'un marché pour une carte donnée avec une tendance générale similaire, à la différence près que l'écart est bien plus important&#8239;: cette probabilité dépasse 50&#8239;% une fois les 255 vues mensuelles acquises d'après le modèle théorique, contre 10&#8239;000 vues mensuelles pour le modèle empirique.</p>
+
+        <figure><img src="../images/wikimasters-5.png" alt="Courbes de la probabilité d'existence d'un marché pour une carte en fonction de la notoriété (vues mensuelles, échelle logarithmique d'environ cent à un million) : les points gris sont les probabilités observées par classes, la courbe violette lissée (LOWESS) est la courbe empirique, la ligne bleue pointillée le modèle logistique théorique et la ligne orange pointillée le seuil critique de 50 % ; la courbe empirique franchit ce seuil autour de 10 000 vues, alors que le modèle théorique le franchit beaucoup plus tôt, et toutes deux tendent vers 1 à partir d'environ 100 000 vues." width="800" height="600" loading="lazy"><figcaption>Probabilité d'existence d'un marché&#8239;: courbe empirique lissée et modèle théorique</figcaption></figure>
+
+        <h2>Robinets, puits et masse monétaire</h2>
+
+        <p>La défausse de cartes contre 1 Wikibidous est un robinet monétaire illimité, avec un flux quotidien de création calculable avec la formule <em>joueurs x paquets par joueur x 5 x part défaussée</em>. On peut obtenir le tableau suivant&#8239;:</p>
+
+        <div class="tableau-defile">
+        <table class="texte">
+        <caption>Wikibidous créés par jour si toutes les cartes sont défaussées (en millions)</caption>
+        <thead>
+        <tr><th>Paquets par joueur et par jour</th><th>10</th><th>30</th><th>60</th></tr>
+        </thead>
+        <tbody>
+        <tr><th scope="row">215&#8239;000 joueurs actifs/jour</th><td>10,8</td><td>32,3</td><td>64,5</td></tr>
+        <tr><th scope="row">330&#8239;000 joueurs actifs/jour</th><td>16,5</td><td>49,5</td><td>99,0</td></tr>
+        </tbody>
+        </table>
+        </div>
+
+        <p>En revanche, les puits sont rares, leur efficacité est minimale (seuls les achats de cartes), il n'y a pas de limitations de la borne supérieure et, à biens rares donnés, on attend une hausse tendancielle des prix nominaux&#8239;: c'est la relation quantitative M·V = P·Q que formule Fisher avec M la masse monétaire, V la vitesse, P les prix et Q la quantité, le tout appliqué à une économie close. Il est probable, donc, à terme, que cette inflation du prix, non suivie par le montant des défausses, constitue une barrière à l'entrée pour les nouveaux joueurs.</p>
+
+        <p>À cela s'ajoute un autre problème, puisque la transaction fictive entre deux comptes d'un même joueur ne coûte presque rien, la monnaie étant créée à volonté par le système du jeu (quoique l'on puisse toujours supposer que le coût d'opportunité pour un paquet freine cette création), il existe un risque non négligeable que, lorsqu'elles sont répétées (on parle alors de <em>wash trading</em>), elles faussent les prix de référence du marché&#8239;; or ces prix de référence servent justement de point d'ancrage aux acheteurs qui se basent dès lors sur de faux prix pour estimer la valeur réelle de ces objets.</p>
+
+        <h2>Information et incertitude</h2>
+
+        <p>La particularité de Wikimasters, c'est que l'information est inégalement répartie entre les joueurs, puisqu'il faut payer environ 10 dollars canadien par mois pour avoir accès à l'historique des ventes, et donc à ce qui favoriserait la liquidité et la formation d'un prix juste. Toutefois, en l'absence de données sur la dispersion des prix de réserve entre abonnés et non-abonnés à carte égale, on ne peut confirmer notre affirmation. En revanche, l'on peut se demander comment les agents économiques vont chercher à compenser leur aveuglement. Il parait probable que l'estimation se fasse selon deux critères&#8239;: la popularité de la carte, la désirabilité propre, et éventuellement la profondeur du marché qui pourrait traduire cette désirabilité autrement difficile à estimer.</p>
+
+        <figure><img src="../images/wikimasters-6.png" alt="Histogrammes groupés de l'écart-type du résidu du modèle (de 0 à 1) : à gauche selon la profondeur du marché, c'est-à-dire le nombre de cartes en vente (catégories 1, 2-3, 4-6 et 7+, avec n = 9, 19, 18 et 11), à droite selon les terciles de vues mensuelles (bas, milieu, haut, avec n = 19 chacun)." width="800" height="400" loading="lazy"><figcaption>Résidus du modèle selon la profondeur du marché et la popularité</figcaption></figure>
+
+        <p>L'analyse de notre échantillon nous porte à croire qu'il s'agit davantage de la popularité, c'est-à-dire de la valeur décidée par le jeu, qui déterminera le prix d'une carte plutôt que la profondeur du marché, c'est-à-dire le nombre de fois où une même carte apparait sur le marché aux enchères. Notons enfin, et ce sera notre dernière remarque avant la conclusion, que George Akerlof<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a> met en garde contre ces asymétries de l'information qui peuvent, pousser, à terme, le joueur modèle à quitter le marché&#8239;; il ne resterait dès lors que les «&nbsp;mauvais joueurs&nbsp;», c'est-à-dire ceux les manipulateurs de prix et les payeurs.</p>
+
+        <h2>Conclusion</h2>
+
+        <p>En convertissant l'architecture encyclopédique de Wikipédia en un marché de cartes à collectionner, Wikimasters devient un laboratoire réellement fascinant de l'économie des mondes virtuelles. Cette étude, qui pourrait être poussée bien plus loin avec davantage de données, montre d'abord un marché fragmenté, avec une valeur des cartes qui s'articulent autour de deux régimes distincts&#8239;: d'un côté un prix plancher d'efficience garantit par le coût d'opportunité de la défausse (1 Wikibidous), et de l'autre, une valorisation fortement convexe appuyée sur la notoriété de la page Wikipédia associée, pilotée par le «&nbsp;capital de consommation&nbsp;» d'Adler. Pour autant, il semblerait que le modèle économique de Wikimasters souffre de faiblesses structurelles en l'absence de puits de monnaie efficaces face à un robinet monétaire illimité<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>&#8239;; l'inflation tendancielle qui risque d'en découler risque à terme de créer une barrière à l'entrée infranchissable pour les nouveaux entrants (mais ce n'est qu'une hypothèse à ce stade, il faudrait encore une formalisation mathématique)&#8239;; à cela s'ajoute la monétisation de l'information qui freine la parfaite formation des prix.</p>
+
+        <h2>Remarques complémentaires</h2>
+
+        <p>Durant l'écriture de cet article, nous avons constaté l'absence de mentions légales sur le site, or il s'agit d'une stricte obligation encadrée par la loi<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a> dès lors que la cible de consommation se trouve en France.</p>
+
+        <h2 id="annexe-1">Annexe 1&#8239;: données</h2>
+
+        <div class="tableau-defile">
+        <table class="texte">
+        <thead>
+        <tr><th>Nom de la carte</th><th>Nombre de vue Wikipédia</th><th>Prix moyen à l'instant de la mesure</th><th>Nombre de cartes en vente à l'instant de la mesure</th></tr>
+        </thead>
+        <tbody>
+        <tr><td>Paris</td><td>779862</td><td>3600</td><td>1</td></tr>
+        <tr><td>Albert Einstein</td><td>346108</td><td>6526,66667</td><td>3</td></tr>
+        <tr><td>Napoléon Ier</td><td>705493</td><td>6650,5</td><td>2</td></tr>
+        <tr><td>Adolf Hitler</td><td>547442</td><td>67363,0769</td><td>13</td></tr>
+        <tr><td>Elvis Presley</td><td>306097</td><td>1563,875</td><td>8</td></tr>
+        <tr><td>Michael Jackson</td><td>1902234</td><td>15235,5</td><td>6</td></tr>
+        <tr><td>Leonardo da Vinci</td><td>534</td><td>2684,25</td><td>4</td></tr>
+        <tr><td>Cléopâtre</td><td>330228</td><td>1333,11111</td><td>9</td></tr>
+        <tr><td>Jésus de Nazareth</td><td>179937</td><td>3816,5</td><td>6</td></tr>
+        <tr><td>Mahatma Gandhi</td><td>3546</td><td>102</td><td>5</td></tr>
+        <tr><td>Marilyn Monroe</td><td>412693</td><td>1258,33333</td><td>6</td></tr>
+        <tr><td>Walt Disney</td><td>130881</td><td>430,142857</td><td>7</td></tr>
+        <tr><td>Cristiano Ronaldo</td><td>1962974</td><td>13361,75</td><td>8</td></tr>
+        <tr><td>Lionel Messi</td><td>3149949</td><td>110665,1</td><td>10</td></tr>
+        <tr><td>Kylie Jenner</td><td>313468</td><td>344,5</td><td>2</td></tr>
+        <tr><td>Elon Musk</td><td>669933</td><td>4255,75</td><td>12</td></tr>
+        <tr><td>Beyoncé</td><td>193726</td><td>472</td><td>7</td></tr>
+        <tr><td>Taylor Swift</td><td>312683</td><td>4852,8</td><td>5</td></tr>
+        <tr><td>Kim Kardashian</td><td>263272</td><td>1787,375</td><td>8</td></tr>
+        <tr><td>Barack Obama</td><td>313423</td><td>1400</td><td>3</td></tr>
+        <tr><td>Queen (groupe)</td><td>221</td><td>4434</td><td>0</td></tr>
+        <tr><td>Star Wars</td><td>271031</td><td>35800</td><td>5</td></tr>
+        <tr><td>Harry Potter</td><td>271019</td><td>4356</td><td>5</td></tr>
+        <tr><td>Pokémon</td><td>169135</td><td>1510,66667</td><td>4</td></tr>
+        <tr><td>Minecraft</td><td>176063</td><td>3909</td><td>7</td></tr>
+        <tr><td>Photosynthèse</td><td>52700</td><td>7,5</td><td>2</td></tr>
+        <tr><td>Molière</td><td>361668</td><td>3700</td><td>2</td></tr>
+        <tr><td>Révolution française</td><td>245027</td><td>10000</td><td>1</td></tr>
+        <tr><td>Seconde Guerre mondiale</td><td>438114</td><td>3092</td><td>3</td></tr>
+        <tr><td>Union européenne</td><td>299172</td><td>1301,6</td><td>5</td></tr>
+        <tr><td>Organisation des Nations unies</td><td>224902</td><td>216,666667</td><td>3</td></tr>
+        <tr><td>Théorème de Pythagore</td><td>70513</td><td>262,666667</td><td>6</td></tr>
+        <tr><td>Tableau périodique des éléments</td><td>752818</td><td>2254,8</td><td>5</td></tr>
+        <tr><td>Démocratie</td><td>67175</td><td>101</td><td>6</td></tr>
+        <tr><td>Capitalisme</td><td>60593</td><td>283,333333</td><td>3</td></tr>
+        <tr><td>Philosophie</td><td>148525</td><td>261,666667</td><td>3</td></tr>
+        <tr><td>Histoire de France</td><td>89573</td><td>80</td><td>1</td></tr>
+        <tr><td>Guerre froide</td><td>161577</td><td>68,5</td><td>4</td></tr>
+        <tr><td>Renaissance (art)</td><td>0</td><td>134,4</td><td>5</td></tr>
+        <tr><td>Impressionnisme</td><td>114857</td><td>117</td><td>10</td></tr>
+        <tr><td>Théorie de l'évolution</td><td>3832</td><td>NA</td><td>0</td></tr>
+        <tr><td>Génétique</td><td>17132</td><td>NA</td><td>0</td></tr>
+        <tr><td>Système solaire</td><td>174936</td><td>3710</td><td>2</td></tr>
+        <tr><td>Cerveau</td><td>26513</td><td>44,25</td><td>4</td></tr>
+        <tr><td>Économie (discipline)</td><td>32403</td><td>4</td><td>1</td></tr>
+        <tr><td>Droit</td><td>26219</td><td>NA</td><td>NA</td></tr>
+        <tr><td>Sociologie</td><td>39450</td><td>12</td><td>2</td></tr>
+        <tr><td>Linguistique</td><td>42788</td><td>23</td><td>2</td></tr>
+        <tr><td>Mathématiques</td><td>149270</td><td>NA</td><td>NA</td></tr>
+        <tr><td>Chimie organique</td><td>14735</td><td>75,5</td><td>2</td></tr>
+        <tr><td>Canton de Vaud</td><td>72850</td><td>61,8333333</td><td>6</td></tr>
+        <tr><td>Bataille de Sisak</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Longue Guerre</td><td>2339</td><td>NA</td><td>0</td></tr>
+        <tr><td>Météorite de Chassigny</td><td>1138</td><td>NA</td><td>0</td></tr>
+        <tr><td>Manoise</td><td>249</td><td>NA</td><td>0</td></tr>
+        <tr><td>Orquevaux</td><td>921</td><td>NA</td><td>0</td></tr>
+        <tr><td>Orcevaux</td><td>359</td><td>NA</td><td>0</td></tr>
+        <tr><td>Aingoulaincourt</td><td>376</td><td>NA</td><td>0</td></tr>
+        <tr><td>Soyers (Haute-Marne)</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Violot</td><td>513</td><td>NA</td><td>0</td></tr>
+        <tr><td>Juzennecourt</td><td>553</td><td>NA</td><td>0</td></tr>
+        <tr><td>Lacrète</td><td>157</td><td>NA</td><td>0</td></tr>
+        <tr><td>Leffonds</td><td>693</td><td>NA</td><td>0</td></tr>
+        <tr><td>Harréville-les-Chanteurs</td><td>759</td><td>60</td><td>1</td></tr>
+        <tr><td>Ormoy-lès-Sexfontaines</td><td>292</td><td>NA</td><td>0</td></tr>
+        <tr><td>Échelle de Kardashev</td><td>1529</td><td>NA</td><td>0</td></tr>
+        <tr><td>Hypothèse de la Terre rare</td><td>2421</td><td>12</td><td>1</td></tr>
+        <tr><td>Théorie des cordes</td><td>45192</td><td>75,5</td><td>0</td></tr>
+        <tr><td>Entropie de von Neumann</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Nombre de Skewes</td><td>1201</td><td>NA</td><td>0</td></tr>
+        <tr><td>Fonction zêta de Riemann</td><td>31204</td><td>53,5</td><td>2</td></tr>
+        <tr><td>Théorème de Ramsey</td><td>2729</td><td>75,5</td><td>0</td></tr>
+        <tr><td>Complexe d'Ediacara</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Gène HOX</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Réaction de Diels-Alder</td><td>3168</td><td>NA</td><td>0</td></tr>
+        <tr><td>Cortinaire violet</td><td>1445</td><td>NA</td><td>0</td></tr>
+        <tr><td>Clathrus ruber</td><td>11107</td><td>NA</td><td>0</td></tr>
+        <tr><td>Tremella mesenterica</td><td>86</td><td>NA</td><td>0</td></tr>
+        <tr><td>Ceratiomyxa fruticulosa</td><td>350</td><td>NA</td><td>0</td></tr>
+        <tr><td>Phallus impudicus</td><td>287</td><td>NA</td><td>0</td></tr>
+        <tr><td>Satyre puant</td><td>8121</td><td>14</td><td>1</td></tr>
+        <tr><td>Cœur de sorcière</td><td>30</td><td>NA</td><td>0</td></tr>
+        <tr><td>Vesse-de-loup perlée</td><td>2348</td><td>50</td><td>1</td></tr>
+        <tr><td>Fausse-girolle</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Pied bleu</td><td>3559</td><td>NA</td><td>0</td></tr>
+        <tr><td>Liste de champignons comestibles</td><td>4617</td><td>NA</td><td>0</td></tr>
+        <tr><td>Bataille des casernes</td><td>731</td><td>NA</td><td>0</td></tr>
+        <tr><td>Théorie du complot</td><td>83625</td><td>635</td><td>5</td></tr>
+        <tr><td>Paradoxe de Newcomb</td><td>9560</td><td>NA</td><td>0</td></tr>
+        <tr><td>Méthode scientifique</td><td>16960</td><td>NA</td><td>0</td></tr>
+        <tr><td>Règle 34</td><td>44969</td><td>875</td><td>2</td></tr>
+        <tr><td>Mème Internet</td><td>52357</td><td>87,5</td><td>2</td></tr>
+        <tr><td>Rickrolling</td><td>0</td><td>NA</td><td>0</td></tr>
+        <tr><td>Nyan Cat</td><td>6735</td><td>NA</td><td>0</td></tr>
+        <tr><td>Doge (mème)</td><td>3205</td><td>NA</td><td>0</td></tr>
+        <tr><td>Pepe the Frog</td><td>7755</td><td>NA</td><td>0</td></tr>
+        <tr><td>Grumpy Cat</td><td>5928</td><td>250</td><td>1</td></tr>
+        <tr><td>Shrek (personnage)</td><td>2644</td><td>267</td><td>4</td></tr>
+        <tr><td>Among Us</td><td>19672</td><td>103,333333</td><td>3</td></tr>
+        <tr><td>Skibidi Toilet</td><td>22741</td><td>166</td><td>3</td></tr>
+        </tbody>
+        </table>
+        </div>
+
+        <h2 id="annexe-2">Annexe 2&#8239;: calculs</h2>
+
+        <h3>Calcul de l'élasticité-prix en fonction de l'effet superstar</h3>
+
+        <p>La valeur accordée par le joueur à la carte représentant la page est une variable aléatoire log-normale<a href="#fn13" class="footnote-ref" id="fnref13" role="doc-noteref"><sup>13</sup></a>&#8239;:</p>
+
+        <div class="formule">\[ V_i = \beta_0\, v_i^{\alpha}\, \varepsilon_i \]</div>
+
+        <p>Avec \(\beta_0\, v_i^{\alpha}\) la composante déterministe (liée à la notoriété \(v_i\), avec une élasticité \(\alpha\)) et où \(\varepsilon_i\) représente l'hétérogénéité des préférences individuelles. D'après Myerson, on a la fixation du prix de réserve qui vaut&#8239;:</p>
+
+        <div class="formule">\[ r_i^{*} = v_0 + \frac{1 - F(r_i^{*})}{f(r_i^{*})} \]</div>
+
+        <p>Puisque la distribution des valeurs dérive de la distribution de \(\varepsilon_i\) par un simple changement d'échelle d'un facteur \(\beta_0\, v_i^{\alpha}\), si la valeur de défausse est négligeable devant \(\beta_0\, v_i^{\alpha}\) (\(g \ll \beta_0\, v_i^{\alpha}\)), la condition d'optimalité se simplifie. Le prix de réserve optimal devient un multiple direct du facteur d'échelle&#8239;:</p>
+
+        <div class="formule">\[ r_i^{*} = \kappa(\sigma)\, \beta_0\, v_i^{\alpha} \]</div>
+
+        <p>Où \(\kappa(\sigma)\) est une constante adimensionnelle ne dépendant que de la forme de la loi du choc (donc de l'écart-type \(\sigma\)). En remplaçant et en appliquant le logarithme naturel&#8239;:</p>
+
+        <div class="formule">\[ \ln r_i^{*} = \ln \kappa(\sigma) + \ln \beta_0 + \alpha \ln v_i \]</div>
+
+        <p>Si le prix payé reflète directement la valeur maximale parmi les enchérisseurs&#8239;:</p>
+
+        <p>Si le prix payé reflète directement la valeur maximale parmi les enchérisseurs&#8239;:</p>
+
+        <div class="formule">\[ P_i = \kappa(\sigma)\, \beta_0\, v_i^{\alpha}\, e^{\sigma M_{n_i}} \]</div>
+
+        <p>Où \(M_{n_i}\) est la 1<sup>re</sup> statistique d'ordre (le maximum) d'un échantillon de taille \(n_i\) issu d'une loi normale centrée réduite \(\mathcal{N}(0,1)\). D'après la théorie des valeurs extrêmes (distribution de Gumbel pour la loi normale), lorsque le nombre d'enchérisseurs est grand&#8239;:</p>
+
+        <div class="formule">\[ M_{n_i} \approx b_{n_i} = \sqrt{2 \ln n_i} - \frac{\ln \ln n_i + \ln 4\pi}{2 \sqrt{2 \ln n_i}} \]</div>
+
+        <p>En reprenant l'endogénéité du nombre d'enchérisseurs avec la notoriété (\(n_i = \gamma_0\, v_i^{\delta}\))&#8239;:</p>
+
+        <p>En dérivant par rapport à \(\ln v_i\) par la règle en chaîne&#8239;:</p>
+
+        <div class="formule">\[ \frac{\partial \ln P_i}{\partial \ln v_i} = \alpha + \sigma \frac{\partial b_{n_i}}{\partial n_i} \cdot \frac{\partial n_i}{\partial \ln v_i} \]</div>
+
+        <p>On trouve&#8239;:</p>
+
+        <div class="formule">\[ \frac{d \ln P_i}{d \ln v_i} = \alpha + \frac{\sigma \delta}{\sqrt{2 \ln n_i}} \]</div>
+
+        <p>Avec \(n_i = \gamma_0\, v_i^{\delta}\).</p>
+
+        <h2 id="annexe-3">Annexe 3&#8239;: scripts Python</h2>
+
+        <p>Pour obtenir les scripts Python qui permettent le dessin des graphiques, vous pouvez envoyer un message à cette adresse&#8239;: latortuequipense@yahoo.com.</p>
+
+      </div>
+
+      <section class="notes" aria-label="Notes">
+        <ol>
+          <li id="fn1">WikiMasters — Wikipédia<a href="#fnref1" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn2">Vili Lehdonvirta et Edward Castranova, <em>Virtual Economies&#8239;: Design and Analysis</em><a href="#fnref2" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn3">Roger B. Myerson, «&nbsp;Optimal Auction Design&nbsp;», et John G. Riley et Willam F. Samuelson, «&nbsp;Optimal Auctions&nbsp;».<a href="#fnref3" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn4">Adam Smith, <em>La Richesse des nations.</em><a href="#fnref4" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn5">Sherwin Rosen, «&nbsp;The Economics of Superstars&nbsp;».<a href="#fnref5" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn6">Moshe Adler, «&nbsp;Stardom and Talent&nbsp;».<a href="#fnref6" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn7">Voir les calculs en <a href="#annexe-2">annexe</a>.<a href="#fnref7" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn8">Les calculs sont en <a href="#annexe-2">annexe</a>.<a href="#fnref8" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn9">Qui suit une loi de poisson d'après les travaux empiriques de Roger Myerson en 1998.<a href="#fnref9" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn10">George Akerlof, «&nbsp;Market for Lemons&nbsp;».<a href="#fnref10" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn11">La loi du reflux de Thomas Tooke.<a href="#fnref11" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn12">Article 3 du Règlement (CE) n<sup>o</sup>&#8239;593/2008 (Rome I)&#8239;; Article L. 511-11 du Code de la consommation&#8239;; Article 6, III de la loi n<sup>o</sup>&#8239;2004-575 du 21 juin 2004 (LCEN).<a href="#fnref12" class="footnote-back" role="doc-backlink">↩</a></li>
+          <li id="fn13">Jean-Jacques Laffont, Hervé Ossard et Vuong Quan, «&nbsp;Econometrics of First-Price Auctions&nbsp;».<a href="#fnref13" class="footnote-back" role="doc-backlink">↩</a></li>
+        </ol>
+      </section>
+    </article>
+
+    <div class="billet-fin">
+      <div class="ornement"></div>
+      <a class="lien" href="../index.html">Retour à l'accueil</a>
+    </div>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+
+  </div>
+</body>
+</html>

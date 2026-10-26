@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Thélyson Orélien, un scandale littéraire ? Une analyse statistique — La Tortue</title>
+<meta name="description" content="Dans cet article, nous verrons comment le livre de Thélyson Orélien a pu se retrouver parmi la sélection du Goncourt">
+<meta name="keywords" content="Thélyson Orélien, C’était ça ou mourir, littérature, intelligence artificielle, IA générative, détection IA, Pangram, Lucide, plagiat, prix Goncourt, prix littéraires, analyse statistique, édition, jurys littéraires">
+<link rel="stylesheet" href="../charte.css">
+<script src="../menu.js" defer></script>
+<link rel="stylesheet" href="../article.css">
+<script src="../schema-descriptions.js" defer></script>
+<link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+<link rel="shortcut icon" href="../favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png" />
+<link rel="manifest" href="../favicon/site.webmanifest" />
+</head>
+<body>
+  <div class="progression" aria-hidden="true"></div>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="../index.html">
+        <img class="logo" src="../logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="../index.html#articles">Articles</a>
+        <a href="../a-propos.html">À propos</a>
+        <a href="../a-propos.html#contact">Contact</a>
+        <a href="../newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <article>
+      <div class="billet-entete">
+        <h1>Thélyson Orélien, un scandale littéraire ? Une analyse statistique</h1>
+        <div class="ornement"></div>
+        <p class="sous-titre">Analyse statistique des prix littéraires et réflexion sur l'IA et l'écriture</p>
+        <p class="billet-meta"><time datetime="2026-10-12">12 octobre 2026</time><span>16 min de lecture</span></p>
+        <div class="billet-actions">
+          <button type="button" onclick="window.print()">
+            Télécharger l’article en PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="billet-texte">
+<h2>Qui est donc Thélyson Orélien ?</h2>
+<p>Né en 1988 en Haïti, Thélyson Orélien quitte son pays et rejoint les États-Unis, puis le Canada. Il s’inspire de ce voyage pour écrire <em>C’était ça ou mourir</em>, « un roman dénué de tout voyeurisme » et au « verbe alerte »<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, selon le site Vogue France. Le livre remporte le prix de la Première Plume 2026 et le prix du Roman Fnac 2026. C’est un véritable phénomène : l’ouvrage s’est vendu à plus de 82 000 exemplaires<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, dont 65 000<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> en France depuis le 19 août 2026. L’auteur est en lice pour les prix Goncourt, Renaudot, Femina<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> et le prix des Rendez-vous du premier roman<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+<h2>Alors pourquoi parle-t-on tant de Thélyson Orélien ?</h2>
+<p>Eh bien, le 21 septembre 2026, un compte X (anciennement Twitter) « Balance ton Claude » détenu par un collectif de 5 personnes sous la direction de Samuel Fitoussi affirme que le livre <em>C’était ça ou mourir</em> aurait été très largement généré par une IA sur la base d’un outil de détection Pangram. La chose fait scandale, d’autant que surgissent des accusations de plagiat : la nouvelle de 2012 <em>Où va le monde</em> reprendrait une grande partie de la préface du <em>Matin des magiciens</em> de Louis Pauwels et Jacques Bergier paru en 1960 ; « Ne mettons pas nos héros sur un piédestal » de 2013 serait une traduction légèrement remaniée d’une chronique d’Andy Bautista parue cinq jours plus tôt dans <em>The Philippine Star</em> ; « Le prochain pape devrait être plus jeune », également de 2013, serait une copie à quelques mots près d’un éditorial de <em>The Hindu</em> ; etc. Finalement, Philippe Claudel, président de l’Académie Goncourt, décide de retirer de sa sélection l’ouvrage le 25 septembre.</p>
+<p>Un concurrent de Pangram, Lucide, a également analysé l’ouvrage avec son détecteur (Lucide 3.0), soit 59 488 mots. Selon ses résultats, les 34 chapitres auraient été générés par IA à près de 100 %, et l’épilogue à 96,7 %.</p>
+<h2>Y a-t-il vraiment utilisation de l’IA ?</h2>
+<p>C’est la grande question : quelle valeur attribuer à un outil de détection de l’intelligence artificielle qui fonctionne lui-même grâce à l’intelligence artificielle ? Une autre question, tout aussi importante, mais que nous ne traiterons pas ici, est celle de la valeur d’une accusation anonyme lancée depuis un compte X. L’outil utilisé est Pangram 4, développé par Pangram Labs et lancé en juillet 2026. Le recul sur ce modèle est relativement faible : l’unique étude sérieuse<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> à son sujet a été produite par le laboratoire lui-même et doit donc être considérée avec précaution. La fiche technique affirme que Pangram 4 obtient un AUROC de 0,9916 sur 1, c’est-à-dire un score proche de 100 % pour détecter les textes rédigés par une IA. Pour les textes coécrits par une IA et un humain, le taux de faux positifs — la probabilité qu’un texte humain soit considéré comme écrit par une IA — atteint 0,01 %, ce qui reste faible. Il est important de souligner que la langue a peu d’impact sur les capacités du détecteur.</p>
+<p>Le deuxième outil, Lucide 3.0, est lui aussi récent : il est sorti à la mi-septembre. Il a toutefois l’avantage, par rapport à Pangram 4, d’être spécialisé dans le français. Une fiche technique publiée par l’entreprise fait également état d’un faible taux de faux positifs (0,3 %) pour les textes entièrement générés par IA. Sa capacité à détecter les textes mixtes est moins systématique, puisque son taux de réussite atteint 84 %<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. Ces deux études vont dans le sens de l’hypothèse d’un texte rédigé par IA, même si elles doivent être considérées avec recul, car elles poursuivent un objectif commercial et marketing. N’oublions pas, toutefois, un principe fondamental : la présomption d’innocence. Dans l’attente d’une éventuelle décision de justice, rien ne permet d’affirmer que Thélyson Orélien a écrit son livre avec l’IA.</p>
+<h2>Ce que ce scandale révèle</h2>
+<p>En réalité, la gravité du scandale ne réside pas tant dans le fait que Thélyson Orélien ait utilisé ou non l’IA que dans la crédibilité des institutions littéraires qui font autorité, comme l’Académie Goncourt. Comment se fait-il que les académiciens chargés d’attribuer le prix littéraire français le plus prestigieux aient sélectionné l’ouvrage de Thélyson Orélien ? Un internaute signalait déjà le 12 septembre, soit une semaine avant les premières accusations : « Dommage que le livre entier soit écrit avec… l’intelligence artificielle », en citant ces mots du roman : « Il y a un gars qui peut me faire passer. Ce n’est pas un visa. C’est un passage. Une ouverture ». Deux hypothèses se présentent : soit l’ouvrage de Thélyson Orélien est effectivement digne de remporter le prix Goncourt, ce qui interroge nos conceptions de l’art, de la beauté et de l’émotion : que deviennent-elles lorsque ces qualités, résolument humaines, résultent d’une technique ? Soit il existe un entre-soi dans le milieu littéraire et une présélection informelle dans la première liste.</p>
+<h2>Et si <em>C’était ça ou mourir</em> était bon ?</h2>
+<p>Le postulat informel que formule Thomas Durand sous couvert d’une critique des processus de sélection de l’académie Goncourt dans un billet publié sur la <em>Menace théoriste</em><a href="#fn8" class="footnote-ref" id="fnref8" role="doc-noteref"><sup>8</sup></a> mais non moins intéressant, c’est que l’IA écrit mal : « Mais si le texte est une succession de formules calamiteuses, répétitive, ternaires, téléphonées et pataudes, de comparaisons pseudo-profondes et de pirouettes approximatives, le soupçon pèsera sur les conditions dans lesquelles s’exerce la grand-messe des récompenses mondaines. Que vaut encore le jugement littéraire de ce petit monde ? ». La question ne se poserait pas, ou pas de la même façon en tout cas, s’il était de notoriété publique que les IA écrivent mieux que les écrivains : « Quand je lis du Racine, du Flaubert ou du Victor Hugo, je saisis la distance qui me sépare de leur talent, le doute s’éteint de lui-même. »</p>
+<p>Prenons le contrepied de ce postulat et imaginons, comme une pure expérience de pensée, que l’IA écrive mieux que nous. Comment ce texte serait-il jugé ? Le blog « Les Lectures de Cannetille<a href="#fn9" class="footnote-ref" id="fnref9" role="doc-noteref"><sup>9</sup></a> » souligne le mélange des langues, les phrases courtes et l’humour noir et cynique qui s’y dissimule. D’autres critiques saluent sa musicalité, ses images et ses métaphores<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. Indépendamment des préjugés que l’on peut avoir sur le style de l’intelligence artificielle, que penser de cette phrase du roman ? « Je me suis demandé : qu’est-ce qui fait qu’on reste dans un pays qui veut nous tuer à chaque virage ? Ce n’est pas l’amour. Ce n’est pas l’attachement. C’est juste qu’on ne sait pas où on pourrait aller. Jusqu’à ce que la mort monte dans notre bus et nous donne une claque. Une claque qui réveille, ou qui enterre. » Malgré mes réflexes rouillés de khâgneux, je me suis prêté à l’exercice de l’analyse :</p>
+<p>Ce monologue intérieur à la première personne s’ouvre sur un verbe pronominal au passé composé, « Je me suis demandé », qui introduit après les deux points une interrogation directe sans guillemets, bâtie sur la locution « qu’est-ce qui fait que » et sa complétive. Le pronom indéfini « on » généralise l’expérience, tandis que la proposition subordonnée relative « qui veut nous tuer » (antécédent « pays ») prête au pays une volonté hostile, le pronom personnel « nous » marquant la passivité du collectif. Le complément circonstanciel de fréquence « à chaque virage » ouvre une métaphore à double sens, littéral et figuré, que prolonge plus loin l’image du bus. Deux phrases brèves en anaphore, « Ce n’est pas l’amour. Ce n’est pas l’attachement. », nient en gradation descendante les causes attendues, etc.</p>
+<p>Il y a derrière cette phrase une réelle beauté, une profondeur indéniable. C’est <em>bien écrit</em>. Sans cela, le livre n’aurait certainement pas suscité un tel engouement, même si l’on peut toujours soupçonner un effet de groupe alimenté par la preuve sociale<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. Mais au fond, qu’ai-je démontré par cette analyse ? Que le texte est bien construit, que ses images fonctionnent, que ses répétitions produisent un effet et que sa simplicité apparente dissimule un véritable travail d’écriture. Autant de qualités que l’on serait en droit d’attendre d’un bon écrivain. Or, si j’apprenais que ces quelques lignes ont été écrites par une intelligence artificielle, lesquelles de ces qualités disparaîtraient ? La métaphore du pays qui tue à chaque virage cesserait-elle d’être pertinente ? L’image de la mort qui monte dans un bus perdrait-elle sa force ? Les phrases courtes deviendraient-elles soudain le symptôme d’une pauvreté stylistique plutôt que le moyen d’une progression dramatique efficace ?</p>
+<p>En réalité, cette hypothèse s’appuie sur une étude de Proksch et al., publiée en 2024 et intitulée « Frontiers in Artificial Intelligence ». Celle-ci conclut notamment que le fait de croire qu’un texte a été écrit par un humain conduit à surestimer fortement l’intelligence et les compétences de son auteur. Ce résultat peut-il s’appliquer à la littérature ? On peut raisonnablement le penser au vu du scandale soulevé par l’affaire Thélyson Orélien. Ainsi, deux textes de qualité équivalente ne seraient pas perçus de la même manière selon que l’on soupçonne ou non l’intervention de l’intelligence artificielle.</p>
+<h2>Y'a t'il une mafia des prix littéraires</h2>
+<p>Le deuxième postulat, beaucoup plus explicite, avancé par Thomas Durand dans son article, concerne la collusion qui peut exister entre les maisons d’édition et l’opacité des processus de sélection. En 2020, une enquête de Raphaëlle Leyris publiée dans <em>Le Monde</em>, intitulée « Du Goncourt au Renaudot, enquête sur le fonctionnement des jurys littéraires », montre que le statut « à vie » des jurés de l’Académie Goncourt favorise un système de club où le copinage et la fidélité aux réseaux pèsent dans les négociations. L’analyse des données fait également apparaître un certain entre-soi littéraire : soit les livres correspondent parfaitement aux normes implicites qui permettent la récompense, manifestement partagées dans le milieu des prix, soit le jeu des relations et des stratégies favorise l’élection d’un titre particulier.</p>
+<h2>Une analyse quantitative des prix littéraires</h2>
+<p>Nous avons recensé, de 2016 à 2025, la répartition des 21 prix littéraires les plus prestigieux de la francophonie (Goncourt, Renaudot, Femina, Médicis, Interallié, Académie française, Goncourt des lycéens, Renaudot des lycéens, Décembre, Livre Inter, Grand prix RTL-Lire, prix du Monde, prix du roman Fnac, prix des libraires, Landerneau des lecteurs, Jean Giono, Orange du Livre, France Culture-Télérama, Deux Magots, Première Plume et Femina des lycéens). Nous avons également analysé les livres présents dans les sélections du Goncourt, du Femina, du Renaudot et du Médicis afin d’en étudier les recoupements.</p>
+<p>Nous partons de plusieurs hypothèses principales que nous invaliderons par une démonstration par l’absurde :</p>
+<ul>
+<li><strong>Hypothèse 1</strong> : À caractéristiques littéraires comparables, le fait d'être publié par une maison d'édition particulière ne devrait pas augmenter significativement les chances d'être sélectionné pour un prix.</li>
+<li><strong>Hypothèse 2</strong> : Si les prix distinguaient systématiquement des ouvrages différents selon leurs critères propres, on devrait observer une certaine dispersion des récompenses.</li>
+<li><strong>Hypothèse 3</strong> : les ouvrages des sélections de concours sont considérés de qualité équivalente.</li>
+</ul>
+<p>De ces hypothèses découlent les suivantes :</p>
+<ul>
+<li><strong>Hypothèse 3bis</strong> : La présence d'un ouvrage dans plusieurs sélections ne devrait pas, en elle-même, accroître ses chances de remporter un prix ultérieur.</li>
+<li><strong>Hypothèse 1bis et 2bis</strong> : Les listes établies par les différents jurys devraient se recouper dans des proportions compatibles avec un modèle où les sélections sont indépendantes, compte tenu du nombre de titres retenus et de l'ensemble des romans admissibles.</li>
+</ul>
+<h2>Des éditeurs particulièrement avantagés ?</h2>
+<p>En 2018, sur les 16 ouvrages de la première sélection, 3 sont publiés par Gallimard, soit 18,75 %. Ces trois titres appartiennent à la « Collection blanche », qui publie cette année-là 14 ouvrages susceptibles de concourir. À titre de comparaison, environ 381 romans sont publiés en France pour cette rentrée littéraire. Être publié par Gallimard multiplie donc par 5,1 les chances de figurer dans la sélection, soit une hausse de 410 % par rapport à la moyenne du marché.</p>
+<figure><img src="../images/thelyson-orelien-1.png" alt="Histogramme du facteur d’amplification des chances d’entrer dans la première sélection du Goncourt pour un titre de la collection blanche de Gallimard, de 2016 à 2025 : entre 4,8 (2021) et 8,1 (2016), avec un second pic à 7,2 en 2023." width="1263" height="702" loading="lazy"><figcaption>Facteur d’amplification des chances de faire partie de la sélection au Goncourt en étant publié dans la « collection blanche » de Gallimard contre la moyenne</figcaption></figure>
+<p>La permanence dans le temps invalide les tentatives de l’Académie Goncourt pour être plus transparente dans la sélection des livres (lorsqu’elle supprime le statut à vie des jurés ou que le vote se fait désormais à la vue de tous) : encore aujourd’hui, la « collection blanche » est un pré-signal qui influence fortement le succès futur du livre, indépendamment de sa qualité<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>.</p>
+<h2>Une proximité possible entre les jurys ?</h2>
+<p>Le principe consiste à prendre les romans retenus par deux prix littéraires, à compter les titres communs aux deux sélections, puis à comparer ce résultat à celui que l’on obtiendrait si les listes étaient constituées indépendamment à partir d’un ensemble de romans possibles. Le constat est le suivant : les sélections ne se comportent pas comme des choix indépendants dans le modèle aléatoire retenu, et les jurys semblent avoir davantage de romans en commun que prévu si l’on suppose que tous les romans sélectionnés sont de qualité équivalente.</p>
+<figure><img src="../images/thelyson-orelien-2.png" alt="Histogramme comparant, pour six paires de prix, le nombre de titres communs observé (33, 28, 26, 8, 8 et 3) au nombre attendu si les listes étaient indépendantes (6,6, 6,2, 6,3, 1,5, 1,5 et 1,4)." width="1279" height="792" loading="lazy"><figcaption>Proximité entre les jurys</figcaption></figure>
+<p>Cet écart entre la proximité observée et attendue peut s’expliquer de plusieurs façons : d’abord, la forte présence médiatique dont peut déjà disposer un éditeur ; le nom de l’auteur, qui est plus ou moins connu et de fait, sa diffusion auprès des libraires, des critiques et des jurés ; et enfin, les influences réciproques qui peuvent s’exercer entre les jurés. Le modèle ne permet pas d’estimer l’importance de chacun des critères dans le résultat obtenu : il faudrait pour cela tenter de tenir compte de la visibilité d’un ouvrage précédant chaque remise de prix. Alors que pouvons-nous conclure de cela ? Simplement que les sélections des grands prix littéraires se recoupent bien davantage que ce que ne le prévoit les modèles de hasard.</p>
+<p>Par ailleurs, la présence simultanée d’un titre dans les sélections Femina, Goncourt, Médicis et Renaudot semble augmenter fortement sa probabilité de remporter le prix Goncourt. Ce résultat va dans le sens de ceux obtenus par Watts dans son expérience de 2006 sur les biais cognitifs au sein des marchés culturels.</p>
+<figure><img src="../images/thelyson-orelien-3.png" alt="Histogramme du taux de victoire au Goncourt selon le nombre de listes où figure le titre : 3,8 % pour une liste, 4,7 % pour deux, 15,8 % pour trois et 50 % pour quatre." width="1304" height="741" loading="lazy"><figcaption>Taux de victoire du titre au prix Goncourt en fonction du nombre de ses présences simultanées dans les sélections Femina, Goncourt, Médicis et Renaudot</figcaption></figure>
+<p>Le graphique suivant présente la répartition moyenne des 21 prix mentionnés plus tôt : dans 31 % des cas, un prix récompense un ouvrage déjà primé. Plus généralement, notre analyse montre que, sur dix ans, aucun livre n’a remporté deux des grands prix d’automne (Goncourt, Renaudot, Femina, Médicis, Interallié et Grand Prix du roman de l’Académie française), à deux exceptions près : <em>Le Rêve du jaguar</em> de Miguel Bonnefoy (Femina et Académie française en 2024) et <em>Le Lambeau</em> de Philippe Lançon (Femina en 2018, ainsi qu’un « prix spécial » Renaudot créé pour l’occasion). Les doubles ou triples couronnes associent presque toujours un grand prix à un prix « de lecteurs » (Goncourt des lycéens, Landerneau, prix du Monde, Fnac ou libraires). Les trois livres les plus décorés sont <em>La Maison vide</em> (2025), <em>Triste tigre</em> (2023) et <em>S’adapter</em> (2021), chacun ayant remporté trois prix.</p>
+<figure><img src="../images/thelyson-orelien-4.png" alt="Diagramme circulaire de la moyenne des 21 prix sur 2016-2025 : 6,5 prix (31 %) vont à des livres multiprimés et 14,5 (69 %) à des livres monoprimés." width="1320" height="634" loading="lazy"><figcaption>Moyenne des répartitions des 21 prix sur la période 2016-2025</figcaption></figure>
+<h2>Ce que révèlent les prix littéraires</h2>
+<p>En définitive, cette analyse quantitative tend à confirmer que les prix littéraires ne reposent pas uniquement sur une évaluation indépendante de la qualité des œuvres, mais s’inscrivent dans un système où la réputation des éditeurs, la visibilité médiatique des auteurs, les réseaux professionnels et les dynamiques d’influence entre jurys jouent un rôle déterminant. La surreprésentation de certaines maisons d’édition, la proximité statistiquement significative entre les sélections et l’augmentation des chances de remporter le Goncourt lorsqu’un ouvrage figure simultanément dans plusieurs listes suggèrent l’existence de mécanismes cumulatifs de consécration. Ces résultats ne suffisent toutefois pas à démontrer l’existence d’une collusion délibérée entre éditeurs et jurés, ni à mesurer précisément le poids respectif de chaque facteur. Ils mettent néanmoins en évidence les limites d’un système dont les critères de sélection demeurent en partie opaques et dans lequel les chances de reconnaissance semblent inégalement réparties. Ainsi, au-delà de la question de la transparence des jurys, c’est celle de l’indépendance du jugement littéraire qui se trouve posée : dans quelle mesure les prix récompensent-ils les qualités propres d’une œuvre, et dans quelle mesure consacrent-ils également la position qu’elle occupe déjà au sein du champ littéraire ?</p>
+<h2>Thélyson Orélien et les prix littéraires</h2>
+<p>Revenons au premier postulat informel de Thomas Durand, selon lequel un ouvrage écrit par une intelligence artificielle ne pourrait prétendre à un prix parce qu’il serait fondamentalement mauvais. Les chiffres qui précèdent pourraient alors expliquer la sélection de <em>C’était ça ou mourir</em> au Goncourt : celle-ci témoignerait moins d’une reconnaissance intrinsèque de ses qualités littéraires que de l’influence des mécanismes de visibilité, de légitimation et de consécration qui structurent le champ éditorial. Notons que cela ne signifie pas que le livre de Thélyson Orélien soit mauvais : c'est justement tout l'enjeu des premiers paragraphes de l'articles.</p>
+<h2>Conclusion générale</h2>
+<p>L’affaire Thélyson Orélien soulève une question qui dépasse largement celle de l’usage de l’intelligence artificielle en littérature : et si celle-ci était capable d’écrire aussi bien, voire mieux que nous ? Si la valeur esthétique d’un texte dépend moins de sa qualité que de l’idée que nous nous faisons de son auteur, quelle est la crédibilité des institutions littéraires ? La sélection d’un ouvrage potentiellement rédigé avec l'IA semble révéler une incapacité à distinguer un texte généré d’un roman auquel l’auteur aurait consacré plusieurs années. La consécration d’une œuvre ne dépend pas uniquement de ses qualités intrinsèques, mais aussi de sa visibilité, de son éditeur et des réseaux qui favorisent sa reconnaissance. Sans démontrer l’existence d’une collusion délibérée ni trancher la question de l’origine du texte, cette affaire met en lumière deux éléments : la minimisation volontaire de la qualité d’une œuvre générée par IA (un sujet qui fera sans doute l’objet d’un autre article) et le fait que les institutions littéraires ne récompensent pas nécessairement la qualité d’une œuvre.</p>
+<h2 id="annexe-1">Annexe 1 : données</h2>
+<div class="tableau-defile">
+<table>
+<caption>Tableau 1 : taille des premières listes de romans français (* est une donnée estimée) pour les prix Goncourt, Femina, Médicis et Renaudot.</caption>
+<thead>
+<tr>
+<th>Année</th>
+<th>G</th>
+<th>F</th>
+<th>M</th>
+<th>R</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>16*</td>
+<td>16*</td>
+<td>15*</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>16*</td>
+<td>14</td>
+<td>15*</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>15</td>
+<td>16*</td>
+<td>15*</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>16*</td>
+<td>16*</td>
+<td>15*</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>16*</td>
+<td>17</td>
+<td>15*</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>16*</td>
+<td>16</td>
+<td>15</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>16</td>
+<td>16</td>
+<td>15</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>16</td>
+<td>16*</td>
+<td>16</td>
+<td>15*</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>15</td>
+<td>16</td>
+<td>14</td>
+<td>15</td>
+</tr>
+<tr class="total">
+<td>Total</td>
+<td>142</td>
+<td>143</td>
+<td>135</td>
+<td>135</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tableau-defile">
+<table class="texte">
+<caption>Tableau 2 : liste des livres primés et multiprimés</caption>
+<thead>
+<tr>
+<th>Parution</th>
+<th>Livre (auteur)</th>
+<th>Prix remportés</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>« Laëtitia ou la Fin des hommes » (Ivan Jablonka)</td>
+<td>Médicis, prix du Monde (<a href="https://fr.wikipedia.org/wiki/Prix_M%C3%A9dicis">Médicis</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raire_du_Monde">prix du Monde</a>)</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>« Petit Pays » (Gaël Faye)</td>
+<td>Goncourt des lycéens, Fnac, France Culture-Télérama (<a href="https://fr.wikipedia.org/wiki/Prix_du_roman_Fnac">Fnac</a>)</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>« En attendant Bojangles » (Olivier Bourdeaut)</td>
+<td>RTL-Lire, France Culture-Télérama (mars 2016) (<a href="https://fr.wikipedia.org/wiki/Grand_prix_RTL-Lire">RTL-Lire</a>, <a href="https://fr.wikipedia.org/wiki/Prix_France_Culture-T%C3%A9l%C3%A9rama">France Culture-Télérama</a>)</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>« Comment Baptiste est mort » (Alain Blottière)</td>
+<td>Décembre, Jean-Giono (<a href="https://fr.wikipedia.org/wiki/Prix_D%C3%A9cembre">Décembre</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2016">Prix littéraires 2016</a>)</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>« L'Art de perdre » (Alice Zeniter)</td>
+<td>Goncourt des lycéens, prix du Monde, Landerneau (<a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2017">Prix littéraires 2017</a>)</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>« La Nostalgie de l'honneur » (Jean-René Van der Plaetsen)</td>
+<td>Interallié, Jean-Giono (<a href="https://fr.wikipedia.org/wiki/Prix_Interalli%C3%A9">Interallié</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2017">Prix littéraires 2017</a>)</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>« La Vraie Vie » (Adeline Dieudonné)</td>
+<td>Fnac, Première Plume, Renaudot des lycéens (<a href="https://fr.wikipedia.org/wiki/Prix_Renaudot_des_Lyc%C3%A9ens">Renaudot des lycéens</a>)</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>« Le Lambeau » (Philippe Lançon)</td>
+<td>Femina, « prix spécial » Renaudot (<a href="https://fr.wikipedia.org/wiki/Prix_Renaudot">Renaudot</a>)</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>« Par les routes » (Sylvain Prudhomme)</td>
+<td>Femina, Landerneau (<a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2019">Prix littéraires 2019</a>)</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>« Les Choses humaines » (Karine Tuil)</td>
+<td>Interallié, Goncourt des lycéens (<a href="https://fr.wikipedia.org/wiki/Prix_Interalli%C3%A9">Interallié</a>)</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>« Le Bal des folles » (Victoria Mas)</td>
+<td>Première Plume, Renaudot des lycéens (<a href="https://fr.wikipedia.org/wiki/Prix_Renaudot_des_Lyc%C3%A9ens">Renaudot des lycéens</a>)</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>« Chavirer » (Lola Lafon)</td>
+<td>Landerneau, France Culture-Télérama (<a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2020">Prix littéraires 2020</a>)</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>« S'adapter » (Clara Dupont-Monod)</td>
+<td>Femina, Goncourt des lycéens, Landerneau (<a href="https://fr.wikipedia.org/wiki/Prix_Femina">Femina</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2021">Prix littéraires 2021</a>)</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>« Ne t'arrête pas de courir » (Mathieu Palain)</td>
+<td>Interallié, France Culture-Télérama (<a href="https://fr.wikipedia.org/wiki/Prix_Interalli%C3%A9">Interallié</a>)</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>« La Treizième Heure » (Emmanuelle Bayamack-Tam)</td>
+<td>Médicis, Landerneau (<a href="https://fr.wikipedia.org/wiki/Prix_M%C3%A9dicis">Médicis</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2022">Prix littéraires 2022</a>)</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>« Attaquer la terre et le soleil » (Mathieu Belezi)</td>
+<td>Prix du Monde 2022, Livre Inter 2023 (<a href="https://fr.wikipedia.org/wiki/Prix_du_livre_inter">Livre Inter</a>)</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>« On était des loups » (Sandrine Collette)</td>
+<td>Renaudot des lycéens, Jean-Giono (<a href="https://fr.wikipedia.org/wiki/Prix_Renaudot_des_Lyc%C3%A9ens">Renaudot des lycéens</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2022">Prix littéraires 2022</a>)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>« Veiller sur elle » (Jean-Baptiste Andrea)</td>
+<td>Goncourt, Fnac (<a href="https://fr.wikipedia.org/wiki/Prix_du_roman_Fnac">Fnac</a>)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>« Triste tigre » (Neige Sinno)</td>
+<td>Femina, Goncourt des lycéens, prix du Monde (<a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raire_du_Monde">prix du Monde</a>)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>« Que notre joie demeure » (Kev Lambert)</td>
+<td>Médicis, Décembre (<a href="https://fr.wikipedia.org/wiki/Prix_D%C3%A9cembre">Décembre</a>)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>« Humus » (Gaspard Koenig)</td>
+<td>Interallié, Jean-Giono (<a href="https://fr.wikipedia.org/wiki/Prix_Interalli%C3%A9">Interallié</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2023">Prix littéraires 2023</a>)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>« Ce que je sais de toi » (Éric Chacour)</td>
+<td>Première Plume 2023, Femina des lycéens 2023, prix des libraires 2024 (<a href="https://fr.wikipedia.org/wiki/Prix_des_libraires">libraires</a>)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>« Houris » (Kamel Daoud)</td>
+<td>Goncourt, Landerneau (<a href="https://fr.wikipedia.org/wiki/Prix_Goncourt_2024">Goncourt 2024</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2024">Prix littéraires 2024</a>)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>« Le Rêve du jaguar » (Miguel Bonnefoy)</td>
+<td>Femina, Académie française (<a href="https://fr.wikipedia.org/wiki/Prix_Femina">Femina</a>, <a href="https://fr.wikipedia.org/wiki/Grand_Prix_du_roman_de_l%27Acad%C3%A9mie_fran%C3%A7aise">Académie française</a>)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>« Les Guerriers de l'hiver » (Olivier Norek)</td>
+<td>Renaudot des lycéens, Jean-Giono (<a href="https://fr.wikipedia.org/wiki/Prix_Renaudot_des_Lyc%C3%A9ens">Renaudot des lycéens</a>, <a href="https://www.lefigaro.fr/livres/olivier-norek-prix-jean-giono-2024-20241107">Le Figaro</a>)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>« Ilaria ou la conquête de la désobéissance » (Gabriella Zalapì)</td>
+<td>Femina des lycéens, France Culture-Télérama (<a href="https://www.loumina.fr/prix-litteraire-prix-femina-des-lyceens">Loumina</a>)</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>« La Maison vide » (Laurent Mauvignier)</td>
+<td>Goncourt, prix du Monde, Landerneau (<a href="https://fr.wikipedia.org/wiki/Prix_Goncourt_2025">Goncourt 2025</a>, <a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raire_du_Monde">prix du Monde</a>)</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>« La Nuit au cœur » (Nathacha Appanah)</td>
+<td>Femina, Goncourt des lycéens, Renaudot des lycéens (<a href="https://fr.wikipedia.org/wiki/Prix_Femina">Femina</a>, <a href="https://fr.wikipedia.org/wiki/Prix_Renaudot_des_Lyc%C3%A9ens">Renaudot des lycéens</a>)</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>« Le monde est fatigué » (Joseph Incardona)</td>
+<td>Deux Magots, Femina des lycéens (<a href="https://fr.wikipedia.org/wiki/Prix_litt%C3%A9raires_2025">Prix littéraires 2025</a>)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tableau-defile">
+<table>
+<caption>Tableau 3 : répartition des 21 prix les plus importants</caption>
+<thead>
+<tr>
+<th>Année</th>
+<th>Livres multiprimés</th>
+<th>Prix allant aux livres multiprimés</th>
+<th>Prix allant aux livres monoprimés (1 livre = 1 prix)</th>
+<th>Prix non attribués / Hors périmètre</th>
+<th>TOTAL DES PRIX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>4</td>
+<td>8</td>
+<td>13</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>2</td>
+<td>5</td>
+<td>16</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>2</td>
+<td>5</td>
+<td>16</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>3</td>
+<td>6</td>
+<td>15</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>1</td>
+<td>2</td>
+<td>19</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>2</td>
+<td>5</td>
+<td>16</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>3</td>
+<td>6</td>
+<td>15</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>5</td>
+<td>12</td>
+<td>9</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>4</td>
+<td>8</td>
+<td>13</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>3</td>
+<td>8</td>
+<td>13</td>
+<td>0</td>
+<td>21</td>
+</tr>
+<tr class="total">
+<td>MOYENNE</td>
+<td>2,9</td>
+<td>6,5 (31 %)</td>
+<td>14,5 (69 %)</td>
+<td>0</td>
+<td>21 (100 %)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tableau-defile">
+<table class="texte">
+<caption>Tableau 4 : recensement des livres multi-sélectionnés pour les prix Médicis, Goncourt, Femina et Renaudot</caption>
+<thead>
+<tr>
+<th>Année</th>
+<th>Sur trois ou quatre listes</th>
+<th>Sur deux listes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>Appanah « Tropique de la violence » (G, F, M) ; Del Amo « Règne animal » (G, F, M) ; Faye « Petit Pays » (G, F, M) ; Mauvignier « Continuer » (G, F, M) ; Cusset « L'Autre qu'on adorait » (G, F, R) ; Slimani « Chanson douce » (G, F, R) ; Jablonka « Laëtitia » (G, R en essai, M)</td>
+<td>Lang (G, F) ; Gros, Jauffret, Reza (G, R)</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>Désérable « Un certain M. Pickielny » (7 prix sur 7 : Goncourt, Goncourt des lycéens, Renaudot, Médicis, Femina, Interallié, Académie) ; Adimi « Nos richesses », Guez « La Disparition de Josef Mengele », Haenel « Tiens ferme ta couronne », Jaenada « La Serpe », Zeniter « L'Art de perdre » (5 listes chacun) (<a href="https://www.lefigaro.fr/livres/2017/10/03/03005-20171003ARTFIG00115-goncourt-renaudot-medicis-ces-ecrivains-qui-trustent-les-listes-des-prix-litteraires.php">Le Figaro</a>)</td>
+<td>Giraud « Un loup pour l'homme » (4 listes)</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>Diop « Frère d'âme » (G, F, R)</td>
+<td>Dieudonné « La Vraie Vie » (G, R)</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>Appanah « Le Ciel par-dessus le toit » (G, F, R)</td>
+<td>Amigorena « Le Ghetto intérieur » (G, M) ; Barbéris, Pauly, Tuil (G, F) ; Coatalem (G, R)</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>Le Tellier « L'Anomalie » (G, R, M) ; Chiche « Saturne » (G, F, M)</td>
+<td>Lafon « Chavirer » (G, F) ; Aïssaoui, Frain (G, R) ; Martin, de Toledo (G, M)</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>Sarr « La Plus Secrète Mémoire des hommes » (G, F, R, M) ; Angot « Le Voyage dans l'Est » (G, F, M) ; Berest « La Carte postale » (G, F, R)</td>
+<td>Dupont-Monod, Fottorino, Noudelmann, Quentin (G, F)</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>Ravey « Taormine » (G, F, R) ; Sabolo « La Vie clandestine » (G, R, M)</td>
+<td>Bouillier (G, F) ; Devers (G, R) ; Korman, Serre (G, M)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>Barbéris « Une façon d'aimer » (G, F, M) ; Sinno « Triste tigre » (G, F, M)</td>
+<td>Andrea (G, F) ; Amoudi, Koenig, Sénanque (G, R) ; Lambert, Reinhardt (G, M)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>Faye « Jacaranda » (G, F, R) ; Kern « La Vie meilleure » (G, F, R) ; Bonnefoy « Le Rêve du jaguar » (F, R, M)</td>
+<td>Daoud, Jaenada, Montaigu, Norek, Orengo (G, R) ; Gaudy (G, F) ; Clerc, E. Lambert, Taïa (G, M) ; Bouillier « Le Syndrome de l'Orangerie », Choplin « La Barque de Masao », Laforcade « Berlin pour elles » (F, R) ; Deck « Ann d'Angleterre », Haddad « Aimez Gil », Richard « La Vie infinie » (F, M)</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>Appanah « La Nuit au cœur » (G, F, M, R) ; Mauvignier « La Maison vide » (G, F, M)</td>
+<td>Carrère « Kolkhoze », Dunant « Un amour infini » (G, M) ; Pourchet « Tressaillir », Thomas « Un frère » (G, F) ; Alikavazovic « Au grand jamais » (F, R) ; Richeux « Officier radio », Serre « Vertu et Rosalinde » (F, M) ; Jestin « La mauvaise joueuse » (R, M)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tableau-defile">
+<table>
+<caption>Tableau 5 : recensement des livres publiés pour la rentrée de septembre en littérature blanche, susceptible de concourir au Goncourt, au Femina, au Médicis et au Renaudot</caption>
+<thead>
+<tr>
+<th>Année</th>
+<th>Romans français (Rentrée de septembre)</th>
+<th>Total (avec littérature étrangère traduite)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2015</td>
+<td>393</td>
+<td>589</td>
+</tr>
+<tr>
+<td>2016</td>
+<td>363</td>
+<td>560</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>381</td>
+<td>581</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>381</td>
+<td>567</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>336</td>
+<td>524</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>344</td>
+<td>461</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>334</td>
+<td>521</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>345</td>
+<td>490</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>321</td>
+<td>466</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>311</td>
+<td>459</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>344</td>
+<td>484</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="annexe-2">Annexe 2 : calcul des données</h2>
+<div class="tableau-defile">
+<table class="large">
+<caption>Graphique 1 : Facteur d'amplification des chances de faire partie de la sélection au Goncourt en étant publié dans la "collection blanche" de Gallimard contre la moyenne</caption>
+<thead>
+<tr>
+<th>Année</th>
+<th>Romans français (Rentrée)</th>
+<th>Places dans la 1re sélection du Goncourt</th>
+<th>Chance moyenne du marché</th>
+<th>Titres « Blanche » Gallimard</th>
+<th>Titres Gallimard sélectionnés</th>
+<th>Chance pour un titre Gallimard</th>
+<th>Facteur d'amplification (vs Moyenne)</th>
+<th>Facteur d'amplification (vs Autres éditeurs)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>363</td>
+<td>16</td>
+<td>4,41 %</td>
+<td>14</td>
+<td>5</td>
+<td>35,71 %</td>
+<td>8,1 x</td>
+<td>11,3 x</td>
+</tr>
+<tr>
+<td>2017</td>
+<td>381</td>
+<td>15</td>
+<td>3,94 %</td>
+<td>15</td>
+<td>3</td>
+<td>20,00 %</td>
+<td>5,1 x</td>
+<td>6,1 x</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>381</td>
+<td>16</td>
+<td>4,20 %</td>
+<td>14</td>
+<td>3</td>
+<td>21,43 %</td>
+<td>5,1 x</td>
+<td>6,0 x</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>336</td>
+<td>15</td>
+<td>4,46 %</td>
+<td>13</td>
+<td>3</td>
+<td>23,08 %</td>
+<td>5,2 x</td>
+<td>6,2 x</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>344</td>
+<td>16</td>
+<td>4,65 %</td>
+<td>14</td>
+<td>4</td>
+<td>28,57 %</td>
+<td>6,1 x</td>
+<td>7,9 x</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>334</td>
+<td>16</td>
+<td>4,79 %</td>
+<td>13</td>
+<td>3</td>
+<td>23,08 %</td>
+<td>4,8 x</td>
+<td>5,7 x</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>345</td>
+<td>15</td>
+<td>4,35 %</td>
+<td>14</td>
+<td>3</td>
+<td>21,43 %</td>
+<td>4,9 x</td>
+<td>5,9 x</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>321</td>
+<td>16</td>
+<td>4,98 %</td>
+<td>14</td>
+<td>5</td>
+<td>35,71 %</td>
+<td>7,2 x</td>
+<td>10,0 x</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>311</td>
+<td>16</td>
+<td>5,14 %</td>
+<td>13</td>
+<td>4</td>
+<td>30,77 %</td>
+<td>6,0 x</td>
+<td>7,6 x</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>344</td>
+<td>16</td>
+<td>4,65 %</td>
+<td>14</td>
+<td>4</td>
+<td>28,57 %</td>
+<td>6,1 x</td>
+<td>7,9 x</td>
+</tr>
+<tr class="total">
+<td>MOYENNE</td>
+<td>346</td>
+<td>15,7</td>
+<td>4,56 %</td>
+<td>13,8</td>
+<td>3,7</td>
+<td>26,84 %</td>
+<td>5,9 x</td>
+<td>7,5 x</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="graphique-2-proximité-entre-les-jurys">Graphique 2 : Proximité entre les jurys</h3>
+<div class="tableau-defile">
+<table>
+<caption>Paires avec le Goncourt</caption>
+<thead>
+<tr>
+<th>Année</th>
+<th>N</th>
+<th>G∩F</th>
+<th>G∩M</th>
+<th>G∩R</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>363</td>
+<td>7 (0,71)</td>
+<td>5 (0,66)</td>
+<td>5 (0,66)</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>381</td>
+<td>1 (0,59)</td>
+<td>0 (0,63)</td>
+<td>2 (0,63)</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>336</td>
+<td>4 (0,71)</td>
+<td>1 (0,67)</td>
+<td>2 (0,67)</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>344</td>
+<td>2 (0,74)</td>
+<td>4 (0,70)</td>
+<td>3 (0,70)</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>334</td>
+<td>7 (0,81)</td>
+<td>2 (0,72)</td>
+<td>2 (0,72)</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>345</td>
+<td>2 (0,74)</td>
+<td>3 (0,70)</td>
+<td>3 (0,70)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>321</td>
+<td>3 (0,80)</td>
+<td>4 (0,75)</td>
+<td>3 (0,75)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>311</td>
+<td>3 (0,82)</td>
+<td>3 (0,82)</td>
+<td>7 (0,77)</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>344</td>
+<td>4 (0,70)</td>
+<td>4 (0,61)</td>
+<td>1 (0,65)</td>
+</tr>
+<tr class="total">
+<td>Total</td>
+<td></td>
+<td>33 (6,63)</td>
+<td>26 (6,25)</td>
+<td>28 (6,25)</td>
+</tr>
+<tr>
+<td>Rapport O/E</td>
+<td></td>
+<td>4,98</td>
+<td>4,16</td>
+<td>4,48</td>
+</tr>
+<tr>
+<td>p</td>
+<td></td>
+<td>1,2·10⁻¹⁵</td>
+<td>1,6·10⁻¹⁰</td>
+<td>4,0·10⁻¹²</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tableau-defile">
+<table>
+<caption>Toutes les paires, 2024-2025 seulement</caption>
+<thead>
+<tr>
+<th>Paire</th>
+<th>Observé</th>
+<th>Attendu</th>
+<th>Rapport</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G–F</td>
+<td>3 / 4 = 7</td>
+<td>1,52</td>
+<td>4,6</td>
+<td>4,0·10⁻⁴</td>
+</tr>
+<tr>
+<td>G–M</td>
+<td>3 / 4 = 7</td>
+<td>1,43</td>
+<td>4,9</td>
+<td>2,7·10⁻⁴</td>
+</tr>
+<tr>
+<td>G–R</td>
+<td>7 / 1 = 8</td>
+<td>1,42</td>
+<td>5,6</td>
+<td>2,9·10⁻⁵</td>
+</tr>
+<tr>
+<td>F–R</td>
+<td>6 / 2 = 8</td>
+<td>1,47</td>
+<td>5,4</td>
+<td>3,8·10⁻⁵</td>
+</tr>
+<tr>
+<td>F–M</td>
+<td>4 / 4 = 8</td>
+<td>1,47</td>
+<td>5,4</td>
+<td>3,8·10⁻⁵</td>
+</tr>
+<tr>
+<td>R–M</td>
+<td>1 / 2 = 3</td>
+<td>1,38</td>
+<td>2,2</td>
+<td>0,155</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>ATTENTION : les rapports sont très sensibles à la taille des listes. Le rapport O/E passe, pour −2, 0 et +2, de 6,52 à 4,98 puis 3,93 pour G–F, de 5,49 à 4,16 puis 3,26 pour G–M, et de 5,92 à 4,48 puis 3,51 pour G–R.</p>
+<h3 id="graphique-3-taux-de-victoire-du-titre-au-prix-goncourt-en-fonction-du-nombre-de-ses-présences-simultanées-dans-les-sélections-femina-goncourt-médicis-et-renaudot">Graphique 3 : Taux de victoire du titre au prix Goncourt en fonction du nombre de ses présences simultanées dans les sélections Femina, Goncourt, Médicis et Renaudot</h3>
+<p>Comptage des livres de la liste Goncourt par nombre de listes k (G compris), sur 142 titres entre 2016 et 2025 :</p>
+<ul>
+<li>k = 4 : 2 livres (Sarr 2021, Appanah 2025).</li>
+<li>k = 3 : 19 livres (6 en 2016, 1 en 2018, 1 en 2019, 2 en 2020, 2 en 2021, 2 en 2022, 2 en 2023, 2 en 2024, 1 en 2025).</li>
+<li>k = 2 : 64 − 19 − 2 = 43 livres.</li>
+<li>k = 1 : 142 − 64 = 78 livres (valeur estimée, car elle dépend des tailles de liste).</li>
+</ul>
+<div class="tableau-defile">
+<table>
+<thead>
+<tr>
+<th>Année</th>
+<th>Lauréat</th>
+<th>k</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2016</td>
+<td>Slimani</td>
+<td>3 (G, F, R)</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>Mathieu</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>Dubois</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>Le Tellier</td>
+<td>3 (G, R, M)</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>Sarr</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>Giraud</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>Andrea</td>
+<td>2 (G, F)</td>
+</tr>
+<tr>
+<td>2024</td>
+<td>Daoud</td>
+<td>2 (G, R)</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>Mauvignier</td>
+<td>3 (G, F, M)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="tableau-defile">
+<table>
+<caption>Taux de victoire (intervalles de Clopper-Pearson à 95 %)</caption>
+<thead>
+<tr>
+<th>k</th>
+<th>Lauréats / livres</th>
+<th>Taux</th>
+<th>IC95 %</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3 / 78</td>
+<td>3,8 %</td>
+<td>[0,8 ; 10,8]</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2 / 43</td>
+<td>4,7 %</td>
+<td>[0,6 ; 15,8]</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3 / 19</td>
+<td>15,8 %</td>
+<td>[3,4 ; 39,6]</td>
+</tr>
+<tr>
+<td>4</td>
+<td>1 / 2</td>
+<td>50 %</td>
+<td>[1,3 ; 98,7]</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="graphique-4-moyenne-des-répartitions-des-21-prix-sur-la-période-2016-2025">Graphique 4 : Moyenne des répartitions des 21 prix sur la période 2016-2025</h3>
+<p>Voir l’annexe 1, tableau 3.</p>
+      </div>
+
+      <section class="notes" aria-label="Notes">
+<ol>
+<li id="fn1"><a href="https://www.vogue.fr/article/meilleurs-premiers-romans-rentree-litteraire-2026">Les 11 meilleurs premiers romans de la rentrée littéraire 2026 | Vogue France</a><a href="#fnref1" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn2"><a href="https://www.lefigaro.fr/bons-plans/culture/il-a-remporte-le-prix-du-roman-fnac-2026-c-etait-ca-ou-mourir-ecrit-par-thelyson-orelien-est-le-phenomene-litteraire-de-l-annee-20261010">Il a remporté le prix du Roman Fnac 2026 : « C’était ça ou mourir » écrit par Thélyson Orélien est le phénomène littéraire de l’année</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn3"><a href="https://ici.radio-canada.ca/nouvelle/2288827/hausse-ventes-thelyson-orelien-quebec-france">Hausse des ventes de C’était ça ou mourir, de Thélyson Orélien | Radio-Canada</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn4"><a href="https://www.radiofrance.fr/franceinter/podcasts/l-info-de-france-inter/l-info-de-france-inter-9185178">Qui se cache derrière le compte "Balance ton Claude", à l'origine des accusations à l'encontre de Thélyson Orélien ? | France Inter</a><a href="#fnref4" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn5"><a href="https://www.lapresse.ca/arts/litterature/2026-09-03/c-etait-ca-ou-mourir/un-prix-et-une-selection-au-renaudot-pour-thelyson-orelien.php">C’était ça ou mourir | Un prix et une sélection au Renaudot pour Thélyson Orélien</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn6"><a href="https://arxiv.org/pdf/2607.27183">Pangram 4 Technical Report</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn7"><a href="https://lucide.ai/meilleur-detecteur-ia-comparatif">Étude Lucide.ai 2026 - Précision des détecteurs d'IA en français</a><a href="#fnref7" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn8"><a href="https://menace-theoriste.fr/ecrivain-artificiel-orelien-ridiculise-le-monde-litteraire/">Écrivain artificiel — Orélien ridiculise le monde littéraire ? – La Menace Théoriste</a><a href="#fnref8" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn9"><a href="https://leslecturesdecannetille.blogspot.com/2026/09/critique-cetait-ca-ou-mourir-de.html">Les Lectures de Cannetille: Critique : "C'était ça ou mourir" de Thélyson Orélien | Lectures de Cannetille</a><a href="#fnref9" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn10"><a href="https://www.culture-tops.fr/critique-evenement/romans/cetait-ca-ou-mourir">Critique Avis C’était ça ou mourir de Thélyson Orélien | Romans Culture-Tops</a><a href="#fnref10" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn11"><a href="https://www.youtube.com/watch?v=ppSrAHoGwrI&amp;t=56s">Les musiques populaires sont-elles vraiment mieux que les autres ?</a><a href="#fnref11" class="footnote-back" role="doc-backlink">↩</a></li>
+<li id="fn12">Salganik, M. J., Dodds, P. S., &amp; Watts, D. J. (2006). “Experimental study of inequality and unpredictability in an artificial cultural market”<a href="#fnref12" class="footnote-back" role="doc-backlink">↩</a></li>
+</ol>
+      </section>
+    </article>
+
+    <div class="billet-fin">
+      <div class="ornement"></div>
+      <a class="lien" href="../index.html">Retour à l'accueil</a>
+    </div>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+
+  </div>
+</body>
+</html>

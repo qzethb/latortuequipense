@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Newsletter — La Tortue</title>
+  <meta name="description" content="Inscrivez-vous à la newsletter de La Tortue pour recevoir les nouvelles publications par e-mail.">
+  <link rel="stylesheet" href="charte.css">
+  <link rel="stylesheet" href="report.css">
+  <script src="menu.js" defer></script>
+  <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96">
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+  <link rel="shortcut icon" href="favicon/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
+  <link rel="manifest" href="favicon/site.webmanifest">
+</head>
+<body>
+  <div class="page" id="contact">
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contacts.html">Contacts</a>
+        <a href="newsletter.html" aria-current="page">Newsletter</a>
+      </nav>
+    </header>
+
+    <section class="billet-entete">
+      <h1>Newsletter</h1>
+      <div class="ornement"></div>
+    </section>
+    <main class="lecture">
+      <div class="lecture-texte">
+        <p>Pour vous abonner à notre newsletter, vous pouvez remplir le formulaire ci-dessous (veillez à cocher la case « Envoi manuel »). En cliquant sur envoyer, vous acceptez que <strong>votre adressee e-mail soit utilisée pour recevoir la newsletter</strong>.</p>
+
+
+        <form
+          class="report-form report-form--newsletter"
+          action="https://formsubmit.app/f/yrwzty2rxq"
+          method="POST"
+        >
+          <input type="hidden" name="_subject" value="Nouvelle inscription à la newsletter — La Tortue">
+
+          <div class="report-honeypot" aria-hidden="true">
+            <label for="newsletter-website">Ne pas remplir ce champ</label>
+            <input
+              id="newsletter-website"
+              type="text"
+              name="_gotcha"
+              tabindex="-1"
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="report-fields">
+            <div class="report-field">
+              <label for="newsletter-email">Adresse e-mail</label>
+              <input
+                type="email"
+                id="newsletter-email"
+                name="email"
+                placeholder="votre@email.fr"
+                autocomplete="email"
+                required
+              >
+            </div>
+
+            <div class="report-verification">
+              <div class="report-confirmation">
+                <input id="newsletter-confirmation" type="checkbox" name="manual_confirmation" value="confirmed" required>
+                <label for="newsletter-confirmation">Envoi manuel</label>
+              </div>
+              <button class="report-submit" type="submit">S’inscrire</button>
+            </div>
+          </div>
+
+          <div class="report-actions">
+            <a class="report-back" href="index.html">Retour au site</a>
+          </div>
+        </form>
+      </div>
+    </main>
+
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
+            <li><a href="report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+  </div>
+</body>
+</html>

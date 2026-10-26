@@ -1,0 +1,376 @@
+/* ==========================================================================
+  LA TORTUE — Charte des articles
+   Pages de lecture : à charger APRÈS charte.css (elle réutilise ses variables).
+
+   <link rel="stylesheet" href="../charte.css">
+   <link rel="stylesheet" href="../article.css">
+
+   Sommaire
+   1. Variables de lecture
+   2. Ligne de progression
+   3. Titre de l'article
+   4. Texte
+   5. Intertitres, listes, citations
+   6. Figures
+   6 bis. Tableaux
+   6 ter. Tableaux longs
+   6 quater. Formules de mathématiques
+   7. Notes
+   8. Fin d'article
+   9. Adaptation mobile
+   10. Impression
+   ========================================================================== */
+
+
+/* 1. VARIABLES DE LECTURE
+   -------------------------------------------------------------------------- */
+:root {
+  --t-article-titre: clamp(40px, 7.5vw, 76px);
+  --t-soustitre:     clamp(18px, 2.4vw, 21px);
+  --t-lecture:       20px;
+  --interligne:      1.8;
+  --retrait:         1.6em;     /* alinéa en début de paragraphe */
+}
+
+
+/* 2. LIGNE DE PROGRESSION
+   Un filet violet en haut de l'écran qui avance avec la lecture.
+   Invisible sur les navigateurs qui ne savent pas l'animer.
+   -------------------------------------------------------------------------- */
+.progression {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+  height: 2px;
+  background: var(--violet);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .progression {
+    animation: progression linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes progression { to { transform: scaleX(1); } }
+}
+
+
+/* 3. TITRE DE L'ARTICLE
+   -------------------------------------------------------------------------- */
+.billet-entete { padding: 14vh 0 9vh; text-align: center; }
+
+.billet-entete h1 {
+  max-width: 14ch; margin: 0 auto;
+  font-size: var(--t-article-titre);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.billet-entete .ornement { margin: 34px auto 26px; }
+
+.sous-titre {
+  max-width: 34em; margin: 0 auto;
+  font-size: var(--t-lead); font-style: normal;
+  color: var(--texte);
+  text-wrap: balance;
+}
+
+.billet-meta {
+  display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 0;
+  margin: 34px 0 0;
+  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+}
+.billet-meta > * + *::before {
+  content: ""; display: inline-block; vertical-align: -2px;
+  width: 1px; height: 14px; margin: 0 18px;
+  background: var(--lilas);
+}
+
+
+/* 4. TEXTE
+   Colonne de lecture étroite, paragraphes aérés sans alinéa,
+   lettrine au début de l'article.
+   -------------------------------------------------------------------------- */
+
+.billet-texte,
+.billet-fin,
+.notes {
+  max-width: var(--largeur-lecture);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.billet-texte {
+  font-size: var(--t-lecture);
+  line-height: var(--interligne);
+  hyphens: auto;
+  text-wrap: pretty;
+  text-align: justify;
+  animation: none; /* seul le titre apparaît en douceur */
+}
+
+/* Paragraphes : aucun alinéa, espace entre les paragraphes */
+.billet-texte > p {
+  margin: 0 0 0.8em;
+  text-indent: 0;
+}
+
+/* Lettrine sur le premier paragraphe uniquement */
+.billet-texte > p:first-of-type::first-letter {
+  float: left;
+  margin: .06em .1em 0 0;
+  font-size: 3.7em;
+  line-height: .8;
+  color: var(--violet);
+}
+
+/* Liens */
+.billet-texte a {
+  color: var(--violet);
+  border-bottom: 1px solid var(--lilas);
+  transition: border-color var(--transition);
+}
+
+.billet-texte a:hover {
+  border-color: var(--violet);
+}
+
+/* Emphase : couleur et filet, sans gras artificiel */
+.billet-texte strong {
+  font-weight: 400;
+  color: var(--violet-profond);
+  box-shadow: inset 0 -1px var(--lilas);
+}
+
+
+/* 5. INTERTITRES, LISTES, CITATIONS
+   -------------------------------------------------------------------------- */
+
+.billet-texte h2 {
+  margin: 2.8em 0 .9em;
+  font-size: 1.45em;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--violet);
+  text-wrap: balance;
+  break-after: avoid;
+  text-align: left;
+}
+
+.billet-texte h3 {
+  margin: 2.4em 0 .8em;
+  font-size: 1.15em;
+  font-style: italic;
+  line-height: 1.3;
+  color: var(--violet);
+  text-wrap: balance;
+  break-after: avoid;
+  text-align: left;
+}
+
+.billet-texte ul { margin: 2em 0; padding: 0; list-style: none; }
+.billet-texte li { position: relative; margin: 0 0 1.1em; padding-left: 1.8em; }
+.billet-texte li::before {
+  content: ""; position: absolute; left: 0; top: .95em;
+  width: .9em; height: 1px; background: var(--violet-doux);
+}
+
+.billet-texte blockquote {
+  margin: 2.2em 0; padding: 0 0 0 1.6em;
+  border-left: 1px solid var(--lilas);
+  font-style: italic; color: var(--violet);
+}
+.billet-texte blockquote p { margin: 0 0 1em; text-indent: 0; }
+
+
+/* 6. FIGURES
+   Les schémas sont affichés à leur taille réelle, jamais agrandis :
+   une image étirée perd en netteté. Fournir des images larges (≥ 1200 px)
+   pour un rendu parfait sur écran haute définition.
+   -------------------------------------------------------------------------- */
+.billet-texte figure { margin: 3em 0; text-align: center; }
+.billet-texte figure img {
+  display: inline-block;
+  width: auto; max-width: 100%; height: auto;
+  padding: 14px;
+  background: var(--blanc);
+  border: 1px solid var(--lilas);
+}
+.billet-texte figcaption { margin-top: 12px; text-indent: 0; }
+.billet-texte .description-schema {
+  max-width: 52em; margin: 12px auto 0;
+  text-align: left; font-size: .78em; line-height: 1.55;
+}
+.billet-texte .description-schema summary {
+  width: fit-content;
+  color: var(--violet);
+  cursor: pointer;
+}
+.billet-texte .description-schema summary:focus-visible {
+  outline: 1px solid var(--violet); outline-offset: 3px;
+}
+.billet-texte .description-schema p {
+  margin: .7em 0 0; text-indent: 0; text-align: left;
+}
+
+
+/* 6 bis. TABLEAUX
+   Tableaux de données (annexe) : filets lilas, chiffres alignés à droite.
+   -------------------------------------------------------------------------- */
+.billet-texte table {
+  width: 100%; margin: 2.4em 0;
+  border-collapse: collapse;
+  font-size: .8em; line-height: 1.4;
+  font-variant-numeric: tabular-nums;
+  hyphens: manual;
+  break-inside: avoid;
+}
+.billet-texte caption {
+  padding: 0 0 .9em;
+  text-align: left; font-style: italic; color: var(--violet);
+}
+.billet-texte th,
+.billet-texte td {
+  padding: .55em .7em;
+  text-align: right;
+  border-bottom: 1px solid var(--lilas);
+}
+.billet-texte th:first-child,
+.billet-texte td:first-child { padding-left: 0; text-align: left; }
+.billet-texte thead th {
+  font-weight: 400; font-style: italic; vertical-align: bottom;
+  color: var(--texte-doux);
+  border-bottom-color: var(--violet-doux);
+}
+.billet-texte tbody tr:last-child td { border-bottom-color: var(--violet-doux); }
+
+
+/* 6 ter. TABLEAUX LONGS
+   Chaque tableau est enveloppé dans .tableau-defile : sur mobile il défile
+   horizontalement au lieu d'écraser ses colonnes.
+   .large = beaucoup de colonnes ; .texte = cellules de texte (alignées à gauche) ;
+   tr.total = ligne de total ou de moyenne.
+   -------------------------------------------------------------------------- */
+.billet-texte .tableau-defile { margin: 2.4em 0; overflow-x: auto; }
+.billet-texte .tableau-defile table { margin: 0; break-inside: auto; }
+.billet-texte .tableau-defile tr { break-inside: avoid; }
+.billet-texte table.large { min-width: 44em; }
+.billet-texte table.texte th,
+.billet-texte table.texte td { text-align: left; vertical-align: top; }
+.billet-texte tr.total td { color: var(--violet-profond); border-top: 1px solid var(--violet-doux); }
+
+
+/* 6 quater. FORMULES DE MATHÉMATIQUES
+   Les formules sont écrites en LaTeX directement dans le HTML et mises en forme
+   par KaTeX (voir les trois lignes à copier dans le <head> de l'article) :
+     - dans une phrase :  \( B_i = \beta_0 \cdot v_i^{\alpha} \)
+     - isolée, centrée :  <div class="formule">\[ V_{ij} = B_i \cdot \varepsilon_{ij} \]</div>
+   .formule peut aussi porter .numerotee pour afficher (1), (2)… à droite.
+   -------------------------------------------------------------------------- */
+.billet-texte .katex {
+  font-size: 1.1em;            /* KaTeX est un peu petit à côté du Baskerville */
+  color: var(--texte);
+  text-indent: 0;
+  hyphens: manual;
+}
+
+.billet-texte .formule {
+  margin: 1.7em 0;
+  padding: .2em 0;
+  overflow-x: auto;            /* une formule trop large défile au lieu de déborder */
+  overflow-y: hidden;
+  text-align: center;
+  text-indent: 0;
+  break-inside: avoid;
+}
+.billet-texte .formule .katex-display { margin: 0; }
+.billet-texte .formule .katex { font-size: 1.2em; }
+
+/* Numérotation facultative : <div class="formule numerotee"> */
+.billet-texte { counter-reset: formule; }
+.billet-texte .formule.numerotee { position: relative; counter-increment: formule; padding-right: 3em; }
+.billet-texte .formule.numerotee::after {
+  content: "(" counter(formule) ")";
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+}
+
+
+/* 7. NOTES
+   Appels de note dans le texte, liste des notes en fin d'article.
+   -------------------------------------------------------------------------- */
+.footnote-ref { border-bottom: 0 !important; }
+.footnote-ref sup {
+  padding: 0 .15em;
+  font-size: .7em; line-height: 0;
+  color: var(--violet);
+}
+
+.notes {
+  margin-top: 6em; padding-top: 1.8em;
+  border-top: 1px solid var(--lilas);
+  font-size: 16px; line-height: 1.6;
+  color: var(--texte-doux);
+  hyphens: manual;
+}
+.notes ol { margin: 0; padding-left: 1.6em; }
+.notes li { margin-bottom: .8em; padding-left: .3em; }
+.notes li::marker { color: var(--violet); }
+.notes li:target { background: var(--brume); }
+.notes a { color: var(--violet); word-break: break-word; }
+.notes .footnote-back { margin-left: .5em; border: 0; }
+
+
+/* 8. FIN D'ARTICLE
+   -------------------------------------------------------------------------- */
+.billet-fin { margin-top: 7em; text-align: center; font-style: italic; font-size: var(--t-petit); }
+.billet-fin .ornement { margin: 0 auto 28px; }
+
+
+/* 9. ADAPTATION MOBILE
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  :root { --t-lecture: 18.5px; --interligne: 1.7; --retrait: 1.3em; }
+
+  .billet-entete { padding: 10vh 0 6vh; }
+  .billet-meta > * + *::before { margin: 0 14px; }
+
+  .billet-texte h2 { margin-top: 2.4em; font-size: 1.35em; }
+  .billet-texte > p:first-of-type::first-letter { font-size: 3.4em; }
+  .billet-texte figure img { padding: 8px; }
+  .notes { font-size: 15px; }
+  .billet-texte table { font-size: .72em; }
+  .billet-texte .formule { margin: 1.4em 0; font-size: .88em; }
+}
+
+
+/* 10. IMPRESSION
+    -------------------------------------------------------------------------- */
+@media print {
+  .progression { display: none; }
+  .billet-texte { font-size: 11.5pt; line-height: 1.55; }
+  .billet-texte figure { break-inside: avoid; }
+  .billet-texte .formule { overflow: visible; }
+  .billet-texte a[href^="http"]::after { content: " (" attr(href) ")"; font-size: .8em; color: #555; }
+}
+
+
+/* Bouton de téléchargement PDF */
+.billet-actions {
+  margin-top: 28px;
+  text-align: center;
+}
+
+.billet-actions button {
+  padding: 11px 18px;
+  border: 1px solid var(--lilas);
+  background: transparent;
+  color: var(--violet);
+  font: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .2s, color .2s;
+}
+
+.billet-actions button:hover {
+  background: var(--violet);
+  color: var(--blanc);
+}

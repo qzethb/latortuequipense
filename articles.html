@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Articles — La Tortue</title>
+<meta name="description" content="Retrouvez les articles de La Tortue sur la société, la politique, la littérature et les sciences humaines. Recherchez un sujet ou filtrez les publications.">
+<link rel="stylesheet" href="charte.css">
+<script src="menu.js" defer></script>
+<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+<link rel="shortcut icon" href="favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+<link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html" aria-current="page">Articles</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contacts.html">Contacts</a>
+        <a href="newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <section class="billet-entete">
+      <h1>Tous les articles</h1>
+      <div class="ornement"></div>
+    </section>
+
+    <main>
+      <div class="outils">
+        <form class="recherche" role="search" id="formulaire">
+          <label class="sr-only" for="recherche">Rechercher un article</label>
+          <input type="search" id="recherche" name="q" placeholder="Rechercher un article" autocomplete="off">
+          <button type="button" id="effacer" hidden>Effacer</button>
+        </form>
+
+        <div class="filtres-menus">
+
+          <div class="menu-tags" data-cle="tags" data-param="tag">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="tags-panneau">
+              <span>Tags</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="tags-panneau" role="group" aria-label="Filtrer par tag" hidden>
+              <label class="menu-tags-option"><input type="checkbox" value="Société"><span>Société</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Politique"><span>Politique</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Justice"><span>Justice</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Littérature"><span>Littérature</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Médias"><span>Médias</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Intelligence artificielle"><span>Intelligence artificielle</span></label>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
+          <div class="menu-tags" data-cle="disciplines" data-param="discipline">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="disciplines-panneau">
+              <span>Discipline</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="disciplines-panneau" role="group" aria-label="Filtrer par discipline" hidden>
+              <label class="menu-tags-option"><input type="checkbox" value="Sociologie"><span>Sociologie</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Science politique"><span>Science politique</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Droit"><span>Droit</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Littérature"><span>Littérature</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Philosophie"><span>Philosophie</span></label>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
+          <button type="button" class="actualiser-filtres" id="actualiser-filtres" aria-label="Actualiser les résultats avec les filtres sélectionnés" title="Actualiser les résultats avec les filtres sélectionnés" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20 11a8.1 8.1 0 0 0-14.9-4M4 4v4h4M4 13a8.1 8.1 0 0 0 14.9 4M20 20v-4h-4" />
+            </svg>
+          </button>
+
+        </div>
+      </div>
+
+      <p class="resultats" id="resultats" aria-live="polite"></p>
+
+      <div class="liste">
+        <article class="article-row">
+          <a class="article" href="articles/le-hussard.html" data-tags="Littérature,Politique" data-disciplines="Littérature,Science politique" data-motscles="Le Hussard, littérature, politique, vulgarisation littéraire, titres polémiques, analyse de réseaux, réseau YouTube, extrême droite, droite identitaire, métapolitique, bataille culturelle">
+            <span class="date">23 octobre 2026</span>
+            <div class="article-corps">
+              <h2>Littérature &amp; Politique sur Internet : étude de cas du Hussard</h2>
+              <span class="article-description" id="description-hussard-liste" aria-hidden="true">
+                Le Hussard est une chaine de vulgarisation littéraire, ou en tout cas, elle prétend l'être. Qu'en est-il vraiment ? Quels sont les mécanismes à l'oeuvre sous ses titres polémiques ? Nous nous proposons de les explorer dans cet article à travers une analyse de réseaux.              </span>
+              <div class="article-tags"><span class="tag">Littérature</span><span class="tag">Politique</span></div>
+            </div>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-hussard-liste">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/decryptage-discours-presidentiel.html" data-tags="Politique,Société" data-disciplines="Sociologie,Science politique" data-motscles="discours présidentiel, allocution, 18 octobre 2026, mouvement lycéen, manifestations lycéennes, analyse du discours, rhétorique, violences, répression, maintien de l’ordre, démocratie, revendications">
+            <span class="date">20 octobre 2026</span>
+            <div class="article-corps">
+              <h2>Décryptage du discours présidentiel du 18 octobre 2026</h2>
+              <span class="article-description" id="description-discours-presidentiel-liste" aria-hidden="true">
+                Au lendemain des manifestations violentes du 17 octobre 2026, l’allocution solennelle du Président de la République prétend ramener le calme. Mais à travers un cadrage centré sur le maintien de l’ordre et l’évitement des causes profondes de la colère sociale, le discours présidentiel opère un verrouillage démocratique inquiétant. Analyse d’une stratégie de langage qui préfère la répression au dialogue.
+              </span>
+              <div class="article-tags"><span class="tag">Politique</span><span class="tag">Société</span></div>
+            </div>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-discours-presidentiel-liste">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/thelyson-orelien.html" data-tags="Littérature,Intelligence artificielle" data-disciplines="Littérature,Sociologie" data-motscles="Thélyson Orélien, C’était ça ou mourir, intelligence artificielle, IA, écriture générée, détection IA, Pangram, Lucide, plagiat, Goncourt, prix Goncourt, prix littéraires, sélection littéraire, jurys littéraires, éditeurs, analyse statistique">
+            <span class="date">12 octobre 2026</span>
+            <div class="article-corps">
+              <h2>Thélyson Orélien, un scandale littéraire ? Une analyse statistique</h2>
+              <span class="article-description" id="description-thelyson-liste" aria-hidden="true">
+                Dans cet article, nous verrons comment le livre de Thélyson Orélien a pu faire partie de la première sélection du Goncourt.
+              </span>
+              <div class="article-tags"><span class="tag">Littérature</span><span class="tag">Intelligence artificielle</span></div>
+            </div>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-thelyson-liste">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/manifestations-lyceennes.html" data-tags="Politique,Société" data-disciplines="Sociologie,Science politique" data-motscles="manifestations lycéennes, lycéens, mouvement lycéen, jeunesse, revendications, blocus des lycées, éducation nationale, Parcoursup, médias, traitement médiatique, journal télévisé, temps d’antenne, violences policières, violences urbaines, répression, interpellations, maintien de l’ordre">
+            <span class="date">10 octobre 2026</span>
+            <div class="article-corps">
+              <h2>Revendications lycéennes et traitement médiatique : une lutte asymétrique</h2>
+              <span class="article-description" id="description-manifestations-liste" aria-hidden="true">
+                Retour sur le traitement médiatique du mouvement lycéen dans les journaux télévisés nationaux.
+              </span>
+              <div class="article-tags"><span class="tag">Politique</span><span class="tag">Société</span></div>
+            </div>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-manifestations-liste">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+        <article class="article-row">
+          <a class="article" href="articles/le-masque-du-merite.html" data-tags="Société" data-disciplines="Sociologie,Philosophie" data-motscles="privilège, privilèges, méritocratie, mérite, inégalité, inégalités sociales, domination sociale, hiérarchie sociale, capital culturel, justice sociale, privilège blanc, privilège masculin, Bourdieu, philosophie, sociologie, Ancien Régime, Révolution française, luttes sociales">
+            <span class="date">6 octobre 2026</span>
+            <div class="article-corps">
+              <h2>Aujourd'hui, quels sont les privilèges ?</h2>
+              <span class="article-description" id="description-privileges-liste" aria-hidden="true">
+                Les inégalités n'ont jamais atteint un tel niveau en France, mais les mobilisations échouent les unes après les autres. Pourquoi ?
+              </span>
+              <div class="article-tags"><span class="tag">Société</span></div>
+            </div>
+            <span class="fleche" aria-hidden="true">→</span>
+          </a>
+          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-privileges-liste">
+            <span class="fleche" aria-hidden="true">↓</span>
+          </button>
+        </article>
+      </div>
+
+      <div class="vide" id="vide" hidden>
+        <p>Aucun article ne correspond à cette recherche. Si vous pensez qu'il s'agit d'une erreur, vous pouvez tenter de cliquer sur "Tout afficher", puis d'effectuer votre recherche avec <strong>le raccourci Ctrl + F</strong>. En dernier recours, vous pouvez signaler un problème via <a href="report.html">le formulaire de signalement</a>.</p>
+        <button type="button" class="bouton" id="tout">Tout afficher</button>
+      </div>
+    </main>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
+            <li><a href="report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+
+  </div>
+
+<script>
+(function () {
+  var champ    = document.getElementById('recherche');
+  var effacer  = document.getElementById('effacer');
+  var actualiser = document.getElementById('actualiser-filtres');
+  var compte   = document.getElementById('resultats');
+  var vide     = document.getElementById('vide');
+  var articles = document.querySelectorAll('.liste .article');
+
+  /* Minuscules et sans accents : « litterature » trouve « Littérature » */
+  function normaliser(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  }
+
+  articles.forEach(function (a) {
+    a.dataset.texte = normaliser(a.textContent + ' ' + (a.dataset.motscles || ''));
+  });
+
+  /* Menus déroulants (Tags, Discipline…) : un objet par menu */
+  var menus = [];
+  document.querySelectorAll('.menu-tags').forEach(function (el) {
+    menus.push({
+      el:      el,
+      cle:     el.dataset.cle,     /* attribut data-… lu sur les articles */
+      param:   el.dataset.param,   /* paramètre d'adresse (?tag=…) */
+      bouton:  el.querySelector('.menu-tags-bouton'),
+      panneau: el.querySelector('.menu-tags-panneau'),
+      nombre:  el.querySelector('.menu-tags-nombre'),
+      reset:   el.querySelector('.menu-tags-reset'),
+      cases:   el.querySelectorAll('input[type="checkbox"]')
+    });
+  });
+  var filtresAppliques = [];
+
+  function coches(m) {
+    var liste = [];
+    m.cases.forEach(function (c) { if (c.checked) liste.push(c.value); });
+    return liste;
+  }
+
+  /* Valeurs d'un article pour un menu ; les espaces autour des virgules sont ignorés */
+  function valeurs(a, cle) {
+    return (a.dataset[cle] || '').split(',').map(function (t) { return t.trim(); });
+  }
+
+  function decocher(m) {
+    m.cases.forEach(function (c) { c.checked = false; });
+  }
+
+  function filtresModifies() {
+    return menus.some(function (m, i) {
+      var selection = coches(m);
+      var applique = filtresAppliques[i] || [];
+      return selection.length !== applique.length
+        || selection.some(function (valeur) { return applique.indexOf(valeur) === -1; });
+    });
+  }
+
+  function mettreAJourMenus() {
+    menus.forEach(function (m) {
+      var selection = coches(m);
+      m.nombre.textContent = selection.length;
+      m.nombre.hidden = !selection.length;
+      m.reset.hidden = !selection.length;
+    });
+    actualiser.disabled = !filtresModifies();
+  }
+
+  function appliquerFiltres() {
+    filtresAppliques = menus.map(coches);
+    mettreAJourMenus();
+    filtrer();
+  }
+
+  function filtrer() {
+    var mots  = normaliser(champ.value).split(/\s+/).filter(Boolean);
+    var choix = filtresAppliques;
+    var n = 0;
+
+    articles.forEach(function (a) {
+      /* Dans un menu : au moins une case cochée correspond (OU).
+         Entre les menus, et avec la recherche : tout doit correspondre (ET). */
+      var visible = mots.every(function (mot) { return a.dataset.texte.indexOf(mot) > -1; })
+        && menus.every(function (m, i) {
+          if (!choix[i].length) return true;
+          var siens = valeurs(a, m.cle);
+          return choix[i].some(function (v) { return siens.indexOf(v) > -1; });
+        });
+      a.hidden = !visible;
+      if (visible) n++;
+    });
+
+    compte.textContent = n ? n + (n > 1 ? ' articles' : ' article') : '';
+    vide.hidden = n > 0;
+    effacer.hidden = !champ.value;
+  }
+
+  function ouvrir(m, oui) {
+    m.panneau.hidden = !oui;
+    m.bouton.setAttribute('aria-expanded', oui ? 'true' : 'false');
+  }
+
+  /* Ferme tous les menus, sauf éventuellement celui qui est passé en argument */
+  function fermerTout(sauf) {
+    menus.forEach(function (m) { if (m !== sauf) ouvrir(m, false); });
+  }
+
+  menus.forEach(function (m) {
+    m.bouton.addEventListener('click', function () {
+      var ouvrirCelui = m.panneau.hidden;
+      fermerTout(m);
+      ouvrir(m, ouvrirCelui);
+    });
+    m.el.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !m.panneau.hidden) { ouvrir(m, false); m.bouton.focus(); }
+    });
+    m.cases.forEach(function (c) { c.addEventListener('change', mettreAJourMenus); });
+    m.reset.addEventListener('click', function () { decocher(m); mettreAJourMenus(); });
+  });
+
+  actualiser.addEventListener('click', appliquerFiltres);
+
+  /* Clic ou focus à l'extérieur d'un menu : il se referme */
+  function fermerExterieur(e) {
+    menus.forEach(function (m) { if (!m.el.contains(e.target)) ouvrir(m, false); });
+  }
+  document.addEventListener('click', fermerExterieur);
+  document.addEventListener('focusin', fermerExterieur);
+
+  champ.addEventListener('input', filtrer);
+  document.getElementById('formulaire').addEventListener('submit', function (e) { e.preventDefault(); appliquerFiltres(); });
+
+  effacer.addEventListener('click', function () { champ.value = ''; filtrer(); champ.focus(); });
+  document.getElementById('tout').addEventListener('click', function () {
+    champ.value = ''; menus.forEach(decocher); appliquerFiltres();
+  });
+
+  /* Liens directs : articles.html?tag=Société,Justice&discipline=Droit  ou  ?q=privilège */
+  var params = new URLSearchParams(location.search);
+  if (params.get('q')) champ.value = params.get('q');
+  menus.forEach(function (m) {
+    if (params.get(m.param)) {
+      var demandes = params.get(m.param).split(',');
+      m.cases.forEach(function (c) { c.checked = demandes.indexOf(c.value) > -1; });
+    }
+  });
+  filtresAppliques = menus.map(coches);
+  mettreAJourMenus();
+  filtrer();
+})();
+</script>
+</body>
+</html>

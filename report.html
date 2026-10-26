@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Contact — La Tortue</title>
+<meta name="description" content="Retrouvez les informations de contact de La Tortue et l’état du service de newsletter.">
+<link rel="stylesheet" href="charte.css">
+<link rel="stylesheet" href="report.css">
+<script src="menu.js" defer></script>
+<link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+<link rel="shortcut icon" href="favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+<link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contacts.html">Contacts</a>
+        <a href="newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+    <section id="contact" class="lecture" aria-labelledby="contact-titre">
+
+     <section class="billet-entete">
+      <h1 id="contact-titre">Signaler un problème</h1>
+      <div class="ornement"></div>
+    </section>
+
+    <div class="lecture-texte">
+        <p>Vous pouvez utiliser ce formulaire pour nous signaler les erreurs présentes dans les articles ou nous proposer des améliorations. Aucun nom ni aucune adresse e-mail ne vous sont demandés. Le site La Tortue ne collecte ni ne demande directement de données personnelles par ce formulaire.</p>
+    </div>
+
+    <form
+      class="report-form"
+      action="https://formsubmit.app/f/yrwzty2rxq"
+      method="POST"
+    >
+      <input type="hidden" name="_subject" value="Nouveau signalement — La Tortue">
+
+      <!-- Champ anti-spam : il doit rester vide. -->
+      <div class="report-honeypot" aria-hidden="true">
+        <label for="report-website">Ne pas remplir ce champ</label>
+        <input
+          id="report-website"
+          type="text"
+          name="_gotcha"
+          tabindex="-1"
+          autocomplete="off"
+        >
+      </div>
+
+      <div class="report-fields">
+        <div class="report-field">
+          <label for="report-category">Type de signalement</label>
+          <select id="report-category" name="category" required>
+            <option value="Erreur technique">Erreur technique ou bug</option>
+            <option value="Erreur de contenu">Erreur dans un article ou un contenu</option>
+            <option value="Lien cassé">Lien qui ne fonctionne pas</option>
+            <option value="Suggestion">Suggestion d’amélioration</option>
+            <option value="Autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="report-field">
+          <label for="report-message">Description</label>
+          <textarea
+            id="report-message"
+            name="message"
+            placeholder="Décrivez le problème rencontré…"
+            minlength="5"
+            maxlength="3000"
+            rows="1"
+            required
+          ></textarea>
+          <small>Évitez les informations personnelles ou confidentielles.</small>
+        </div>
+
+        <div class="report-verification">
+          <div class="report-confirmation">
+            <input id="report-confirmation" type="checkbox" name="manual_confirmation" value="confirmed" required>
+            <label for="report-confirmation">Envoi manuel</label>
+          </div>
+          <button class="report-submit" type="submit">Envoyer</button>
+        </div>
+      </div>
+
+      <div class="report-actions">
+        <a class="report-back" href="index.html">Retour au site</a>
+      </div>
+
+
+    </form>
+    <section class="report-resolved" aria-labelledby="resolved-titre">
+    <h2 id="resolved-titre">Problèmes résolus</h2>
+    <ul class="report-resolved-list">
+      <li>
+        <time datetime="2026-10-23">23 octobre 2026</time>
+        <span>Ajout d'un nouvel article sur la chaine YouTube du Hussard et ajout d'une charte sur l'intelligence artificielle. Corrections de problèmes mineurs sur le site.</span>
+      </li>
+      <li>
+        <time datetime="2026-10-21">22 octobre 2026</time>
+        <span>Corrections stylistiques de l'article sur l'analyse du discours présidentiel. Ajouts de certaines informations suite aux déclarations récentes de l'exécutif.</span>
+      </li>
+      <li>
+        <time datetime="2026-10-21">21 octobre 2026</time>
+        <span>Correction des méta-titres et des métas-descriptions de l'article sur l'analyse du discours présidentiel afin d'améliorer le référencement.</span>
+      </li>
+      <li>
+        <time datetime="2026-10-18">18 octobre 2026</time>
+        <span>Test.</span>
+      </li>
+    </ul>
+    </section>
+    </section>
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
+            <li><a href="report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+  </div>
+  </main>
+  <script>
+    const reportMessage = document.getElementById("report-message");
+    const resizeReportMessage = () => {
+      reportMessage.style.height = "auto";
+      reportMessage.style.height = `${reportMessage.scrollHeight}px`;
+    };
+
+    reportMessage.addEventListener("input", resizeReportMessage);
+  </script>
+</body>
+</html>

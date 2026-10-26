@@ -1,0 +1,7 @@
+# robots.txt pour latortuequipense.fr
+
+User-agent: *
+Allow: /
+
+# Emplacement du plan du site XML
+Sitemap: https://latortuequipense.fr/sitemap.xml

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 400 400"
+     width="400" height="400"
+     role="img"
+     aria-labelledby="logo-title logo-desc">
+  <title id="logo-title">La Tortue</title>
+      <desc id="logo-desc">Logo noir avec un talon stylisé et le texte éditable « la tortue ».</desc>
+
+  <!-- Icône : talon stylisé minimaliste -->
+  <path d="M 120 300
+           C 118 260 122 225 140 205
+           C 160 183 195 175 225 182
+           C 252 189 268 208 264 228
+           C 260 245 242 255 222 265
+           C 200 276 190 288 188 300
+           Z"
+        fill="none"
+        stroke="#1a1a1a"
+        stroke-width="12"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+  <!-- Ligne du sol -->
+  <line x1="80" y1="300" x2="320" y2="300"
+        stroke="#1a1a1a"
+        stroke-width="12"
+        stroke-linecap="round"/>
+
+  <!-- Point de faille sur le talon -->
+  <circle cx="165" cy="245" r="14"
+          fill="none"
+          stroke="#1a1a1a"
+          stroke-width="8"
+          stroke-linecap="round"/>
+
+  <!-- Texte éditable : la police Caveat doit être disponible pour conserver le rendu exact -->
+  <text x="80" y="368"
+        text-anchor="start"
+        font-family="Caveat, cursive"
+        font-size="58"
+        font-weight="700"
+        letter-spacing="1"
+        fill="#1a1a1a">la tortue</text>
+</svg>

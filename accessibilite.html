@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Accessibilité — La Tortue</title>
+  <meta name="description" content="Consultez les engagements d’accessibilité de La Tortue, les aménagements mis en œuvre, les limites recensées et les moyens de signaler une difficulté.">
+  <link rel="stylesheet" href="charte.css">
+  <style>
+    /* Pas de lettrine sur une page juridique / d'information */
+    .billet-texte > p:first-of-type::first-letter {
+      float: none; margin: 0; font-size: inherit; line-height: inherit; color: inherit;
+    }
+  </style>
+  <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
+  <link rel="shortcut icon" href="favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="favicon/site.webmanifest" />
+</head>
+<body>
+
+  <main class="page page--lecture">
+
+    <div class="billet-entete">
+      <h1>Déclaration d’accessibilité</h1>
+    </div>
+
+    <div class="billet-texte">
+
+      <p>L’éditeur de ce site s’engage à rendre ses contenus accessibles à tous les utilisateurs, quelle que soit leur situation, conformément aux meilleures pratiques de conception web inclusive et aux recommandations du RGAA (Référentiel Général d’Amélioration de l’Accessibilité).</p>
+
+      <h2>1. État de conformité</h2>
+      <p>Ce site web est <strong>partiellement conforme</strong> aux normes d’accessibilité (RGAA / WCAG 2.1 niveau AA), en raison des éléments et contraintes énumérés ci-dessous.</p>
+
+      <h2>2. Démarche et éléments mis en œuvre</h2>
+      <p>Afin d’offrir la meilleure expérience de lecture possible, une attention particulière est portée aux points suivants lors de la publication des articles :</p>
+      <ul>
+        <li><strong>Lisibilité et typographie :</strong> choix de polices lisibles, contrastes de couleurs adaptés entre le texte et le fond, et respect de la taille minimale des caractères.</li>
+        <li><strong>Structure du contenu :</strong> utilisation de balises HTML sémantiques (titres <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, paragraphes, listes) pour faciliter la navigation au clavier et via les lecteurs d’écran.</li>
+        <li><strong>Images et médias :</strong> présence d’une alternative textuelle (attribut <code>alt</code>) pour les images informatives. Les descriptions détaillées des schémas peuvent aussi être affichées dans un volet sous chaque image, ouvrable à la souris ou au clavier.</li>
+        <li><strong>Adaptabilité (Responsive design) :</strong> disposition optimisée pour les différents écrans (ordinateurs, tablettes, smartphones).</li>
+      </ul>
+
+      <h2>3. Contenus non accessibles et limites</h2>
+      <p>Malgré le soin apporté à la rédaction et à l’intégration :</p>
+      <ul>
+        <li>Certains documents anciens ou contenus externes intégrés (ex. cartes, vidéos ou modules tiers) peuvent ne pas répondre totalement aux critères d’accessibilité.</li>
+        <li>Des oublis d'alternatives textuelles ou des erreurs dans la hiérarchie des titres peuvent subsister.</li>
+      </ul>
+
+      <h2>4. Retour d’information et contact</h2>
+      <p>Si vous rencontrez une difficulté pour accéder à un article ou à un contenu de ce site, ou si vous constatez un défaut d’accessibilité, vous êtes invité à le signaler afin qu’une solution d’accès alternative puisse vous être proposée.</p>
+      <p>Vous pouvez transmettre vos remarques ou vos demandes par le biais du moyen de contact mis à disposition sur le site (ou à l’adresse électronique indiquée sur la page de contact).</p>
+
+      <h2>5. Voies de recours</h2>
+      <p>Cette procédure est à utiliser dans le cas où vous auriez signalé à l’éditeur du site un défaut d’accessibilité qui vous empêche d’accéder à un contenu et que vous n’auriez pas obtenu de réponse satisfaisante.</p>
+      <p>Vous pouvez :</p>
+      <ul>
+        <li>Écrire un message au <a href="https://formulaire.defenseurdesdroits.fr/">Défenseur des droits</a> ;</li>
+        <li>Contacter <a href="https://www.defenseurdesdroits.fr/carte-des-delegues">le délégué du Défenseur des droits dans votre région</a> ;</li>
+        <li>Envoyer un courrier gratuit (sans timbre) à :<br>
+          <em>Défenseur des droits<br>
+          Libre réponse 71120<br>
+          75342 Paris CEDEX 07</em>
+        </li>
+      </ul>
+
+    </div>
+      <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="a-propos.html">À propos</a></li>
+            <li><a href="contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="report.html">Signaler un problème</a></li>
+            <li><a href="charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>  
+  </main>
+
+</body>
+</html>

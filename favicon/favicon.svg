@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><metadata><rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dc="http://purl.org/dc/elements/1.1/"><rdf:Description><dc:creator>RealFaviconGenerator</dc:creator><dc:source>https://realfavicongenerator.net</dc:source></rdf:Description></rdf:RDF></metadata><style>
+    #light-icon {
+      display: inline;
+    }
+    #dark-icon {
+      display: none;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      #light-icon {
+        display: none;
+      }
+      #dark-icon {
+        display: inline;
+      }
+    }
+  </style><g id="light-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1194)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(3.375,0,0,3.375,-175,-210)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><path d="M 120 300
+           C 118 260 122 225 140 205
+           C 160 183 195 175 225 182
+           C 252 189 268 208 264 228
+           C 260 245 242 255 222 265
+           C 200 276 190 288 188 300
+           Z" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linejoin="round"></path><line x1="80" y1="300" x2="320" y2="300" stroke="#1a1a1a" stroke-width="12" stroke-linecap="round"></line><circle cx="165" cy="245" r="14" fill="none" stroke="#1a1a1a" stroke-width="8"></circle></svg></g></g><defs><clipPath id="SvgjsClipPath1194"><rect width="1000" height="1000" x="0" y="0" rx="100" ry="100"></rect></clipPath></defs></svg></g><g id="dark-icon"><svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="1000"><g clip-path="url(#SvgjsClipPath1195)"><rect width="1000" height="1000" fill="#ffffff"></rect><g transform="matrix(3.375,0,0,3.375,-175,-210)"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400"><path d="M 120 300
+           C 118 260 122 225 140 205
+           C 160 183 195 175 225 182
+           C 252 189 268 208 264 228
+           C 260 245 242 255 222 265
+           C 200 276 190 288 188 300
+           Z" fill="none" stroke="#1a1a1a" stroke-width="12" stroke-linejoin="round"></path><line x1="80" y1="300" x2="320" y2="300" stroke="#1a1a1a" stroke-width="12" stroke-linecap="round"></line><circle cx="165" cy="245" r="14" fill="none" stroke="#1a1a1a" stroke-width="8"></circle></svg></g></g><defs><clipPath id="SvgjsClipPath1195"><rect width="1000" height="1000" x="0" y="0" rx="150" ry="150"></rect></clipPath></defs></svg></g></svg>

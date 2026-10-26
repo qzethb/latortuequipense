@@ -1,0 +1,302 @@
+#contact .billet-entete {
+  padding: 44px 0 22px;
+}
+
+#contact .billet-entete h1 {
+  margin-bottom: 12px;
+}
+
+#contact .lecture-texte {
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+#contact .lecture-texte p {
+  margin-bottom: 18px;
+}
+
+#contact .report-form {
+  margin-top: 8px;
+}
+
+.report-form {
+  border-top: 1px solid var(--lilas, #cdbfe3);
+}
+
+.report-fields {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr) minmax(150px, max-content);
+  align-items: start;
+  gap: 18px;
+  padding: 14px 0 10px;
+  border-bottom: 1px solid var(--lilas, #cdbfe3);
+}
+
+.report-form--newsletter .report-fields {
+  grid-template-columns: minmax(0, 1fr) max-content;
+}
+
+.report-form--newsletter .report-verification {
+  align-items: flex-end;
+}
+
+.report-field label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--violet-profond, #2e1a4a);
+  font-size: var(--t-petit, 15px);
+}
+
+.report-field small {
+  display: block;
+  margin-top: 4px;
+  color: var(--texte-doux, #7a7087);
+  font-size: var(--t-micro, 13px);
+  line-height: 1.3;
+}
+
+.report-field select,
+.report-field input[type="text"],
+.report-field input[type="email"],
+.report-field textarea {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: 7px 0;
+  border: 0;
+  border-bottom: 1px solid var(--lilas, #cdbfe3);
+  border-radius: 0;
+  background: transparent;
+  color: var(--texte, #2b2336);
+  font: inherit;
+  font-size: var(--t-petit, 15px);
+}
+
+.report-field input[type="email"] {
+  line-height: 1.5;
+}
+
+.report-field select {
+  cursor: pointer;
+}
+
+.report-field textarea {
+  min-height: 38px;
+  overflow: hidden;
+  resize: none;
+  line-height: 1.5;
+}
+
+.report-field select:focus,
+.report-field input[type="text"]:focus,
+.report-field input[type="email"]:focus,
+.report-field textarea:focus {
+  outline: none;
+  border-bottom-color: var(--violet, #5b3a8c);
+  box-shadow: 0 1px 0 var(--violet, #5b3a8c);
+}
+
+.report-field input[type="email"]::placeholder,
+.report-field textarea::placeholder {
+  color: var(--texte-doux, #7a7087);
+  font-style: italic;
+  opacity: 1;
+}
+
+.report-field input[type="text"][readonly] {
+  color: var(--texte-doux, #7a7087);
+}
+
+.page-404 .billet-texte > p:first-of-type::first-letter {
+  float: none;
+  margin: 0;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
+
+.report-form--404 .report-fields {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.report-form--404 .report-field--wide,
+.report-form--404 .report-verification {
+  grid-column: 1 / -1;
+}
+
+.report-form--404 .report-verification {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.report-verification {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.report-confirmation {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 20px;
+  color: var(--texte-doux, #7a7087);
+  font-size: var(--t-micro, 13px);
+  white-space: nowrap;
+}
+
+.report-verification input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: var(--violet, #5b3a8c);
+}
+
+.report-verification label {
+  cursor: pointer;
+}
+
+.report-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.report-submit {
+  display: inline-block;
+  width: max-content;
+  max-width: 100%;
+  padding: 7px 12px;
+  border: 1px solid var(--violet, #5b3a8c);
+  border-radius: 0;
+  background: transparent;
+  color: var(--violet, #5b3a8c);
+  font: inherit;
+  font-size: var(--t-micro, 13px);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .3s ease, color .3s ease;
+}
+
+.report-submit:hover {
+  background: var(--violet, #5b3a8c);
+  color: var(--blanc, #fff);
+}
+
+.report-submit:focus-visible {
+  outline: 2px solid var(--violet, #5b3a8c);
+  outline-offset: 3px;
+}
+
+.report-back {
+  color: var(--violet, #5b3a8c);
+  font-size: var(--t-petit, 15px);
+  font-style: italic;
+  background: linear-gradient(var(--violet, #5b3a8c), var(--violet, #5b3a8c)) 0 100% / 100% 1px no-repeat;
+  padding-bottom: 3px;
+}
+
+.report-privacy {
+  margin-top: 12px;
+  color: var(--texte-doux, #7a7087);
+  font-size: var(--t-petit, 15px);
+  font-style: italic;
+}
+
+.report-honeypot {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.report-resolved {
+  margin-top: 40px;
+}
+
+.report-resolved h2 {
+  margin-bottom: 12px;
+  color: var(--violet-profond, #2e1a4a);
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+
+.report-resolved-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--lilas, #cdbfe3);
+}
+
+.report-resolved-list li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--lilas, #cdbfe3);
+  color: var(--texte, #2b2336);
+  font-size: var(--t-petit, 15px);
+  line-height: 1.5;
+}
+
+.report-resolved-list time {
+  flex: 0 0 auto;
+  color: var(--texte-doux, #7a7087);
+  font-size: var(--t-micro, 13px);
+  font-style: italic;
+}
+@media (max-width: 640px) {
+  #contact .billet-entete {
+    padding: 32px 0 18px;
+  }
+
+  .report-fields {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .report-form--newsletter .report-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .report-form--404 .report-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .report-form--404 .report-field--wide,
+  .report-form--404 .report-verification {
+    grid-column: auto;
+  }
+
+  .report-form--404 .report-verification {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .report-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .report-resolved-list li {
+    flex-direction: column;
+    gap: 2px;
+  }
+}
+
+@media print {
+  .report-actions,
+  .report-privacy {
+    display: none;
+  }
+}

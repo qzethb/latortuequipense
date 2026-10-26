@@ -1,0 +1,835 @@
+/* ==========================================================================
+  LA TORTUE — Charte graphique
+   Élégant, sobre, fond blanc, palette autour du violet.
+   Police : Baskerville Old Face (repli : Baskerville, Libre Baskerville).
+
+   Sommaire
+   1. Variables
+   2. Base
+   3. Typographie
+   4. Mise en page
+   5. En-tête et navigation
+   6. Introduction
+   7. Liste d'articles
+   8. Page d'article (lecture)
+   9. Éléments : boutons, étiquettes, vidéo, images, pagination
+   10. Pied de page
+   11. Animations
+   12. Adaptation mobile
+   13. Impression
+   ========================================================================== */
+
+/* Libre Baskerville : repli pour les appareils sans Baskerville Old Face.
+   Supprimer cette ligne si tu héberges toi-même une police. */
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital@0;1&display=swap");
+
+
+/* 1. VARIABLES
+   -------------------------------------------------------------------------- */
+:root {
+  color-scheme: light;
+
+  /* Couleurs */
+  --blanc:          #ffffff;
+  --brume:          #f6f2fb;   /* fond au survol */
+  --lilas:          #cdbfe3;   /* filets, séparateurs */
+  --violet-doux:    #8e6cc0;   /* ornements */
+  --violet:         #5b3a8c;   /* liens, accents */
+  --violet-profond: #2e1a4a;   /* titres */
+  --texte:          #2b2336;   /* texte courant */
+  --texte-doux:     #7a7087;   /* dates, légendes, navigation */
+
+  /* Police */
+  --police: "Baskerville Old Face", "Baskerville", "Libre Baskerville",
+            "Baskerville URW", Georgia, "Times New Roman", serif;
+
+  /* Tailles de texte */
+  --t-micro:  13px;
+  --t-petit:  15px;
+  --t-base:   18px;
+  --t-lead:   19px;
+  --t-h3:     22px;
+  --t-h2:     26px;
+  --t-billet: clamp(34px, 6vw, 56px);
+  --t-titre:  clamp(54px, 11vw, 112px);
+
+  /* Espacement des lettres */
+  --lettres-large: .32em;
+  --lettres-moyen: .28em;
+  --lettres-fin:   .2em;
+
+  /* Mise en page */
+  --largeur:         880px;
+  --largeur-lecture: 680px;
+  --marge:           28px;
+  --logo-hauteur:    76px;
+
+  /* Mouvement */
+  --transition: .3s ease;
+}
+
+
+/* 2. BASE
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+html, body { margin: 0; }
+
+body {
+  background: var(--blanc);
+  color: var(--texte);
+  font-family: var(--police);
+  font-size: var(--t-base);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+img, video, iframe { max-width: 100%; display: block; }
+
+::selection { background: var(--lilas); color: var(--violet-profond); }
+
+:focus-visible {
+  outline: 1px solid var(--violet);
+  outline-offset: 4px;
+}
+
+
+/* 3. TYPOGRAPHIE
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--violet-profond);
+}
+h1 { font-size: var(--t-titre); line-height: 1; letter-spacing: -0.02em; }
+h2 { font-size: var(--t-h2); }
+h3 { font-size: var(--t-h3); }
+h4 { font-size: var(--t-base); font-style: italic; }
+
+p { margin: 0 0 1.4em; }
+
+em, i { font-style: italic; }
+
+hr {
+  width: 56px; height: 1px; margin: 3em auto;
+  border: 0; background: var(--violet-doux);
+}
+
+blockquote {
+  margin: 2em 0; padding: 0 0 0 1.6em;
+  border-left: 1px solid var(--lilas);
+  font-style: italic; color: var(--violet);
+}
+
+/* Lien souligné d'un filet violet */
+.lien {
+  color: var(--violet);
+  background: linear-gradient(var(--violet), var(--violet)) 0 100% / 100% 1px no-repeat;
+  padding-bottom: 3px;
+}
+
+/* Petites capitales espacées (étiquettes, pied de page) */
+.etiquette {
+  margin: 0 0 18px;
+  font-size: var(--t-micro);
+  letter-spacing: var(--lettres-moyen);
+  text-transform: uppercase;
+  color: var(--texte-doux);
+}
+
+
+/* 4. MISE EN PAGE
+   -------------------------------------------------------------------------- */
+.page {
+  max-width: var(--largeur);
+  margin: 0 auto;
+  padding: 0 var(--marge);
+}
+.page--lecture { max-width: calc(var(--largeur-lecture) + 2 * var(--marge)); }
+
+/* Colonne étroite à l'intérieur d'une page (texte court, centré) */
+.lecture { max-width: var(--largeur-lecture); margin: 0 auto; }
+.lecture-texte { font-size: 19px; line-height: 1.75; text-align: justify; text-justify: inter-word; hyphens: auto;}
+.lecture-texte p { margin: 0 0 1.2em; }
+.signature { margin-top: 2em; font-style: italic; color: var(--violet); }
+
+
+/* 5. EN-TÊTE ET NAVIGATION
+   -------------------------------------------------------------------------- */
+header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 36px 0 0;
+}
+
+.marque {
+  display: inline-flex; align-items: center; gap: 14px;
+  font-size: var(--t-petit);
+  letter-spacing: var(--lettres-large);
+  text-transform: uppercase;
+  color: var(--violet-profond);
+}
+.marque .logo { display: block; height: var(--logo-hauteur); width: auto; }
+
+nav { display: flex; gap: 28px; font-size: var(--t-petit); font-style: italic; }
+nav.navigation[hidden] { display: none; }
+nav a {
+  color: var(--texte-doux);
+  background: linear-gradient(var(--violet), var(--violet)) 0 100% / 0 1px no-repeat;
+  padding-bottom: 3px;
+  transition: color var(--transition), background-size var(--transition);
+}
+nav a:hover,
+nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
+
+
+/* 6. INTRODUCTION (page d'accueil)
+   -------------------------------------------------------------------------- */
+.intro { padding: 17vh 0 14vh; text-align: center; }
+.intro h1 { color: #000; }
+.intro p  { margin: 0; font-size: var(--t-lead); font-style: normal; color: var(--texte); }
+
+.ornement {
+  width: 56px; height: 1px; margin: 34px auto 26px;
+  background: var(--violet-doux);
+}
+
+
+/* 7. LISTE D'ARTICLES
+   -------------------------------------------------------------------------- */
+.liste { border-top: 1px solid var(--lilas); }
+
+.article {
+  display: grid;
+  grid-template-columns: 130px 1fr auto;
+  align-items: baseline;
+  gap: 20px;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--lilas);
+  transition: background var(--transition), padding var(--transition);
+}
+.article .date   { font-size: var(--t-petit); font-style: italic; color: var(--texte-doux); }
+.article h2      { transition: color var(--transition); }
+.article .fleche { font-size: 22px; color: var(--lilas); transition: color var(--transition), transform var(--transition); }
+.article-corps h2 a { color: inherit; }
+.article-row { position: relative; }
+.article-toggle {
+  display: none;
+  position: absolute;
+  top: 50%;
+  right: 0;
+  z-index: 2;
+  transform: translateY(-50%);
+}
+
+@media (hover: hover) and (min-width: 641px) {
+  .article:hover { background: var(--brume); padding-left: 14px; padding-right: 14px; }
+  .article:hover h2 { color: var(--violet); }
+  .article:hover .fleche { color: var(--violet); transform: translateX(4px); }
+}
+
+/* Conteneur du titre et de sa description */
+.article-corps {
+  display: block;
+  min-width: 0;
+}
+
+/* Description masquée par défaut mais sans transparence ni italique */
+.article-description {
+  display: block;
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  opacity: 1; /* Rend le texte opaque en permanence */
+  transform: none; /* Supprime l'effet de décalage vertical */
+
+  color: var(--texte-doux);
+  font-size: var(--t-petit);
+  font-style: normal; /* Supprime l'italique */
+  line-height: 1.55;
+
+  transition:
+    max-height .35s ease,
+    margin-top .35s ease;
+}
+
+/* Apparition au survol ou au focus sur les appareils avec pointeur */
+@media (hover: hover) and (min-width: 641px) {
+  .article:hover .article-description,
+  .article:focus-within .article-description {
+    max-height: 8em;
+    margin-top: 10px;
+  }
+}
+
+/* Respect des préférences de réduction des animations */
+@media (prefers-reduced-motion: reduce) {
+  .article-description {
+    transition: none;
+    transform: none;
+  }
+}
+
+.suite { margin: 26px 0 0; text-align: right; font-size: 16px; font-style: italic; }
+.suite a { color: var(--violet); background: linear-gradient(var(--violet), var(--violet)) 0 100% / 100% 1px no-repeat; padding-bottom: 3px; }
+
+
+/* 8. PAGE D'ARTICLE (lecture)
+   -------------------------------------------------------------------------- */
+.billet-entete { padding: 12vh 0 8vh; text-align: center; }
+.billet-entete h1 {
+  font-size: var(--t-billet);
+  line-height: 1.15;
+  color: #000;
+}
+.billet-meta {
+  margin: 22px 0 0;
+  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+}
+
+.billet-texte { font-size: 19px; line-height: 1.75; }
+.billet-texte h2 { margin: 2.2em 0 .8em; }
+.billet-texte a  { color: var(--violet); border-bottom: 1px solid var(--lilas); transition: border-color var(--transition); }
+.billet-texte a:hover { border-color: var(--violet); }
+
+/* Lettrine violette sur le premier paragraphe */
+.billet-texte > p:first-of-type::first-letter {
+  float: left;
+  margin: .08em .12em 0 0;
+  font-size: 3.6em; line-height: .8;
+  color: var(--violet);
+}
+
+
+/* 9. ÉLÉMENTS
+   -------------------------------------------------------------------------- */
+
+/* Bouton : filet violet, se remplit au survol */
+.bouton {
+  display: inline-block;
+  padding: 12px 30px;
+  border: 1px solid var(--violet);
+  background: transparent;
+  color: var(--violet);
+  font-family: inherit; font-size: var(--t-petit);
+  letter-spacing: var(--lettres-fin); text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.bouton:hover { background: var(--violet); color: var(--blanc); }
+
+/* Étiquette de catégorie */
+.tag {
+  display: inline-block;
+  padding: 3px 14px;
+  border: 1px solid var(--lilas);
+  font-size: var(--t-micro);
+  letter-spacing: var(--lettres-fin); text-transform: uppercase;
+  color: var(--violet);
+}
+
+/* Contacts : lignes séparées par des filets lilas */
+.contacts { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--lilas); }
+.contacts li {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 20px;
+  padding: 20px 0; border-bottom: 1px solid var(--lilas);
+}
+.contacts span { font-size: var(--t-petit); font-style: italic; color: var(--texte-doux); }
+.contacts a { color: var(--violet); transition: color var(--transition); }
+.contacts a:hover { color: var(--violet-profond); }
+
+/* Vidéo intégrée (YouTube, Vimeo…) en 16/9 */
+.video { aspect-ratio: 16 / 9; margin: 2.4em 0; background: var(--brume); }
+.video iframe, .video video { width: 100%; height: 100%; border: 0; }
+
+/* Image et légende */
+figure { margin: 2.4em 0; }
+figure img { width: 100%; height: auto; }
+figcaption {
+  margin-top: 12px; text-align: center;
+  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+}
+
+/* Pagination « précédent / suivant » */
+.pagination {
+  display: flex; justify-content: space-between;
+  margin-top: 6em; padding-top: 28px;
+  border-top: 1px solid var(--lilas);
+  font-style: italic; font-size: var(--t-petit);
+}
+.pagination a { color: var(--violet); transition: color var(--transition); }
+.pagination a:hover { color: var(--violet-profond); }
+
+
+/* 10. PIED DE PAGE
+   -------------------------------------------------------------------------- */
+footer {
+  margin-top: 16vh; padding: 28px 0 44px; text-align: center;
+  font-size: var(--t-micro);
+  letter-spacing: var(--lettres-fin); text-transform: uppercase;
+  color: var(--texte-doux);
+}
+
+
+/* 11. ANIMATIONS
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: no-preference) {
+  .intro, .liste, .suite, .billet-entete, .billet-texte { animation: monte .9s ease both; }
+  .liste, .billet-texte { animation-delay: .15s; }
+  .suite { animation-delay: .3s; }
+
+  @keyframes monte {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+
+/* 12. ADAPTATION MOBILE
+   -------------------------------------------------------------------------- */
+.menu-toggle { display: none; }
+
+@media (max-width: 640px) {
+  :root { --t-base: 17px; --marge: 22px; }
+
+  header { flex-direction: column; align-items: flex-start; gap: 14px; padding-top: 28px; }
+  nav { gap: 22px; }
+
+  .intro { padding: 13vh 0 10vh; }
+
+  .article { grid-template-columns: 1fr auto; gap: 6px 16px; padding: 24px 56px 24px 0; }
+  .article .date { grid-column: 1 / -1; }
+  .article h2 { font-size: var(--t-h3); }
+  .article-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  .article-toggle .fleche { font-size: 22px; }
+  .article > .fleche { display: none; }
+  .article-toggle[aria-expanded="true"] .fleche { transform: rotate(180deg); }
+  .article.is-expanded .article-description { max-height: 30em; margin-top: 10px; }
+
+  .billet-texte { font-size: 18px; }
+}
+
+@media (max-width: 760px) {
+  header { flex-direction: row; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding-top: 28px; }
+
+  .menu-toggle {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid var(--lilas);
+    background: transparent;
+    color: var(--violet);
+    cursor: pointer;
+  }
+
+  .menu-toggle-icon {
+    display: flex;
+    width: 20px;
+    height: 16px;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .menu-toggle-icon span {
+    display: block;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transition: transform var(--transition), opacity var(--transition);
+  }
+
+  .menu-toggle[aria-expanded="true"] .menu-toggle-icon span:first-child { transform: translateY(7.5px) rotate(45deg); }
+  .menu-toggle[aria-expanded="true"] .menu-toggle-icon span:nth-child(2) { opacity: 0; }
+  .menu-toggle[aria-expanded="true"] .menu-toggle-icon span:last-child { transform: translateY(-7.5px) rotate(-45deg); }
+
+  .navigation:not([hidden]) {
+    flex-basis: 100%;
+    flex-direction: column;
+    gap: 0;
+    padding: 12px 0 4px;
+    border-top: 1px solid var(--lilas);
+  }
+
+  .navigation a { padding: 10px 0; }
+}
+
+
+/* 13. IMPRESSION
+   -------------------------------------------------------------------------- */
+@media print {
+  header, nav, footer, .pagination, .video { display: none; }
+  body { font-size: 12pt; color: #000; }
+  a { color: #000; }
+}
+
+/* ==========================================================================
+  LA TORTUE — Pied de page
+   Trois colonnes : plan du site, informations, newsletter.
+   À charger APRÈS charte.css (elle réutilise ses variables).
+ 
+   <link rel="stylesheet" href="charte.css">
+   <link rel="stylesheet" href="footer.css">
+   ========================================================================== */
+ 
+/* Cadre : remplace le pied de page centré de charte.css */
+footer.pied {
+  margin-top: 16vh;
+  padding: 0 0 44px;
+  text-align: left;
+  text-transform: none;
+  letter-spacing: normal;
+  font-size: var(--t-petit);
+  color: var(--texte-doux);
+}
+ 
+.pied-colonnes {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.5fr;
+  gap: 48px;
+  padding: 44px 0 56px;
+  border-top: 1px solid var(--lilas);
+}
+ 
+/* Titres de colonne */
+.pied h2 {
+  margin: 0 0 18px;
+  font-size: var(--t-petit);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--violet);
+}
+ 
+/* Listes de liens
+   (les colonnes sont des <nav> : on neutralise la barre horizontale de l'en-tête) */
+nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
+.pied ul { margin: 0; padding: 0; list-style: none; }
+.pied li + li { margin-top: 10px; }
+ 
+.pied a {
+  color: var(--texte-doux);
+  background: linear-gradient(var(--violet), var(--violet)) 0 100% / 0 1px no-repeat;
+  padding-bottom: 2px;
+  transition: color var(--transition), background-size var(--transition);
+}
+.pied a:hover { color: var(--violet); background-size: 100% 1px; }
+ 
+/* Newsletter */
+.newsletter { display: flex; align-items: flex-end; gap: 16px; }
+ 
+.newsletter input {
+  flex: 1; min-width: 0;
+  padding: 8px 0;
+  border: 0; border-bottom: 1px solid var(--lilas); border-radius: 0;
+  background: transparent;
+  font: inherit; color: var(--texte);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.newsletter input::placeholder { color: var(--texte-doux); font-style: italic; opacity: 1; }
+.newsletter input:focus {
+  outline: none;
+  border-bottom-color: var(--violet);
+  box-shadow: 0 1px 0 var(--violet);
+}
+ 
+.newsletter button {
+  padding: 8px 22px;
+  border: 1px solid var(--violet); background: transparent;
+  font: inherit; font-style: italic; color: var(--violet);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.newsletter button:hover { background: var(--violet); color: var(--blanc); }
+
+.inscription-newsletter {
+  display: grid;
+  gap: 14px;
+  margin: 2em 0;
+  text-align: left;
+}
+.inscription-newsletter > input[type="email"] {
+  width: 100%;
+  padding: 10px 0;
+  border: 0;
+  border-bottom: 1px solid var(--lilas);
+  border-radius: 0;
+  background: transparent;
+  color: var(--texte);
+  font: inherit;
+}
+.inscription-newsletter > input[type="email"]:focus {
+  outline: none;
+  border-bottom-color: var(--violet);
+  box-shadow: 0 1px 0 var(--violet);
+}
+.inscription-consentement {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: var(--t-petit);
+  line-height: 1.5;
+}
+.inscription-consentement input {
+  flex: 0 0 auto;
+  margin: .4em 0 0;
+  accent-color: var(--violet);
+}
+.inscription-newsletter button {
+  justify-self: start;
+  padding: 8px 22px;
+  border: 1px solid var(--violet);
+  background: transparent;
+  color: var(--violet);
+  font: inherit;
+  font-style: italic;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.inscription-newsletter button:hover {
+  background: var(--violet);
+  color: var(--blanc);
+}
+ 
+.pied-note { margin: 14px 0 0; font-size: 13px; font-style: italic; line-height: 1.5; }
+ 
+/* Ligne de copyright */
+.pied-copy {
+  margin: 0; text-align: center;
+  font-size: var(--t-micro);
+  letter-spacing: var(--lettres-fin); text-transform: uppercase;
+}
+ 
+/* Texte réservé aux lecteurs d'écran (étiquette du champ e-mail) */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+ 
+/* Mobile : une seule colonne */
+@media (max-width: 760px) {
+  .pied-colonnes { grid-template-columns: 1fr; gap: 36px; padding: 36px 0 44px; }
+}
+ 
+@media print {
+  .newsletter, .pied-note { display: none; }
+}
+
+
+/* ==========================================================================
+  LA TORTUE — Recherche et tags
+   Page « Tous les articles » : barre de recherche, menu déroulant de tags,
+   résultats.
+   À charger APRÈS charte.css (elle réutilise ses variables).
+
+   <link rel="stylesheet" href="charte.css">
+   <link rel="stylesheet" href="recherche.css">
+   ========================================================================== */
+
+
+/* Barre de recherche : même esprit que le champ de la newsletter
+   -------------------------------------------------------------------------- */
+.recherche { display: flex; align-items: flex-end; gap: 16px; }
+
+.recherche input {
+  flex: 1; min-width: 0;
+  padding: 10px 0;
+  border: 0; border-bottom: 1px solid var(--lilas); border-radius: 0;
+  background: transparent;
+  -webkit-appearance: none; appearance: none;
+  font: inherit; font-size: var(--t-lead); color: var(--texte);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+.recherche input::placeholder { color: var(--texte-doux); font-style: italic; opacity: 1; }
+.recherche input:focus {
+  outline: none;
+  border-bottom-color: var(--violet);
+  box-shadow: 0 1px 0 var(--violet);
+}
+.recherche input::-webkit-search-cancel-button,
+.recherche input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+
+.recherche button {
+  padding: 8px 22px;
+  border: 1px solid var(--violet); background: transparent;
+  font: inherit; font-size: var(--t-petit); font-style: italic; color: var(--violet);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.recherche button:hover { background: var(--violet); color: var(--blanc); }
+
+
+/* Menu déroulant des tags : bouton + cases à cocher
+   -------------------------------------------------------------------------- */
+/* Rangée qui accueille les menus côte à côte */
+.filtres-menus { position: relative; z-index: 5; display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.menu-tags { position: relative; display: inline-block; }
+.menu-tags [hidden] { display: none; }
+
+.actualiser-filtres {
+  display: inline-grid; place-items: center;
+  width: 40px; height: 40px; padding: 0;
+  border: 1px solid var(--lilas); background: transparent; color: var(--violet);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), opacity var(--transition);
+}
+.actualiser-filtres:hover:not(:disabled) { background: var(--brume); border-color: var(--violet-doux); }
+.actualiser-filtres:disabled { opacity: .45; cursor: default; }
+.actualiser-filtres:focus-visible { outline: 2px solid var(--violet); outline-offset: 3px; }
+.actualiser-filtres svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+
+.menu-tags-bouton {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 7px 18px;
+  border: 1px solid var(--lilas); background: transparent;
+  font: inherit; font-size: var(--t-petit); font-style: italic; color: var(--violet);
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+}
+.menu-tags-bouton:hover { background: var(--brume); border-color: var(--violet-doux); }
+.menu-tags-bouton[aria-expanded="true"] { border-color: var(--violet); }
+
+/* Petit chevron qui se retourne à l'ouverture */
+.menu-tags-bouton::after {
+  content: "";
+  width: 6px; height: 6px;
+  border-right: 1px solid currentColor; border-bottom: 1px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform var(--transition);
+}
+.menu-tags-bouton[aria-expanded="true"]::after { transform: translateY(1px) rotate(225deg); }
+
+/* Nombre de tags cochés */
+.menu-tags-nombre {
+  min-width: 1.5em; padding: 0 .4em;
+  background: var(--violet); color: var(--blanc);
+  font-size: var(--t-micro); font-style: normal; line-height: 1.5; text-align: center;
+}
+
+/* Panneau */
+.menu-tags-panneau {
+  position: absolute; top: calc(100% + 6px); left: 0;
+  min-width: min(260px, calc(100vw - 2 * var(--marge)));
+  padding: 8px 0;
+  background: var(--blanc);
+  border: 1px solid var(--lilas);
+  box-shadow: 0 14px 32px -16px rgba(46, 26, 74, .25);
+}
+
+.menu-tags-option {
+  display: flex; align-items: center; gap: 14px;
+  padding: 9px 20px;
+  font-size: var(--t-petit); color: var(--texte);
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.menu-tags-option:hover { background: var(--brume); }
+.menu-tags-option:has(input:checked) { color: var(--violet); }
+
+/* Case à cocher : carré fin, rempli de violet une fois cochée */
+.menu-tags-option input {
+  -webkit-appearance: none; appearance: none;
+  display: grid; place-content: center; flex: none;
+  width: 16px; height: 16px; margin: 0;
+  border: 1px solid var(--violet-doux); border-radius: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color var(--transition);
+}
+.menu-tags-option input::before {
+  content: "";
+  width: 8px; height: 8px;
+  background: var(--violet);
+  transform: scale(0);
+  transition: transform .15s ease;
+}
+.menu-tags-option input:checked { border-color: var(--violet); }
+.menu-tags-option input:checked::before { transform: scale(1); }
+.menu-tags-option input:focus-visible { outline: 1px solid var(--violet); outline-offset: 3px; }
+
+/* Tout décocher */
+.menu-tags-reset {
+  display: block; width: 100%;
+  margin-top: 6px; padding: 10px 20px 4px;
+  border: 0; border-top: 1px solid var(--lilas); background: none;
+  font: inherit; font-size: var(--t-micro); font-style: italic; text-align: left;
+  color: var(--texte-doux);
+  cursor: pointer;
+  transition: color var(--transition);
+}
+.menu-tags-reset:hover { color: var(--violet); }
+
+/* Le panneau se déroule à l'ouverture (seulement si le mouvement est permis) */
+@media (prefers-reduced-motion: no-preference) {
+  .menu-tags-panneau { animation: deroule .2s ease both; }
+  .actualiser-filtres svg { transition: transform .3s ease; }
+  .actualiser-filtres:hover:not(:disabled) svg { transform: rotate(90deg); }
+  @keyframes deroule {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: none; }
+  }
+}
+
+
+/* Résultats
+   -------------------------------------------------------------------------- */
+.resultats {
+  min-height: 1.6em;
+  margin: 40px 0 14px;
+  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+}
+
+/* Les articles sont masqués par l'attribut hidden : on rétablit son effet,
+   car .article utilise display: grid */
+.article[hidden] { display: none; }
+.article-row:has(> .article[hidden]) { display: none; }
+
+/* Titre dans la colonne centrale d'un article de la liste.
+   Les tags restent dans le code (data-tags et .article-tags) mais ne
+   s'affichent pas. Pour les réafficher : display: none → display: flex. */
+.article-corps { min-width: 0; }
+.article-tags { display: none; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.article .tag { padding: 1px 10px; }
+
+/* Aucun résultat */
+.vide {
+  padding: 56px 0 24px; text-align: center;
+  font-style: italic; color: var(--texte-doux);
+}
+.vide p { margin: 0; }
+.vide .bouton { margin-top: 24px; font-style: normal; }
+
+
+/* Mobile
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .recherche input { font-size: var(--t-base); }
+  .recherche button { padding: 8px 16px; }
+  .resultats { margin-top: 32px; }
+  .menu-tags { position: static; }
+  .menu-tags-panneau { left: 0; }
+}
+
+
+/* Impression
+   -------------------------------------------------------------------------- */
+@media print {
+  .outils, .resultats { display: none; }
+}
