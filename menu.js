@@ -1,3 +1,60 @@
+const themePreference = window.matchMedia("(prefers-color-scheme: dark)");
+const themeToggle = document.createElement("button");
+themeToggle.className = "theme-toggle";
+themeToggle.type = "button";
+
+let savedTheme = null;
+try {
+  const storedTheme = localStorage.getItem("la-tortue-theme");
+  if (storedTheme === "light" || storedTheme === "dark") savedTheme = storedTheme;
+} catch (error) {
+  console.warn("La préférence de thème ne peut pas être lue.", error);
+}
+
+const selectedTheme = () => document.documentElement.dataset.theme
+  || (themePreference.matches ? "dark" : "light");
+
+const updateThemeToggle = () => {
+  const nextTheme = selectedTheme() === "dark" ? "light" : "dark";
+  themeToggle.textContent = "∨";
+  themeToggle.setAttribute("aria-label", `Activer le mode ${nextTheme === "dark" ? "sombre" : "clair"}`);
+  themeToggle.title = `Activer le mode ${nextTheme === "dark" ? "sombre" : "clair"}`;
+};
+
+if (savedTheme) document.documentElement.dataset.theme = savedTheme;
+
+const header = document.querySelector("header");
+const navigation = header?.querySelector(".navigation");
+if (navigation) {
+  navigation.append(themeToggle);
+} else if (header) {
+  header.append(themeToggle);
+} else {
+  themeToggle.classList.add("theme-toggle--floating");
+  const main = document.querySelector("main");
+  if (main) {
+    main.prepend(themeToggle);
+  } else {
+    document.body.append(themeToggle);
+  }
+}
+
+updateThemeToggle();
+themePreference.addEventListener("change", () => {
+  if (!document.documentElement.dataset.theme) updateThemeToggle();
+});
+
+themeToggle.addEventListener("click", () => {
+  const theme = selectedTheme() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = theme;
+  updateThemeToggle();
+  try {
+    localStorage.setItem("la-tortue-theme", theme);
+  } catch (error) {
+    console.warn("La préférence de thème ne peut pas être enregistrée.", error);
+  }
+});
+
 document.querySelectorAll(".menu-toggle").forEach((toggle) => {
   const navigation = document.getElementById(toggle.getAttribute("aria-controls"));
   if (!navigation) return;

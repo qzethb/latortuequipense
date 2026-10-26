@@ -80,6 +80,11 @@
   cursor: pointer;
 }
 
+.report-field select option {
+  background: var(--surface, #fff);
+  color: var(--texte, #2b2336);
+}
+
 .report-field textarea {
   min-height: 38px;
   overflow: hidden;
@@ -186,7 +191,7 @@
 
 .report-submit:hover {
   background: var(--violet, #5b3a8c);
-  color: var(--blanc, #fff);
+  color: var(--texte-sur-accent, #fff);
 }
 
 .report-submit:focus-visible {
@@ -221,7 +226,7 @@
   border: 0 !important;
 }
 .report-resolved {
-  margin-top: 40px;
+  margin-top: 64px;
 }
 
 .report-resolved h2 {

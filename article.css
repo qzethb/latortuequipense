@@ -372,5 +372,5 @@
 
 .billet-actions button:hover {
   background: var(--violet);
-  color: var(--blanc);
+  color: var(--texte-sur-accent, #fff);
 }

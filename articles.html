@@ -31,6 +31,20 @@
       </nav>
     </header>
 
+    <div class="bandeau-recherche" id="bandeau-recherche" hidden>
+      <form class="bandeau-recherche-formulaire" role="search" aria-label="Recherche rapide dans les articles">
+        <label class="sr-only" for="recherche-rapide">Rechercher un article</label>
+        <input type="search" id="recherche-rapide" placeholder="Rechercher un article" autocomplete="off">
+        <button type="button" id="effacer-rapide" aria-label="Effacer la recherche" hidden>×</button>
+        <button type="submit" class="bandeau-recherche-submit" aria-label="Rechercher">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.2 4.2"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+
     <section class="billet-entete">
       <h1>Tous les articles</h1>
       <div class="ornement"></div>
@@ -210,7 +224,12 @@
 <script>
 (function () {
   var champ    = document.getElementById('recherche');
+  var champRapide = document.getElementById('recherche-rapide');
   var effacer  = document.getElementById('effacer');
+  var effacerRapide = document.getElementById('effacer-rapide');
+  var bandeauRecherche = document.getElementById('bandeau-recherche');
+  var outils = document.querySelector('.outils');
+  var positionAvantRechercheRapide = null;
   var actualiser = document.getElementById('actualiser-filtres');
   var compte   = document.getElementById('resultats');
   var vide     = document.getElementById('vide');
@@ -281,6 +300,15 @@
     filtrer();
   }
 
+  function restaurerPositionRechercheRapide() {
+    if (positionAvantRechercheRapide === null) return;
+    var position = positionAvantRechercheRapide;
+    positionAvantRechercheRapide = null;
+    window.requestAnimationFrame(function () {
+      window.scrollTo({ top: position, behavior: 'auto' });
+    });
+  }
+
   function filtrer() {
     var mots  = normaliser(champ.value).split(/\s+/).filter(Boolean);
     var choix = filtresAppliques;
@@ -302,6 +330,7 @@
     compte.textContent = n ? n + (n > 1 ? ' articles' : ' article') : '';
     vide.hidden = n > 0;
     effacer.hidden = !champ.value;
+    effacerRapide.hidden = !champRapide.value;
   }
 
   function ouvrir(m, oui) {
@@ -336,17 +365,62 @@
   document.addEventListener('click', fermerExterieur);
   document.addEventListener('focusin', fermerExterieur);
 
-  champ.addEventListener('input', filtrer);
+  champ.addEventListener('input', function () {
+    champRapide.value = champ.value;
+    filtrer();
+  });
+  document.querySelector('.bandeau-recherche-formulaire').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var valeur = champRapide.value;
+    var rechercheModifiee = valeur !== champ.value;
+    var effacement = !valeur && Boolean(champ.value);
+
+    if (rechercheModifiee && valeur && positionAvantRechercheRapide === null) {
+      positionAvantRechercheRapide = window.scrollY;
+    }
+
+    champ.value = valeur;
+    filtrer();
+
+    if (effacement) {
+      restaurerPositionRechercheRapide();
+    } else if (rechercheModifiee && valeur) {
+      var cible = document.querySelector(vide.hidden ? '.liste .article:not([hidden])' : '#vide');
+      if (cible) {
+        var reduireMouvement = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        cible.scrollIntoView({ behavior: reduireMouvement ? 'auto' : 'smooth', block: 'start' });
+      }
+    }
+  });
+  champRapide.addEventListener('input', function () {
+    effacerRapide.hidden = !champRapide.value;
+  });
+  effacerRapide.addEventListener('click', function () {
+    champRapide.value = '';
+    effacerRapide.hidden = true;
+    champRapide.focus();
+  });
   document.getElementById('formulaire').addEventListener('submit', function (e) { e.preventDefault(); appliquerFiltres(); });
 
-  effacer.addEventListener('click', function () { champ.value = ''; filtrer(); champ.focus(); });
+  effacer.addEventListener('click', function () {
+    champ.value = '';
+    champRapide.value = '';
+    filtrer();
+    restaurerPositionRechercheRapide();
+    champ.focus();
+  });
   document.getElementById('tout').addEventListener('click', function () {
-    champ.value = ''; menus.forEach(decocher); appliquerFiltres();
+    champ.value = '';
+    champRapide.value = '';
+    menus.forEach(decocher);
+    appliquerFiltres();
+    restaurerPositionRechercheRapide();
   });
 
   /* Liens directs : articles.html?tag=Société,Justice&discipline=Droit  ou  ?q=privilège */
   var params = new URLSearchParams(location.search);
   if (params.get('q')) champ.value = params.get('q');
+  champRapide.value = champ.value;
   menus.forEach(function (m) {
     if (params.get(m.param)) {
       var demandes = params.get(m.param).split(',');
@@ -356,6 +430,27 @@
   filtresAppliques = menus.map(coches);
   mettreAJourMenus();
   filtrer();
+
+  if ('IntersectionObserver' in window) {
+    var observateurRecherche = new IntersectionObserver(function (entrees) {
+      bandeauRecherche.hidden = entrees[0].isIntersecting && document.activeElement !== champRapide;
+    });
+    observateurRecherche.observe(outils);
+  } else {
+    window.addEventListener('scroll', function () {
+      bandeauRecherche.hidden = outils.getBoundingClientRect().bottom >= 0
+        && document.activeElement !== champRapide;
+    }, { passive: true });
+  }
+
+  champRapide.addEventListener('focus', function () {
+    bandeauRecherche.hidden = false;
+  });
+  champRapide.addEventListener('blur', function () {
+    window.requestAnimationFrame(function () {
+      bandeauRecherche.hidden = outils.getBoundingClientRect().bottom >= 0;
+    });
+  });
 })();
 </script>
 </body>

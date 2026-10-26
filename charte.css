@@ -30,6 +30,9 @@
   color-scheme: light;
 
   /* Couleurs */
+  --fond:            #ffffff;
+  --surface:         #ffffff;
+  --texte-sur-accent: #ffffff;
   --blanc:          #ffffff;
   --brume:          #f6f2fb;   /* fond au survol */
   --lilas:          #cdbfe3;   /* filets, séparateurs */
@@ -68,6 +71,36 @@
   --transition: .3s ease;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fond:            #17151b;
+  --surface:         #25212b;
+  --texte-sur-accent: #17151b;
+  --brume:            #25212b;
+  --lilas:            #4a4352;
+  --violet-doux:      #b49ada;
+  --violet:           #c0a6eb;
+  --violet-profond:   #eee6f5;
+  --texte:            #e5dfe9;
+  --texte-doux:       #b8afc0;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --fond:            #17151b;
+    --surface:         #25212b;
+    --texte-sur-accent: #17151b;
+    --brume:            #25212b;
+    --lilas:            #4a4352;
+    --violet-doux:      #b49ada;
+    --violet:           #c0a6eb;
+    --violet-profond:   #eee6f5;
+    --texte:            #e5dfe9;
+    --texte-doux:       #b8afc0;
+  }
+}
+
 
 /* 2. BASE
    -------------------------------------------------------------------------- */
@@ -82,7 +115,7 @@ html {
 html, body { margin: 0; }
 
 body {
-  background: var(--blanc);
+  background: var(--fond);
   color: var(--texte);
   font-family: var(--police);
   font-size: var(--t-base);
@@ -178,8 +211,13 @@ header {
   color: var(--violet-profond);
 }
 .marque .logo { display: block; height: var(--logo-hauteur); width: auto; }
+:root[data-theme="dark"] .marque .logo { filter: invert(1); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .marque .logo { filter: invert(1); }
+}
 
 nav { display: flex; gap: 28px; font-size: var(--t-petit); font-style: italic; }
+nav.navigation { align-items: center; }
 nav.navigation[hidden] { display: none; }
 nav a {
   color: var(--texte-doux);
@@ -190,11 +228,33 @@ nav a {
 nav a:hover,
 nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
 
+.theme-toggle {
+  display: inline-block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--texte-doux);
+  font: inherit;
+  font-size: var(--t-petit);
+  font-style: normal;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--transition), background-size var(--transition);
+}
+
+.theme-toggle:hover { color: var(--violet); }
+
+.theme-toggle--floating {
+  display: block;
+  margin: 20px 0 0 auto;
+  padding: 8px 0 3px;
+}
+
 
 /* 6. INTRODUCTION (page d'accueil)
    -------------------------------------------------------------------------- */
 .intro { padding: 17vh 0 14vh; text-align: center; }
-.intro h1 { color: #000; }
+.intro h1 { color: var(--violet-profond); }
 .intro p  { margin: 0; font-size: var(--t-lead); font-style: normal; color: var(--texte); }
 
 .ornement {
@@ -214,7 +274,7 @@ nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
   gap: 20px;
   padding: 28px 0;
   border-bottom: 1px solid var(--lilas);
-  transition: background var(--transition), padding var(--transition);
+  transition: background var(--transition);
 }
 .article .date   { font-size: var(--t-petit); font-style: italic; color: var(--texte-doux); }
 .article h2      { transition: color var(--transition); }
@@ -231,9 +291,9 @@ nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
 }
 
 @media (hover: hover) and (min-width: 641px) {
-  .article:hover { background: var(--brume); padding-left: 14px; padding-right: 14px; }
+  .article:hover { background: var(--brume); }
   .article:hover h2 { color: var(--violet); }
-  .article:hover .fleche { color: var(--violet); transform: translateX(4px); }
+  .article:hover .fleche { color: var(--violet); }
 }
 
 /* Conteneur du titre et de sa description */
@@ -263,10 +323,16 @@ nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
 
 /* Apparition au survol ou au focus sur les appareils avec pointeur */
 @media (hover: hover) and (min-width: 641px) {
-  .article:hover .article-description,
+  .article:hover .article-description {
+    max-height: 8em;
+    margin-top: 10px;
+    transition-delay: .5s;
+  }
+
   .article:focus-within .article-description {
     max-height: 8em;
     margin-top: 10px;
+    transition-delay: 0s;
   }
 }
 
@@ -288,7 +354,7 @@ nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
 .billet-entete h1 {
   font-size: var(--t-billet);
   line-height: 1.15;
-  color: #000;
+  color: var(--violet-profond);
 }
 .billet-meta {
   margin: 22px 0 0;
@@ -324,7 +390,7 @@ nav a[aria-current="page"] { color: var(--violet); background-size: 100% 1px; }
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
 }
-.bouton:hover { background: var(--violet); color: var(--blanc); }
+.bouton:hover { background: var(--violet); color: var(--texte-sur-accent); }
 
 /* Étiquette de catégorie */
 .tag {
@@ -464,12 +530,14 @@ footer {
   .navigation:not([hidden]) {
     flex-basis: 100%;
     flex-direction: column;
+    align-items: flex-start;
     gap: 0;
     padding: 12px 0 4px;
     border-top: 1px solid var(--lilas);
   }
 
   .navigation a { padding: 10px 0; }
+  .navigation .theme-toggle { margin-top: 6px; padding: 10px 0; }
 }
 
 
@@ -557,7 +625,7 @@ nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
 }
-.newsletter button:hover { background: var(--violet); color: var(--blanc); }
+.newsletter button:hover { background: var(--violet); color: var(--texte-sur-accent); }
 
 .inscription-newsletter {
   display: grid;
@@ -605,7 +673,7 @@ nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
 }
 .inscription-newsletter button:hover {
   background: var(--violet);
-  color: var(--blanc);
+  color: var(--texte-sur-accent);
 }
  
 .pied-note { margin: 14px 0 0; font-size: 13px; font-style: italic; line-height: 1.5; }
@@ -673,7 +741,90 @@ nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
 }
-.recherche button:hover { background: var(--violet); color: var(--blanc); }
+.recherche button:hover { background: var(--violet); color: var(--texte-sur-accent); }
+
+.bandeau-recherche {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 20;
+  padding: 10px var(--marge);
+  border-bottom: 1px solid var(--lilas);
+  background: var(--fond);
+  box-shadow: 0 8px 24px -18px rgba(20, 15, 28, .6);
+}
+
+.bandeau-recherche[hidden] { display: none; }
+
+.bandeau-recherche-formulaire {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: var(--largeur);
+  margin: 0 auto;
+}
+
+.bandeau-recherche-formulaire input {
+  flex: 1;
+  min-width: 0;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid var(--lilas);
+  border-radius: 0;
+  background: transparent;
+  color: var(--texte);
+  font: inherit;
+  font-size: var(--t-base);
+}
+
+.bandeau-recherche-formulaire input:focus {
+  outline: none;
+  border-bottom-color: var(--violet);
+  box-shadow: 0 1px 0 var(--violet);
+}
+
+.bandeau-recherche-formulaire input::placeholder {
+  color: var(--texte-doux);
+  font-style: italic;
+  opacity: 1;
+}
+
+.bandeau-recherche-formulaire button {
+  display: grid;
+  flex: 0 0 40px;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--texte-doux);
+  font: inherit;
+  cursor: pointer;
+}
+
+.bandeau-recherche-formulaire button:hover { color: var(--violet); }
+.bandeau-recherche-formulaire button[hidden] { display: none; }
+
+.bandeau-recherche-formulaire .bandeau-recherche-submit {
+  flex: 0 0 40px;
+  border: 1px solid var(--violet);
+  color: var(--violet);
+}
+
+.bandeau-recherche-formulaire .bandeau-recherche-submit:hover {
+  background: var(--violet);
+  color: var(--fond);
+}
+
+.bandeau-recherche-formulaire .bandeau-recherche-submit svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
 
 
 /* Menu déroulant des tags : bouton + cases à cocher
@@ -719,7 +870,7 @@ nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
 /* Nombre de tags cochés */
 .menu-tags-nombre {
   min-width: 1.5em; padding: 0 .4em;
-  background: var(--violet); color: var(--blanc);
+  background: var(--violet); color: var(--texte-sur-accent);
   font-size: var(--t-micro); font-style: normal; line-height: 1.5; text-align: center;
 }
 
@@ -728,7 +879,7 @@ nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
   position: absolute; top: calc(100% + 6px); left: 0;
   min-width: min(260px, calc(100vw - 2 * var(--marge)));
   padding: 8px 0;
-  background: var(--blanc);
+  background: var(--surface);
   border: 1px solid var(--lilas);
   box-shadow: 0 14px 32px -16px rgba(46, 26, 74, .25);
 }
@@ -794,12 +945,14 @@ nav.pied-col { display: block; gap: 0; font-size: inherit; font-style: normal; }
   min-height: 1.6em;
   margin: 40px 0 14px;
   font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+  scroll-margin-top: 76px;
 }
 
 /* Les articles sont masqués par l'attribut hidden : on rétablit son effet,
    car .article utilise display: grid */
 .article[hidden] { display: none; }
 .article-row:has(> .article[hidden]) { display: none; }
+.liste .article, .vide { scroll-margin-top: 76px; }
 
 /* Titre dans la colonne centrale d'un article de la liste.
    Les tags restent dans le code (data-tags et .article-tags) mais ne
