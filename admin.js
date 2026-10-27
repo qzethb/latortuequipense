@@ -347,7 +347,23 @@
       target.setAttribute("aria-expanded", String(expanded));
       target.textContent = expanded ? "Options avancées ▾" : "Options avancées ▸";
       advancedContextMenu.hidden = !expanded;
-      if (expanded) advancedContextMenu.querySelector("button")?.focus();
+      
+      if (expanded) {
+        // Positionnement en cascade sur la droite du bouton parent
+        const parentRect = target.getBoundingClientRect();
+        const menuRect = contextMenu.getBoundingClientRect();
+        
+        advancedContextMenu.style.left = `${parentRect.width}px`;
+        advancedContextMenu.style.top = `${target.offsetTop}px`;
+        
+        // Si le sous-menu dépasse de l'écran à droite, on le décale à gauche
+        const advRect = advancedContextMenu.getBoundingClientRect();
+        if (menuRect.left + advRect.right > window.innerWidth) {
+          advancedContextMenu.style.left = `-${advRect.width}px`;
+        }
+        
+        advancedContextMenu.querySelector("button")?.focus();
+      }
       return;
     }
     if (target.id === "menu-contextuel-note") {
@@ -404,8 +420,13 @@
     }
   });
   window.addEventListener("resize", closeContextMenu);
-  window.addEventListener("scroll", closeContextMenu, true);
-
+  window.addEventListener("scroll", (event) => {
+    // Si on utilise la molette à l'intérieur du menu contextuel, on ne le ferme pas
+    if (contextMenu.contains(event.target)) {
+      return;
+    }
+    closeContextMenu();
+  }, true);
   const renderImageList = () => {
     imageList.replaceChildren();
     queuedImages.forEach((file, index) => {
