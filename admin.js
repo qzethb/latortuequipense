@@ -349,17 +349,15 @@
       advancedContextMenu.hidden = !expanded;
       
       if (expanded) {
-        // Positionnement en cascade sur la droite du bouton parent
-        const parentRect = target.getBoundingClientRect();
-        const menuRect = contextMenu.getBoundingClientRect();
-        
-        advancedContextMenu.style.left = `${parentRect.width}px`;
+        // On aligne le sous-menu sur la hauteur du bouton "Options avancées"
         advancedContextMenu.style.top = `${target.offsetTop}px`;
         
-        // Si le sous-menu dépasse de l'écran à droite, on le décale à gauche
+        // Sécurité anti-débordement en bas de page : 
+        // si le sous-menu dépasse de l'écran, on le remonte automatiquement
         const advRect = advancedContextMenu.getBoundingClientRect();
-        if (menuRect.left + advRect.right > window.innerWidth) {
-          advancedContextMenu.style.left = `-${advRect.width}px`;
+        if (advRect.bottom > window.innerHeight) {
+          const overflow = advRect.bottom - window.innerHeight + 12;
+          advancedContextMenu.style.top = `${target.offsetTop - overflow}px`;
         }
         
         advancedContextMenu.querySelector("button")?.focus();

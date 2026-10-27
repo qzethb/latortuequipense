@@ -270,11 +270,10 @@
 /* Le sous-menu en cascade propre qui dépasse sur le côté */
 .admin-menu-contextuel-avance {
   position: absolute;
-  top: -4px; /* S'aligne tout en haut du menu principal */
-  left: 100%; /* Vient se coller exactement à l'extérieur, sur la droite */
-  margin-left: 4px; /* Petit espace de séparation */
+  left: 100%; /* S'affiche sur la droite */
+  margin-left: 4px;
   min-width: 210px;
-  max-height: 300px;
+  max-height: 280px;
   overflow-y: auto;
   display: grid;
   padding: 4px;
