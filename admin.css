@@ -1,0 +1,434 @@
+.admin {
+  max-width: 760px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+}
+
+.admin-entete {
+  padding: 48px 0 34px;
+}
+
+.admin-entete h1 {
+  font-size: clamp(42px, 8vw, 72px);
+}
+
+.admin-entete > p:last-child {
+  max-width: 560px;
+  margin: 24px auto 0;
+  color: var(--texte-doux);
+}
+
+.admin-avertissement {
+  margin: 0 0 30px;
+  padding: 18px 20px;
+  border-left: 3px solid var(--violet);
+  background: var(--brume);
+  font-size: 15px;
+}
+
+.admin-avertissement strong {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--violet-profond);
+}
+
+.admin-avertissement code {
+  overflow-wrap: anywhere;
+}
+
+.admin-formulaire fieldset {
+  min-width: 0;
+  margin: 0 0 28px;
+  padding: 24px;
+  border: 1px solid var(--lilas);
+}
+
+.admin-formulaire legend {
+  padding: 0 10px;
+  color: var(--violet-profond);
+  font-size: 22px;
+}
+
+.admin-grille {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 18px;
+}
+
+.admin-champ {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.admin-champ--large {
+  grid-column: 1 / -1;
+}
+
+.admin-champ > span {
+  color: var(--violet-profond);
+  font-size: 16px;
+}
+
+.admin-champ input,
+.admin-champ textarea {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--lilas);
+  border-radius: 2px;
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+}
+
+.admin-champ textarea {
+  resize: vertical;
+}
+
+.admin-champ input:focus,
+.admin-champ textarea:focus,
+.admin-editeur:focus {
+  border-color: var(--violet);
+  outline: 1px solid var(--violet);
+  outline-offset: 1px;
+}
+
+.admin-champ small,
+.admin-aide {
+  color: var(--texte-doux);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.admin-outils {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.admin-outils button,
+.admin-publier {
+  min-height: 42px;
+  padding: 8px 13px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--violet-profond);
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-outils button:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.admin-options-avancees {
+  margin-top: 12px;
+  border-top: 1px solid var(--lilas);
+  padding-top: 10px;
+}
+
+.admin-options-avancees > summary {
+  width: fit-content;
+  color: var(--violet);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.admin-options-avancees[open] > summary {
+  margin-bottom: 12px;
+}
+
+.admin-options-avancees .admin-outils {
+  padding: 12px;
+  background: var(--brume);
+}
+
+.admin-formule-saisie {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: var(--texte-doux);
+  font-size: 15px;
+}
+
+.admin-formule-saisie input {
+  min-width: 150px;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+}
+
+.admin-aide {
+  margin: 12px 0;
+}
+
+.admin-editeur {
+  min-height: 340px;
+  padding: 18px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--texte);
+  font-size: 18px;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.admin-editeur:empty::before {
+  content: attr(data-placeholder);
+  color: var(--texte-doux);
+  pointer-events: none;
+}
+
+.admin-editeur h2 {
+  margin: 1.4em 0 .6em;
+  font-size: 27px;
+}
+
+.admin-editeur blockquote {
+  margin: 1em 0;
+}
+
+.admin-editeur figure {
+  margin: 1.5em 0;
+}
+
+.admin-editeur figure[data-upload-name]::before {
+  display: block;
+  padding: 10px 12px;
+  border: 1px dashed var(--lilas);
+  background: var(--brume);
+  color: var(--texte-doux);
+  content: "Image à téléverser : " attr(data-upload-name);
+  font: 14px/1.4 sans-serif;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.admin-editeur figure img {
+  max-height: 560px;
+  margin: auto;
+  object-fit: contain;
+}
+
+.admin-editeur figcaption {
+  color: var(--texte-doux);
+  font-size: 14px;
+  text-align: center;
+}
+
+.admin-editeur .tableau-defile {
+  overflow-x: auto;
+}
+
+.admin-menu-contextuel {
+  position: fixed;
+  z-index: 1000;
+  display: grid;
+  width: min(270px, calc(100vw - 24px));
+  max-height: min(75vh, 560px);
+  overflow: auto;
+  padding: 6px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  box-shadow: 0 8px 28px rgb(34 20 55 / 22%);
+}
+
+.admin-menu-contextuel[hidden],
+.admin-menu-contextuel-avance[hidden] {
+  display: none;
+}
+
+.admin-menu-contextuel button {
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--texte);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.admin-menu-contextuel button:hover,
+.admin-menu-contextuel button:focus-visible {
+  outline: 0;
+  background: var(--brume);
+  color: var(--violet-profond);
+}
+
+.admin-menu-contextuel-avance {
+  display: grid;
+  margin: 4px 0 0 10px;
+  padding-left: 6px;
+  border-left: 2px solid var(--lilas);
+}
+
+.admin-menu-contextuel-formule {
+  display: grid;
+  gap: 5px;
+  padding: 7px 10px;
+  color: var(--texte-doux);
+  font-size: 13px;
+}
+
+.admin-menu-contextuel-formule input {
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+}
+
+.admin-editeur--notes {
+  min-height: 180px;
+}
+
+.admin-images {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.admin-image {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 12px;
+  background: var(--brume);
+  font: 14px/1.4 sans-serif;
+}
+
+.admin-image span {
+  min-width: 0;
+  flex: 0 1 180px;
+  overflow-wrap: anywhere;
+}
+
+.admin-image-fields {
+  display: grid;
+  min-width: 180px;
+  flex: 1;
+  gap: 8px;
+}
+
+.admin-image > button {
+  margin-left: auto;
+}
+
+.admin-image-fields label {
+  display: grid;
+  gap: 4px;
+  color: var(--texte-doux);
+  font-size: 13px;
+}
+
+.admin-image-fields input {
+  width: 100%;
+  min-height: 38px;
+  padding: 7px 9px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+}
+
+.admin-image button {
+  flex: 0 0 auto;
+  padding: 6px 9px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-apercu {
+  margin-top: 18px;
+  border-top: 1px solid var(--lilas);
+  padding-top: 12px;
+}
+
+.admin-apercu summary {
+  color: var(--violet);
+  cursor: pointer;
+}
+
+.admin-apercu-corps {
+  padding: 18px 0 0;
+}
+
+.admin-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.admin-publier {
+  padding: 11px 20px;
+  border-color: var(--violet);
+  background: var(--violet);
+  color: var(--texte-sur-accent);
+}
+
+.admin-publier:hover {
+  filter: brightness(1.08);
+}
+
+.admin-publier:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+
+.admin-statut {
+  flex: 1 1 240px;
+  margin: 0;
+  font-size: 15px;
+}
+
+.admin-statut[data-type="erreur"] {
+  color: #b42318;
+}
+
+.admin-statut[data-type="succes"] {
+  color: #26734d;
+}
+
+.admin .suite {
+  margin-top: 48px;
+}
+
+@media (max-width: 600px) {
+  .admin-entete {
+    padding-top: 36px;
+  }
+
+  .admin-formulaire fieldset {
+    padding: 18px 14px;
+  }
+
+  .admin-grille {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-champ--large {
+    grid-column: auto;
+  }
+
+  .admin-editeur {
+    min-height: 280px;
+    padding: 13px;
+  }
+}
