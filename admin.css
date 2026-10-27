@@ -233,7 +233,9 @@
   display: grid;
   width: min(220px, calc(100vw - 24px));
   max-height: min(75vh, 560px);
-  overflow: auto;
+  /* On enlève overflow: auto ici pour éviter de couper le sous-menu, 
+     ou on applique le scroll uniquement sur la liste interne si besoin */
+  overflow: visible; 
   padding: 4px;
   border: 1px solid var(--lilas);
   background: var(--surface);
@@ -265,18 +267,16 @@
   color: var(--violet-profond);
 }
 
-/* C'est ici que la magie de la cascade latérale opère : */
-.admin-menu-contextuel {
-  position: fixed; /* Nécessaire pour positionner le sous-menu en absolu dedans */
-}
-
+/* Le sous-menu en cascade propre qui dépasse sur le côté */
 .admin-menu-contextuel-avance {
   position: absolute;
-  top: 40px; /* S'aligne proprement sous l'option parente dans le menu */
-  left: 100%; /* Sort complètement sur la droite du menu principal */
-  min-width: 200px;
+  top: -4px; /* S'aligne tout en haut du menu principal */
+  left: 100%; /* Vient se coller exactement à l'extérieur, sur la droite */
+  margin-left: 4px; /* Petit espace de séparation */
+  min-width: 210px;
+  max-height: 300px;
+  overflow-y: auto;
   display: grid;
-  margin: 0 0 0 2px;
   padding: 4px;
   border: 1px solid var(--lilas);
   border-left: 2px solid var(--violet);
