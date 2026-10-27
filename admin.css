@@ -265,13 +265,18 @@
   color: var(--violet-profond);
 }
 
+/* C'est ici que la magie de la cascade latérale opère : */
+.admin-menu-contextuel {
+  position: fixed; /* Nécessaire pour positionner le sous-menu en absolu dedans */
+}
+
 .admin-menu-contextuel-avance {
   position: absolute;
-  top: 0;
-  left: 100%;
+  top: 40px; /* S'aligne proprement sous l'option parente dans le menu */
+  left: 100%; /* Sort complètement sur la droite du menu principal */
   min-width: 200px;
   display: grid;
-  margin: -4px 0 0 2px;
+  margin: 0 0 0 2px;
   padding: 4px;
   border: 1px solid var(--lilas);
   border-left: 2px solid var(--violet);
