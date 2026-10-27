@@ -11,6 +11,8 @@ DATA_DIR = ROOT_DIR / "articles-data"
 ARTICLES_DIR = ROOT_DIR / "articles"
 INDEX_PATH = ROOT_DIR / "index.html"
 LIST_PATH = ROOT_DIR / "articles.html"
+SITEMAP_PATH = ROOT_DIR / "sitemap.xml"  # Ajouté pour le sitemap
+DOMAINE_SITE = "https://latortuequipense.fr"  # Ajouté pour le sitemap
 
 MARKER_START = "<!-- ARTICLES_GENERES_DEBUT -->"
 MARKER_END = "<!-- ARTICLES_GENERES_FIN -->"
@@ -266,6 +268,36 @@ def verifier_marqueurs(chemin_page: Path) -> None:
         raise ValueError(f"{chemin_page}: les marqueurs d’articles générés sont dans le désordre.")
 
 
+def generer_sitemap(articles: list[dict[str, Any]]) -> None:
+    """Génère et met à jour automatiquement le fichier sitemap.xml."""
+    pages_fixes = [
+        "/",
+        "/articles.html",
+        "/a-propos.html",
+        "/contacts.html",
+        "/newsletter.html",
+        "/confidentialite.html",
+        "/accessibilite.html",
+        "/mentions-legales.html",
+        "/charte-utilisation-IA.html",
+    ]
+    
+    url_elements = []
+    for page in pages_fixes:
+        url_elements.append(f"  <url>\n    <loc>{DOMAINE_SITE}{page}</loc>\n  </url>")
+        
+    for article in articles:
+        slug = echapper(article["slug"])
+        url_elements.append(f"  <url>\n    <loc>{DOMAINE_SITE}/articles/{slug}.html</loc>\n  </url>")
+        
+    sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{'\n'.join(url_elements)}
+</urlset>
+"""
+    SITEMAP_PATH.write_text(sitemap_content, encoding="utf-8")
+
+
 def main() -> None:
     articles = charger_articles()
     if not articles:
@@ -281,7 +313,11 @@ def main() -> None:
     apercus_liste = [generer_apercu(article, True) for article in articles]
     mettre_a_jour_page(INDEX_PATH, apercus_accueil)
     mettre_a_jour_page(LIST_PATH, apercus_liste)
-    print(f"{len(articles)} article(s) généré(s) dans {ARTICLES_DIR}.")
+    
+    # Mise à jour automatique du sitemap XML
+    generer_sitemap(articles)
+
+    print(f"{len(articles)} article(s) généré(s) dans {ARTICLES_DIR} et sitemap.xml mis à jour.")
 
 
 if __name__ == "__main__":

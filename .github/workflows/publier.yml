@@ -29,6 +29,6 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add articles/ index.html articles.html
-          git diff --staged --quiet || git commit -m "🤖 Publication automatique d'un nouvel article"
+          git add articles/ index.html articles.html sitemap.xml
+          git diff --staged --quiet || git commit -m "🤖 Publication automatique d'un nouvel article et mise à jour du sitemap"
           git push
