@@ -26,7 +26,8 @@
 </head>
 <body>
   <div class="progression" aria-hidden="true"></div>
-  <div class="page page--lecture">
+  <div class="page">
+
     <header>
       <a class="marque" href="../index.html">
         <img class="logo" src="../logo.svg" alt="La Tortue">
@@ -37,10 +38,11 @@
       <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
         <a href="../index.html#articles">Articles</a>
         <a href="../a-propos.html">À propos</a>
-        <a href="../contacts.html">Contacts</a>
+        <a href="../a-propos.html#contact">Contact</a>
         <a href="../newsletter.html">Newsletter</a>
       </nav>
     </header>
+
     <article>
       <div class="billet-entete">
         <h1>Mon Premier Article Automatisé</h1>
@@ -48,18 +50,50 @@
         <p class="sous-titre">Test du nouveau système de publication</p>
         <p class="billet-meta"><time datetime="2026-10-27">27 octobre 2026</time><span>2 min de lecture</span></p>
         <div class="billet-actions">
-          <button type="button" onclick="window.print()">Télécharger l’article en PDF</button>
+          <button type="button" onclick="window.print()">
+            Télécharger l’article en PDF
+          </button>
         </div>
       </div>
+
       <div class="billet-texte">
 <p>Bonjour ! Ceci est le tout premier article créé avec le nouveau script automatisé sur <strong>La Tortue qui Pense</strong>.</p><p>Si vous lisez ceci sur le site, le système fonctionne parfaitement !</p>
       </div>
     </article>
+
     <div class="billet-fin">
       <div class="ornement"></div>
       <a class="lien" href="../index.html">Retour à l’accueil</a>
     </div>
-    <footer>© 2026 La Tortue</footer>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+
   </div>
 </body>
 </html>
