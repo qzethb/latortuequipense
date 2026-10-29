@@ -1226,6 +1226,7 @@
       motscles: parseList($("motscles").value),
       meta_title: $("meta-title").value.trim(),
       meta_description: $("meta-description").value.trim(),
+      publie_le: "",
       corps: "",
       notes: "",
     };
@@ -1296,6 +1297,7 @@
         }
       });
 
+      article.publie_le = new Date().toISOString(); // départage les articles publiés le même jour
       article.corps = serializeBlocks(body);
       article.notes = list && list.children.length
         ? `<ol>\n${Array.from(list.children).map((item) => item.outerHTML).join("\n")}\n</ol>`
