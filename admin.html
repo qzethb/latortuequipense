@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; connect-src 'self' https://api.github.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' https://cdn.jsdelivr.net https://fonts.googleapis.com; font-src 'self' https://cdn.jsdelivr.net https://fonts.gstatic.com; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'self'">
 <meta charset="utf-8">
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Administration des articles — La Tortue</title>
-<meta name="robots" content="noindex, nofollow">
 <link rel="stylesheet" href="charte.css">
 <link rel="stylesheet" href="article.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
@@ -44,7 +43,7 @@
       <div class="admin-avertissement">
         <strong>Accès GitHub requis pour publier.</strong>
         Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>.
-        Le jeton est utilisé uniquement en mémoire pendant l’envoi : il n’est ni enregistré ni transmis ailleurs que sur l’API officielle de GitHub.
+        Le jeton est utilisé uniquement en mémoire pendant l’envoi : il n’est ni enregistré ni transmis ailleurs que sur l’API officielle de GitHub. Il est effacé du formulaire une fois l’article publié.
       </div>
 
       <form id="formulaire-article" class="admin-formulaire">
@@ -134,7 +133,7 @@
               <button type="button" id="ajouter-sources">Ajouter une bibliographie</button>
             </div>
           </details>
-          <p class="admin-aide">Rédigez ou collez votre texte dans la zone. Pour chaque image, renseignez une description détaillée (texte alternatif) et, si utile, une légende. Les images PNG, JPEG, GIF et WebP jusqu’à 10 Mo chacune seront ajoutées au dépôt.</p>
+          <p class="admin-aide">Rédigez ou collez votre texte dans la zone. L’image est insérée à l’endroit du curseur. Pour chacune, renseignez une description détaillée (texte alternatif) et, si utile, une légende. Les images PNG, JPEG, GIF et WebP jusqu’à 10 Mo chacune seront ajoutées au dépôt.</p>
           <div id="corps" class="admin-editeur" contenteditable="true" role="textbox" aria-label="Corps de l’article" aria-multiline="true" data-placeholder="Commencez à rédiger votre article…"></div>
           <div id="menu-contextuel" class="admin-menu-contextuel" role="menu" aria-label="Options d’édition" hidden>
             <button type="button" role="menuitem" data-context-target="[data-commande='bold']">Gras</button>
@@ -163,7 +162,7 @@
             </div>
           </div>
           <div id="liste-images" class="admin-images" aria-live="polite"></div>
-          <details class="admin-apercu">
+          <details class="admin-apercu" open>
             <summary>Aperçu du contenu</summary>
             <div id="apercu-corps" class="admin-apercu-corps billet-texte"></div>
           </details>
@@ -176,7 +175,7 @@
             <button type="button" id="ajouter-note">Ajouter une note à l’endroit du curseur</button>
           </div>
           <div id="notes" class="admin-editeur admin-editeur--notes" contenteditable="true" role="textbox" aria-label="Notes de bas de page" aria-multiline="true" data-placeholder="Les notes de bas de page apparaîtront ici."></div>
-          <details class="admin-apercu">
+          <details class="admin-apercu" open>
             <summary>Aperçu des notes</summary>
             <div id="apercu-notes" class="admin-apercu-corps notes"></div>
           </details>
@@ -187,7 +186,7 @@
           <label class="admin-champ admin-champ--large" for="jeton">
             <span>Jeton GitHub à granularité fine</span>
             <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
-            <small>Le jeton sera effacé du formulaire dès le début de l’envoi. Il doit avoir accès à l’écriture du contenu de ce seul dépôt.</small>
+            <small>Il est effacé du formulaire après une publication réussie. Il doit avoir accès à l’écriture du contenu de ce seul dépôt.</small>
           </label>
           <div class="admin-actions">
             <button type="submit" class="admin-publier" id="publier">Publier l’article</button>

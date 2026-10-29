@@ -1,3 +1,13 @@
+"""Génère les pages d'articles de La Tortue à partir des fichiers articles-data/*.json.
+
+Pour chaque article JSON :
+  - crée articles/<slug>.html ;
+  - met à jour les aperçus de index.html et articles.html (entre les marqueurs) ;
+  - met à jour sitemap.xml.
+
+Usage (depuis la racine du dépôt) :  python scripts/generer_articles.py
+"""
+
 import html
 import json
 import re
@@ -11,8 +21,8 @@ DATA_DIR = ROOT_DIR / "articles-data"
 ARTICLES_DIR = ROOT_DIR / "articles"
 INDEX_PATH = ROOT_DIR / "index.html"
 LIST_PATH = ROOT_DIR / "articles.html"
-SITEMAP_PATH = ROOT_DIR / "sitemap.xml"  # Ajouté pour le sitemap
-DOMAINE_SITE = "https://latortuequipense.fr"  # Ajouté pour le sitemap
+SITEMAP_PATH = ROOT_DIR / "sitemap.xml"
+DOMAINE_SITE = "https://latortuequipense.fr"
 
 MARKER_START = "<!-- ARTICLES_GENERES_DEBUT -->"
 MARKER_END = "<!-- ARTICLES_GENERES_FIN -->"
@@ -24,9 +34,75 @@ MOIS_FR = (
     "juillet", "août", "septembre", "octobre", "novembre", "décembre",
 )
 
+# En-tête et pied de page : repris à l'identique de articles/manifestations-lyceennes.html
+ENTETE_NAVIGATION = """    <header>
+      <a class="marque" href="../index.html">
+        <img class="logo" src="../logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="../index.html#articles">Articles</a>
+        <a href="../a-propos.html">À propos</a>
+        <a href="../a-propos.html#contact">Contact</a>
+        <a href="../newsletter.html">Newsletter</a>
+      </nav>
+    </header>"""
+
+PIED_DE_PAGE = """    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>"""
+
+KATEX_ASSETS = """<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.js" integrity="sha384-CwjPRVHTvLiMBFjEoij+QZViMV5rhTOIp7CJzl24JEqpRDA1sJFHVXXLURktbYYp" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.billet-texte'), { throwOnError: false })"></script>
+"""
+
 
 def echapper(valeur: str) -> str:
     return html.escape(valeur, quote=True)
+
+
+def lire(chemin: Path) -> str:
+    """Lit un fichier en UTF-8 sans convertir les fins de ligne (CRLF conservés)."""
+    with chemin.open(encoding="utf-8", newline="") as fichier:
+        return fichier.read()
+
+
+def ecrire(chemin: Path, contenu: str) -> None:
+    """Écrit en UTF-8 avec des fins de ligne LF, quel que soit le système."""
+    with chemin.open("w", encoding="utf-8", newline="\n") as fichier:
+        fichier.write(contenu)
+
+
+def date_francaise(date_article: date) -> str:
+    jour = "1er" if date_article.day == 1 else str(date_article.day)
+    return f"{jour} {MOIS_FR[date_article.month - 1]} {date_article.year}"
 
 
 def valider_article(data: Any, source: Path) -> dict[str, Any]:
@@ -49,9 +125,7 @@ def valider_article(data: Any, source: Path) -> dict[str, Any]:
 
     article = dict(data)
     article["date_obj"] = date_article
-    article["date_affichee"] = (
-        f"{date_article.day} {MOIS_FR[date_article.month - 1]} {date_article.year}"
-    )
+    article["date_affichee"] = date_francaise(date_article)
 
     for champ in OPTIONAL_LIST_FIELDS:
         valeurs = article.get(champ, [])
@@ -78,8 +152,7 @@ def charger_articles() -> list[dict[str, Any]]:
     slugs = set()
     for fichier_json in sorted(DATA_DIR.glob("*.json")):
         try:
-            with fichier_json.open(encoding="utf-8") as fichier:
-                data = json.load(fichier)
+            data = json.loads(lire(fichier_json))
         except json.JSONDecodeError as erreur:
             raise ValueError(
                 f"{fichier_json}:{erreur.lineno}:{erreur.colno}: JSON invalide ({erreur.msg})."
@@ -90,13 +163,21 @@ def charger_articles() -> list[dict[str, Any]]:
         slugs.add(article["slug"])
         articles.append(article)
 
+    # Plus récent d'abord ; à date égale, ordre alphabétique des slugs (résultat stable).
+    articles.sort(key=lambda article: article["slug"])
     articles.sort(key=lambda article: article["date_obj"], reverse=True)
     return articles
 
 
+def contient_formules(corps: str) -> bool:
+    if re.search(r'class=["\'][^"\']*\bformule\b', corps, re.IGNORECASE):
+        return True
+    # Formules écrites directement dans le texte : \( ... \), \[ ... \] ou $$ ... $$
+    return bool(re.search(r"\\\(|\\\[|\$\$", corps))
+
+
 def generer_page_article(article: dict[str, Any]) -> None:
     titre = echapper(article["titre"])
-    description = echapper(article["description"])
     meta_title = echapper(article["meta_title"] or f'{article["titre"]} — La Tortue')
     meta_description = echapper(article["meta_description"] or article["description"])
     soustitre = echapper(article["soustitre"])
@@ -112,28 +193,24 @@ def generer_page_article(article: dict[str, Any]) -> None:
     meta_description_brute = article["meta_description"] or article["description"]
     notes_html = ""
     if article["notes"].strip():
-        notes_html = f"""      <section class="notes" aria-label="Notes">
-        {article["notes"]}
+        notes_html = f"""
+      <section class="notes" aria-label="Notes">
+{article["notes"]}
       </section>
 """
     figure_script = (
         '<script src="../schema-descriptions.js" defer></script>\n'
         if re.search(r"<figure\b", article["corps"], re.IGNORECASE) else ""
     )
-    formule_assets = ""
-    if re.search(r'class=["\'][^"\']*\bformule\b', article["corps"], re.IGNORECASE):
-        formule_assets = """<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.js" integrity="sha384-CwjPRVHTvLiMBFjEoij+QZViMV5rhTOIp7CJzl24JEqpRDA1sJFHVXXLURktbYYp" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.billet-texte'), { throwOnError: false })"></script>
-"""
+    formule_assets = KATEX_ASSETS if contient_formules(article["corps"]) else ""
     structured_data = json.dumps(
         {
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": article["titre"],
             "description": meta_description_brute,
-            "datePublished": article["date_obj"].isoformat(),
-            "mainEntityOfPage": f"https://latortuequipense.fr/articles/{article['slug']}.html",
+            "datePublished": date_iso,
+            "mainEntityOfPage": f"{DOMAINE_SITE}/articles/{article['slug']}.html",
         },
         ensure_ascii=False,
     ).replace("</", "<\\/")
@@ -148,11 +225,11 @@ def generer_page_article(article: dict[str, Any]) -> None:
 {meta_motscles}<link rel="stylesheet" href="../charte.css">
 <script src="../menu.js" defer></script>
 <link rel="stylesheet" href="../article.css">
-{figure_script}{formule_assets}<link rel="canonical" href="https://latortuequipense.fr/articles/{slug}.html">
+{figure_script}{formule_assets}<link rel="canonical" href="{DOMAINE_SITE}/articles/{slug}.html">
 <meta property="og:type" content="article">
 <meta property="og:title" content="{meta_title}">
 <meta property="og:description" content="{meta_description}">
-<meta property="og:url" content="https://latortuequipense.fr/articles/{slug}.html">
+<meta property="og:url" content="{DOMAINE_SITE}/articles/{slug}.html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="{meta_title}">
 <meta name="twitter:description" content="{meta_description}">
@@ -165,21 +242,10 @@ def generer_page_article(article: dict[str, Any]) -> None:
 </head>
 <body>
   <div class="progression" aria-hidden="true"></div>
-  <div class="page page--lecture">
-    <header>
-      <a class="marque" href="../index.html">
-        <img class="logo" src="../logo.svg" alt="La Tortue">
-      </a>
-      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
-        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-      </button>
-      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
-        <a href="../index.html#articles">Articles</a>
-        <a href="../a-propos.html">À propos</a>
-        <a href="../contacts.html">Contacts</a>
-        <a href="../newsletter.html">Newsletter</a>
-      </nav>
-    </header>
+  <div class="page">
+
+{ENTETE_NAVIGATION}
+
     <article>
       <div class="billet-entete">
         <h1>{titre}</h1>
@@ -187,24 +253,30 @@ def generer_page_article(article: dict[str, Any]) -> None:
         <p class="sous-titre">{soustitre}</p>
         <p class="billet-meta"><time datetime="{date_iso}">{date_affichee}</time><span>{temps_lecture} de lecture</span></p>
         <div class="billet-actions">
-          <button type="button" onclick="window.print()">Télécharger l’article en PDF</button>
+          <button type="button" onclick="window.print()">
+            Télécharger l’article en PDF
+          </button>
         </div>
       </div>
+
       <div class="billet-texte">
 {article["corps"]}
       </div>
 {notes_html}    </article>
+
     <div class="billet-fin">
       <div class="ornement"></div>
       <a class="lien" href="../index.html">Retour à l’accueil</a>
     </div>
-    <footer>© 2026 La Tortue</footer>
+
+{PIED_DE_PAGE}
+
   </div>
 </body>
 </html>
 """
     ARTICLES_DIR.mkdir(parents=True, exist_ok=True)
-    (ARTICLES_DIR / f"{slug}.html").write_text(html_content, encoding="utf-8")
+    ecrire(ARTICLES_DIR / f"{article['slug']}.html", html_content)
 
 
 def generer_apercu(article: dict[str, Any], liste_complete: bool) -> str:
@@ -224,7 +296,7 @@ def generer_apercu(article: dict[str, Any], liste_complete: bool) -> str:
             f' data-motscles="{echapper(motscles)}"'
         )
 
-    apercu = f"""<article class="article-row">
+    return f"""<article class="article-row">
   <a class="article" href="articles/{slug}.html"{metadonnees}>
     <span class="date">{echapper(article["date_affichee"])}</span>
     <div class="article-corps">
@@ -238,34 +310,34 @@ def generer_apercu(article: dict[str, Any], liste_complete: bool) -> str:
     <span class="fleche" aria-hidden="true">↓</span>
   </button>
 </article>"""
-    return apercu
+
+
+def verifier_marqueurs(chemin_page: Path) -> str:
+    """Vérifie la présence d'une seule paire de marqueurs et renvoie le contenu de la page."""
+    if not chemin_page.exists():
+        raise FileNotFoundError(f"Page à mettre à jour introuvable : {chemin_page}")
+    contenu = lire(chemin_page)
+    if contenu.count(MARKER_START) != 1 or contenu.count(MARKER_END) != 1:
+        raise ValueError(
+            f"{chemin_page}: il faut exactement un marqueur {MARKER_START} et un marqueur {MARKER_END}."
+        )
+    if contenu.index(MARKER_START) > contenu.index(MARKER_END):
+        raise ValueError(f"{chemin_page}: les marqueurs d’articles générés sont dans le désordre.")
+    return contenu
 
 
 def mettre_a_jour_page(chemin_page: Path, snippets: list[str]) -> None:
-    if not chemin_page.exists():
-        raise FileNotFoundError(f"Page à mettre à jour introuvable : {chemin_page}")
-
-    contenu = chemin_page.read_text(encoding="utf-8")
-    if contenu.count(MARKER_START) != 1 or contenu.count(MARKER_END) != 1:
-        raise ValueError(f"{chemin_page}: il faut une seule paire de marqueurs d’articles générés.")
-
+    contenu = verifier_marqueurs(chemin_page)
+    fin_de_ligne = "\r\n" if "\r\n" in contenu else "\n"
     debut = contenu.index(MARKER_START) + len(MARKER_START)
     fin = contenu.index(MARKER_END)
-    if debut > fin:
-        raise ValueError(f"{chemin_page}: les marqueurs d’articles générés sont dans le désordre.")
 
     bloc = "\n" + "\n".join(snippets) + "\n        "
-    chemin_page.write_text(contenu[:debut] + bloc + contenu[fin:], encoding="utf-8")
-
-
-def verifier_marqueurs(chemin_page: Path) -> None:
-    if not chemin_page.exists():
-        raise FileNotFoundError(f"Page à mettre à jour introuvable : {chemin_page}")
-    contenu = chemin_page.read_text(encoding="utf-8")
-    if contenu.count(MARKER_START) != 1 or contenu.count(MARKER_END) != 1:
-        raise ValueError(f"{chemin_page}: il faut une seule paire de marqueurs d’articles générés.")
-    if contenu.index(MARKER_START) > contenu.index(MARKER_END):
-        raise ValueError(f"{chemin_page}: les marqueurs d’articles générés sont dans le désordre.")
+    bloc = bloc.replace("\n", fin_de_ligne)
+    nouveau = contenu[:debut] + bloc + contenu[fin:]
+    if nouveau != contenu:
+        with chemin_page.open("w", encoding="utf-8", newline="") as fichier:
+            fichier.write(nouveau)
 
 
 def generer_sitemap(articles: list[dict[str, Any]]) -> None:
@@ -281,30 +353,32 @@ def generer_sitemap(articles: list[dict[str, Any]]) -> None:
         "/mentions-legales.html",
         "/charte-utilisation-IA.html",
     ]
-    
-    url_elements = []
-    for page in pages_fixes:
-        url_elements.append(f"  <url>\n    <loc>{DOMAINE_SITE}{page}</loc>\n  </url>")
-        
+
+    url_elements = [
+        f"  <url>\n    <loc>{DOMAINE_SITE}{page}</loc>\n  </url>" for page in pages_fixes
+    ]
     for article in articles:
         slug = echapper(article["slug"])
-        url_elements.append(f"  <url>\n    <loc>{DOMAINE_SITE}/articles/{slug}.html</loc>\n  </url>")
-        
-    # CORRECTION : On fait le join en dehors de la f-string
+        url_elements.append(
+            f"  <url>\n    <loc>{DOMAINE_SITE}/articles/{slug}.html</loc>\n"
+            f"    <lastmod>{article['date_obj'].isoformat()}</lastmod>\n  </url>"
+        )
+
     corps_sitemap = "\n".join(url_elements)
-    
     sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {corps_sitemap}
 </urlset>
 """
-    SITEMAP_PATH.write_text(sitemap_content, encoding="utf-8")
+    ecrire(SITEMAP_PATH, sitemap_content)
+
 
 def main() -> None:
     articles = charger_articles()
     if not articles:
         raise ValueError(f"Aucun fichier JSON d’article trouvé dans {DATA_DIR}")
 
+    # On vérifie tout avant d'écrire quoi que ce soit.
     verifier_marqueurs(INDEX_PATH)
     verifier_marqueurs(LIST_PATH)
 
@@ -315,11 +389,9 @@ def main() -> None:
     apercus_liste = [generer_apercu(article, True) for article in articles]
     mettre_a_jour_page(INDEX_PATH, apercus_accueil)
     mettre_a_jour_page(LIST_PATH, apercus_liste)
-    
-    # Mise à jour automatique du sitemap XML
     generer_sitemap(articles)
 
-    print(f"{len(articles)} article(s) généré(s) dans {ARTICLES_DIR} et sitemap.xml mis à jour.")
+    print(f"{len(articles)} article(s) généré(s) dans {ARTICLES_DIR} ; index.html, articles.html et sitemap.xml mis à jour.")
 
 
 if __name__ == "__main__":

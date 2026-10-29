@@ -1,4 +1,9 @@
 (() => {
+  "use strict";
+
+  /* ======================================================================
+     Configuration
+     ====================================================================== */
   const OWNER = "qzethb";
   const REPOSITORY = "latortuequipense";
   const BRANCH = "main";
@@ -11,34 +16,77 @@
     "image/webp": "webp",
   };
   const ALLOWED_TAGS = new Set([
-    "A", "B", "BLOCKQUOTE", "BR", "CAPTION", "DIV", "EM", "FIGCAPTION", "FIGURE",
-    "H2", "H3", "H4", "HR", "I", "IMG", "LI", "OL", "P", "STRONG", "SUB", "SUP",
+    "A", "BLOCKQUOTE", "BR", "CAPTION", "DIV", "EM", "FIGCAPTION", "FIGURE",
+    "H2", "H3", "H4", "HR", "IMG", "LI", "OL", "P", "STRONG", "SUB", "SUP",
     "TABLE", "TBODY", "TD", "TFOOT", "TH", "THEAD", "TR", "UL",
+  ]);
+  // Balises renommées au nettoyage (execCommand produit <b>/<i>, la charte style <strong>/<em>).
+  const RENAMED_TAGS = new Map([
+    ["B", "strong"], ["I", "em"],
+    ["H1", "h2"], ["H5", "h4"], ["H6", "h4"],
+  ]);
+  const DROPPED_TAGS = new Set([
+    "SCRIPT", "STYLE", "IFRAME", "OBJECT", "EMBED", "SVG", "MATH", "TEMPLATE",
+    "NOSCRIPT", "HEAD", "META", "LINK", "TITLE", "FORM", "INPUT", "BUTTON",
+    "SELECT", "TEXTAREA",
   ]);
   const BLOCK_TAGS = new Set([
     "BLOCKQUOTE", "DIV", "FIGURE", "H2", "H3", "H4", "HR", "OL", "P", "TABLE", "UL",
   ]);
-  const editor = document.getElementById("corps");
-  const notesEditor = document.getElementById("notes");
-  const form = document.getElementById("formulaire-article");
-  const tokenInput = document.getElementById("jeton");
-  const imageInput = document.getElementById("fichiers-images");
-  const imageList = document.getElementById("liste-images");
-  const status = document.getElementById("statut-publication");
-  const publishButton = document.getElementById("publier");
-  const preview = document.getElementById("apercu-corps");
-  const notesPreview = document.getElementById("apercu-notes");
-  let queuedImages = [];
-  const imageDescriptions = new Map();
-  const imagePreviewUrls = new Map();
-  let savedSelection = null;
+  const BLOCK_SELECTOR = "p,div,h1,h2,h3,h4,h5,h6,ul,ol,table,blockquote,figure,hr";
+  const ALLOWED_CLASSES = new Set([
+    "footnote-back", "footnote-ref", "formule", "large", "numerotee",
+    "tableau-defile", "texte", "total",
+  ]);
+  const MATH_DELIMITERS = [
+    { left: "$$", right: "$$", display: true },
+    { left: "\\[", right: "\\]", display: true },
+    { left: "\\(", right: "\\)", display: false },
+  ];
+  const NOTE_PLACEHOLDER = "Référence à compléter.";
+
+  /* ======================================================================
+     Éléments et état
+     ====================================================================== */
+  const $ = (id) => document.getElementById(id);
+  const editor = $("corps");
+  const notesEditor = $("notes");
+  const form = $("formulaire-article");
+  const tokenInput = $("jeton");
+  const imageInput = $("fichiers-images");
+  const imageList = $("liste-images");
+  const status = $("statut-publication");
+  const publishButton = $("publier");
+  const preview = $("apercu-corps");
+  const notesPreview = $("apercu-notes");
+  const latexInput = $("latex-formule");
+  const menuLatexInput = $("menu-latex-formule");
+
+  const images = []; // { id, file, url, alt, caption, width, height }
+  let imageCounter = 0;
+  const ranges = new Map(); // dernière sélection connue de chaque éditeur
   let activeEditor = editor;
   let slugEdited = false;
-  let imagesWereUploaded = false;
+  let publishing = false;
+  let previewTimer = 0;
 
+  try {
+    // Sans cela, Chrome crée des <div> à chaque Entrée au lieu de <p>.
+    document.execCommand("defaultParagraphSeparator", false, "p");
+  } catch (error) { /* navigateur sans cette commande */ }
+
+  const setStatus = (message, type = "") => {
+    status.textContent = message;
+    if (type) status.dataset.type = type;
+    else delete status.dataset.type;
+  };
+
+  /* ======================================================================
+     Date et slug
+     ====================================================================== */
   const setToday = () => {
     const now = new Date();
-    document.getElementById("date").value = [
+    $("date").value = [
       now.getFullYear(),
       String(now.getMonth() + 1).padStart(2, "0"),
       String(now.getDate()).padStart(2, "0"),
@@ -50,108 +98,212 @@
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/^-+|-+$/g, "");
 
-  document.getElementById("titre").addEventListener("input", (event) => {
-    if (!slugEdited) document.getElementById("slug").value = slugify(event.target.value);
+  $("titre").addEventListener("input", (event) => {
+    if (slugEdited) return;
+    $("slug").value = slugify(event.target.value).slice(0, 80).replace(/-+$/, "");
   });
-  document.getElementById("slug").addEventListener("input", () => {
+  $("slug").addEventListener("input", () => {
     slugEdited = true;
   });
 
-  const rememberSelection = (event) => {
-    if ([editor, notesEditor].includes(event?.currentTarget)) activeEditor = event.currentTarget;
+  /* ======================================================================
+     Sélection (mémorisée pour les boutons, la souris quittant l'éditeur)
+     ====================================================================== */
+  document.addEventListener("selectionchange", () => {
     const selection = window.getSelection();
-    if (!selection || !selection.rangeCount || !activeEditor.contains(selection.anchorNode)) return;
-    savedSelection = selection.getRangeAt(0).cloneRange();
-  };
-  [editor, notesEditor].forEach((editable) => {
-    editable.addEventListener("keyup", rememberSelection);
-    editable.addEventListener("mouseup", rememberSelection);
+    if (!selection || !selection.rangeCount) return;
+    const target = [editor, notesEditor].find((element) => element.contains(selection.anchorNode));
+    if (!target) return;
+    activeEditor = target;
+    ranges.set(target, selection.getRangeAt(0).cloneRange());
   });
-  editor.addEventListener("input", () => {
-    rememberSelection({ currentTarget: editor });
-    editor.querySelectorAll("p[data-image-followup]").forEach((paragraph) => {
-      if (!paragraph.textContent.trim()) return;
-      paragraph.removeAttribute("data-image-followup");
-      if (paragraph.lastElementChild?.tagName === "BR") paragraph.lastElementChild.remove();
-    });
-    updatePreview();
-  });
-  notesEditor.addEventListener("input", () => rememberSelection({ currentTarget: notesEditor }));
 
-  const restoreSelection = () => {
-    activeEditor.focus();
+  const focusEditor = (target = activeEditor) => {
+    target.focus({ preventScroll: true });
+    const saved = ranges.get(target);
     const selection = window.getSelection();
-    if (!selection || !savedSelection) return;
+    if (saved && selection && target.contains(saved.startContainer)) {
+      selection.removeAllRanges();
+      selection.addRange(saved);
+    }
+  };
+
+  const setCaret = (target, range) => {
+    const selection = window.getSelection();
+    target.focus({ preventScroll: true });
+    selection?.removeAllRanges();
+    selection?.addRange(range);
+    ranges.set(target, range.cloneRange());
+    activeEditor = target;
+  };
+
+  const caretIn = (target, element, selectAll = false) => {
+    const range = document.createRange();
+    range.selectNodeContents(element);
+    if (!selectAll) range.collapse(true);
+    setCaret(target, range);
+  };
+
+  const emptyParagraph = () => {
+    const paragraph = document.createElement("p");
+    paragraph.append(document.createElement("br"));
+    return paragraph;
+  };
+
+  // Insère un bloc à l'endroit du curseur (après le bloc courant), jamais au milieu d'un paragraphe.
+  const insertBlock = (node) => {
+    let reference = null;
+    let replace = null;
+    const saved = ranges.get(editor);
+    if (saved && editor.contains(saved.startContainer)) {
+      let current = saved.startContainer;
+      if (current === editor) {
+        reference = editor.childNodes[saved.startOffset] || null;
+      } else {
+        while (current.parentNode !== editor) current = current.parentNode;
+        const isEmpty = current.nodeName === "P"
+          && !current.textContent.trim()
+          && !current.querySelector("img, figure");
+        if (isEmpty) replace = current;
+        reference = current.nextSibling;
+      }
+    }
+    if (replace) replace.remove();
+    editor.insertBefore(node, reference);
+    const after = emptyParagraph();
+    editor.insertBefore(after, node.nextSibling);
+    caretIn(editor, after);
+    schedulePreview();
+  };
+
+  const insertInline = (node) => {
+    const saved = ranges.get(editor);
+    if (!saved || !editor.contains(saved.startContainer)) return false;
+    const selection = window.getSelection();
+    editor.focus({ preventScroll: true });
     selection.removeAllRanges();
-    selection.addRange(savedSelection);
+    selection.addRange(saved);
+    const range = selection.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.collapse(true);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    ranges.set(editor, range.cloneRange());
+    activeEditor = editor;
+    return true;
+  };
+
+  /* ======================================================================
+     Aperçu (différé pour ne pas recalculer à chaque frappe)
+     ====================================================================== */
+  function schedulePreview() {
+    clearTimeout(previewTimer);
+    previewTimer = setTimeout(updatePreview, 120);
+  }
+
+  editor.addEventListener("input", schedulePreview);
+  notesEditor.addEventListener("input", schedulePreview);
+
+  const renderMath = (element) => {
+    if (typeof window.renderMathInElement !== "function") return;
+    try {
+      window.renderMathInElement(element, { delimiters: MATH_DELIMITERS, throwOnError: false });
+    } catch (error) { /* une formule invalide ne doit pas bloquer l'aperçu */ }
+  };
+
+  function updatePreview() {
+    clearTimeout(previewTimer);
+    const body = sanitizeElement(editor);
+    const notes = sanitizeElement(notesEditor);
+    renumberNotes(body, notes);
+
+    body.querySelectorAll("img[data-upload-id]").forEach((img) => {
+      const image = images.find((item) => item.id === img.getAttribute("data-upload-id"));
+      if (!image) {
+        img.remove();
+        return;
+      }
+      img.setAttribute("src", image.url);
+      img.setAttribute("alt", image.alt);
+      const figure = img.closest("figure");
+      const caption = figure?.querySelector("figcaption");
+      if (image.caption) {
+        if (caption) caption.textContent = image.caption;
+      } else {
+        caption?.remove();
+      }
+    });
+    // Évite les identifiants en double avec l'éditeur ; les liens d'aperçu restent inertes.
+    [body, notes].forEach((root) => {
+      root.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+      root.querySelectorAll("a[href^='#']").forEach((anchor) => anchor.removeAttribute("href"));
+    });
+    preview.replaceChildren(body);
+    notesPreview.replaceChildren(notes);
+    renderMath(preview);
+    renderMath(notesPreview);
+    refreshImageStates();
+  }
+
+  /* ======================================================================
+     Boutons de mise en forme
+     ====================================================================== */
+  document.querySelectorAll(".admin-outils button, .admin-options-avancees button").forEach((button) => {
+    button.addEventListener("mousedown", (event) => event.preventDefault());
+  });
+
+  const normalizeUrl = (value) => {
+    const url = value.trim();
+    if (!url) return "";
+    if (/^(?:https?:|mailto:|#|\/|\.\.?\/)/i.test(url)) return url;
+    if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(url)) return `mailto:${url}`;
+    return `https://${url}`;
   };
 
   document.querySelectorAll("[data-commande]").forEach((button) => {
-    button.addEventListener("mousedown", (event) => event.preventDefault());
     button.addEventListener("click", () => {
-      restoreSelection();
+      focusEditor();
       const command = button.dataset.commande;
       if (command === "createLink") {
-        const href = window.prompt("Adresse du lien (https://…)");
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) {
+          setStatus("Sélectionnez d’abord le texte à transformer en lien.", "erreur");
+          return;
+        }
+        const href = normalizeUrl(window.prompt("Adresse du lien (https://…)") || "");
         if (!href) return;
-        document.execCommand(command, false, href);
+        focusEditor();
+        document.execCommand("createLink", false, href);
       } else {
         document.execCommand(command, false);
       }
-      rememberSelection();
-      updatePreview();
+      setStatus("");
+      schedulePreview();
     });
   });
 
   document.querySelectorAll("[data-bloc]").forEach((button) => {
-    button.addEventListener("mousedown", (event) => event.preventDefault());
     button.addEventListener("click", () => {
-      restoreSelection();
-      document.execCommand("formatBlock", false, `<${button.dataset.bloc}>`);
-      rememberSelection();
-      updatePreview();
+      focusEditor();
+      const tag = button.dataset.bloc;
+      const current = String(document.queryCommandValue("formatBlock") || "")
+        .toLowerCase().replace(/[<>]/g, "");
+      // Un second clic revient au paragraphe normal.
+      document.execCommand("formatBlock", false, current === tag ? "p" : tag);
+      schedulePreview();
     });
   });
 
-  document.getElementById("ajouter-image").addEventListener("mousedown", rememberSelection);
-  document.getElementById("ajouter-image").addEventListener("click", () => imageInput.click());
+  $("ajouter-image").addEventListener("click", () => imageInput.click());
 
-  const insertAtSelection = (target, node) => {
-    const selection = window.getSelection();
-    if (savedSelection && selection && target.contains(savedSelection.startContainer)) {
-      selection.removeAllRanges();
-      selection.addRange(savedSelection);
-      const range = selection.getRangeAt(0);
-      range.deleteContents();
-      range.insertNode(node);
-      range.setStartAfter(node);
-      range.collapse(true);
-      selection.removeAllRanges();
-      selection.addRange(range);
-      savedSelection = range.cloneRange();
-      target.focus();
-      activeEditor = target;
-      return true;
-    }
-    return false;
-  };
-
-  const appendBlock = (node) => {
-    editor.append(node);
-    editor.focus();
-    const range = document.createRange();
-    range.selectNodeContents(editor);
-    range.collapse(false);
-    const selection = window.getSelection();
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-    savedSelection = range.cloneRange();
-    activeEditor = editor;
-  };
-
-  document.getElementById("ajouter-annexe").addEventListener("click", () => {
+  /* ======================================================================
+     Annexe, bibliographie, tableau, formule
+     ====================================================================== */
+  $("ajouter-annexe").addEventListener("click", () => {
     if (editor.querySelector("#annexe")) {
       setStatus("Une annexe existe déjà dans le corps de l’article.", "erreur");
       return;
@@ -159,22 +311,14 @@
     const heading = document.createElement("h2");
     heading.id = "annexe";
     heading.textContent = "Annexe";
-    const paragraph = document.createElement("p");
-    paragraph.append(document.createElement("br"));
+    const paragraph = emptyParagraph();
     editor.append(heading, paragraph);
-    const range = document.createRange();
-    range.setStart(paragraph, 0);
-    range.collapse(true);
-    const selection = window.getSelection();
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-    savedSelection = range.cloneRange();
-    editor.focus();
-    updatePreview();
+    caretIn(editor, paragraph);
+    schedulePreview();
     setStatus("");
   });
 
-  document.getElementById("ajouter-sources").addEventListener("click", () => {
+  $("ajouter-sources").addEventListener("click", () => {
     if (editor.querySelector("#sources")) {
       setStatus("Une bibliographie existe déjà dans le corps de l’article.", "erreur");
       return;
@@ -186,23 +330,84 @@
     const item = document.createElement("li");
     item.textContent = "Ajoutez une référence.";
     list.append(item);
-    appendBlock(heading);
-    editor.append(list);
-    updatePreview();
+    editor.append(heading, list);
+    caretIn(editor, item, true);
+    schedulePreview();
     setStatus("");
   });
 
-  const addNote = (referenceText = "Référence à compléter.") => {
-    restoreSelection();
-    const selection = window.getSelection();
-    if (!savedSelection || !selection || !editor.contains(savedSelection.startContainer)) {
-      setStatus("Placez d’abord le curseur dans le corps de l’article, à l’endroit de l’appel de note.", "erreur");
+  const askCount = (question, fallback, max) => {
+    const answer = window.prompt(question, String(fallback));
+    if (answer === null) return null;
+    const value = Number.parseInt(answer, 10);
+    return Number.isInteger(value) && value >= 1 && value <= max ? value : fallback;
+  };
+
+  $("ajouter-tableau").addEventListener("click", () => {
+    const columns = askCount("Nombre de colonnes (1 à 8) :", 3, 8);
+    if (columns === null) return;
+    const rows = askCount("Nombre de lignes de données (1 à 30) :", 3, 30);
+    if (rows === null) return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "tableau-defile";
+    const table = document.createElement("table");
+    table.className = "texte";
+    const caption = document.createElement("caption");
+    caption.textContent = "Titre du tableau";
+    const head = document.createElement("thead");
+    const headRow = document.createElement("tr");
+    for (let column = 1; column <= columns; column += 1) {
+      const cell = document.createElement("th");
+      cell.textContent = `Colonne ${column}`;
+      headRow.append(cell);
+    }
+    head.append(headRow);
+    const body = document.createElement("tbody");
+    for (let row = 0; row < rows; row += 1) {
+      const line = document.createElement("tr");
+      for (let column = 0; column < columns; column += 1) {
+        const cell = document.createElement("td");
+        cell.textContent = "Valeur";
+        line.append(cell);
+      }
+      body.append(line);
+    }
+    table.append(caption, head, body);
+    wrapper.append(table);
+    insertBlock(wrapper);
+    setStatus("");
+  });
+
+  const insertFormula = (latex, className) => {
+    const expression = latex.trim();
+    if (!expression) {
+      setStatus("Saisissez d’abord une formule LaTeX.", "erreur");
       return false;
     }
-    const numbers = Array.from(notesEditor.querySelectorAll("li[id^='fn']"))
-      .map((item) => Number(item.id.slice(2)))
-      .filter(Number.isInteger);
-    const number = Math.max(0, ...numbers) + 1;
+    const formula = document.createElement("div");
+    formula.className = className;
+    formula.textContent = `\\[ ${expression} \\]`;
+    insertBlock(formula);
+    setStatus("");
+    return true;
+  };
+
+  document.querySelectorAll("[data-formule]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (insertFormula(latexInput.value, button.dataset.formule)) latexInput.value = "";
+      else latexInput.focus();
+    });
+  });
+
+  /* ======================================================================
+     Notes de bas de page
+     ====================================================================== */
+  const noteNumberOf = (value, prefix) => {
+    const match = new RegExp(`^${prefix}([1-9]\\d*)$`).exec(value || "");
+    return match ? Number(match[1]) : null;
+  };
+
+  const createNoteRef = (number) => {
     const reference = document.createElement("a");
     reference.href = `#fn${number}`;
     reference.className = "footnote-ref";
@@ -211,7 +416,108 @@
     const superscript = document.createElement("sup");
     superscript.textContent = String(number);
     reference.append(superscript);
-    if (!insertAtSelection(editor, reference)) {
+    return reference;
+  };
+
+  const createBacklink = (number) => {
+    const backlink = document.createElement("a");
+    backlink.href = `#fnref${number}`;
+    backlink.className = "footnote-back";
+    backlink.setAttribute("role", "doc-backlink");
+    backlink.setAttribute("aria-label", "Revenir à l’appel de note");
+    backlink.title = "Revenir à l’appel de note";
+    backlink.textContent = "↩";
+    return backlink;
+  };
+
+  // Renumérote les notes dans l'ordre d'apparition des appels, relie chaque note
+  // à son appel (et recrée le lien de retour). Renvoie les anomalies détectées.
+  function renumberNotes(bodyRoot, notesRoot, live = false) {
+    const result = { count: 0, orphans: 0, unmatched: 0, duplicates: 0 };
+    const list = notesRoot.querySelector("ol");
+    const itemsByOld = new Map();
+    const orphanItems = [];
+    if (list) {
+      Array.from(list.children).filter((child) => child.tagName === "LI").forEach((item) => {
+        const number = noteNumberOf(item.id, "fn");
+        if (number && !itemsByOld.has(number)) {
+          itemsByOld.set(number, item);
+          return;
+        }
+        const clone = item.cloneNode(true);
+        clone.querySelectorAll("a.footnote-back").forEach((anchor) => anchor.remove());
+        if (!clone.textContent.trim()) item.remove(); // ligne vide laissée par la touche Entrée
+        else orphanItems.push(item);
+      });
+    }
+
+    const assignments = [];
+    const mapping = new Map();
+    bodyRoot.querySelectorAll("a.footnote-ref").forEach((reference) => {
+      const old = noteNumberOf((reference.getAttribute("href") || "").replace(/^#/, ""), "fn");
+      if (!old || !itemsByOld.has(old)) {
+        result.unmatched += 1;
+        return;
+      }
+      if (mapping.has(old)) {
+        result.duplicates += 1;
+        return;
+      }
+      mapping.set(old, mapping.size + 1);
+      assignments.push({ reference, old, number: mapping.size });
+    });
+    result.count = assignments.length;
+
+    const ordered = [];
+    assignments.forEach(({ reference, old, number }) => {
+      reference.setAttribute("href", `#fn${number}`);
+      reference.id = `fnref${number}`;
+      const superscript = reference.querySelector("sup") || reference.appendChild(document.createElement("sup"));
+      superscript.textContent = String(number);
+      if (live) reference.setAttribute("contenteditable", "false");
+      const item = itemsByOld.get(old);
+      item.id = `fn${number}`;
+      item.querySelectorAll("a.footnote-back").forEach((anchor) => anchor.remove());
+      const backlink = createBacklink(number);
+      if (live) backlink.setAttribute("contenteditable", "false");
+      item.append(backlink);
+      ordered.push(item);
+    });
+    itemsByOld.forEach((item, old) => {
+      if (mapping.has(old)) return;
+      item.removeAttribute("id");
+      item.querySelectorAll("a.footnote-back").forEach((anchor) => anchor.remove());
+      orphanItems.push(item);
+    });
+    result.orphans = orphanItems.length;
+    if (list) list.append(...ordered, ...orphanItems);
+    return result;
+  }
+
+  const renumberLive = () => renumberNotes(editor, notesEditor, true);
+
+  const selectText = (target, element) => {
+    const node = element.firstChild;
+    if (!node) return;
+    const range = document.createRange();
+    range.selectNodeContents(node);
+    setCaret(target, range);
+  };
+
+  const addNote = (referenceText = "") => {
+    const saved = ranges.get(editor);
+    if (!saved || !editor.contains(saved.startContainer)) {
+      setStatus("Placez d’abord le curseur dans le corps de l’article, à l’endroit de l’appel de note.", "erreur");
+      return false;
+    }
+    const used = [
+      ...Array.from(editor.querySelectorAll("a.footnote-ref")).map((a) => noteNumberOf(a.id, "fnref")),
+      ...Array.from(notesEditor.querySelectorAll("li[id]")).map((li) => noteNumberOf(li.id, "fn")),
+    ].filter(Boolean);
+    const number = Math.max(0, ...used) + 1;
+    const reference = createNoteRef(number);
+    reference.setAttribute("contenteditable", "false");
+    if (!insertInline(reference)) {
       setStatus("Le curseur n’est plus disponible dans le corps de l’article. Cliquez à nouveau à son emplacement.", "erreur");
       return false;
     }
@@ -223,145 +529,109 @@
     }
     const item = document.createElement("li");
     item.id = `fn${number}`;
-    item.append(document.createTextNode(`${referenceText.trim()} `));
-    const backlink = document.createElement("a");
-    backlink.href = `#fnref${number}`;
-    backlink.className = "footnote-back";
-    backlink.setAttribute("role", "doc-backlink");
-    backlink.setAttribute("aria-label", "Revenir à l’appel de note");
-    backlink.title = "Revenir à l’appel de note";
-    backlink.textContent = "↩";
-    item.append(backlink);
+    const hasText = Boolean(referenceText.trim());
+    item.append(document.createTextNode(hasText ? referenceText.trim() : NOTE_PLACEHOLDER));
     list.append(item);
-    activeEditor = notesEditor;
-    notesEditor.focus();
-    updatePreview();
-    setStatus(
-      referenceText.trim()
-        ? "Appel et référence de note ajoutés."
-        : "Appel et note ajoutés. Remplacez « Référence à compléter » par la référence.",
-      "succes",
-    );
+    renumberLive();
+    schedulePreview();
+
+    if (hasText) {
+      focusEditor(editor); // le curseur reste dans le texte, juste après l'appel
+      setStatus("Appel et référence de note ajoutés.", "succes");
+    } else {
+      selectText(notesEditor, item); // la phrase à remplacer est déjà sélectionnée
+      setStatus("Appel de note ajouté : saisissez la référence dans la zone des notes.", "succes");
+    }
     return true;
   };
-  document.getElementById("ajouter-note").addEventListener("mousedown", (event) => event.preventDefault());
-  document.getElementById("ajouter-note").addEventListener("click", () => addNote());
+  $("ajouter-note").addEventListener("mousedown", (event) => event.preventDefault());
+  $("ajouter-note").addEventListener("click", () => addNote());
 
-  document.getElementById("ajouter-tableau").addEventListener("click", () => {
-    const wrapper = document.createElement("div");
-    wrapper.className = "tableau-defile";
-    const table = document.createElement("table");
-    table.className = "texte";
-    const caption = document.createElement("caption");
-    caption.textContent = "Titre du tableau";
-    const head = document.createElement("thead");
-    const headRow = document.createElement("tr");
-    ["Colonne 1", "Colonne 2"].forEach((label) => {
-      const cell = document.createElement("th");
-      cell.textContent = label;
-      headRow.append(cell);
-    });
-    head.append(headRow);
-    const body = document.createElement("tbody");
-    const row = document.createElement("tr");
-    ["Valeur", "Valeur"].forEach((value) => {
-      const cell = document.createElement("td");
-      cell.textContent = value;
-      row.append(cell);
-    });
-    body.append(row);
-    table.append(caption, head, body);
-    wrapper.append(table);
-    appendBlock(wrapper);
-    updatePreview();
-    setStatus("");
-  });
+  /* ======================================================================
+     Menu contextuel de l'éditeur
+     ====================================================================== */
+  const contextMenu = $("menu-contextuel");
+  const advancedContextMenu = $("menu-contextuel-avance");
+  const advancedContextToggle = $("menu-options-avancees");
 
-  document.querySelectorAll("[data-formule]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const input = document.getElementById("latex-formule");
-      const latex = input.value.trim();
-      if (!latex) {
-        setStatus("Saisissez d’abord une formule LaTeX.", "erreur");
-        input.focus();
-        return;
-      }
-      const formula = document.createElement("div");
-      formula.className = button.dataset.formule;
-      formula.textContent = `\\[ ${latex.trim()} \\]`;
-      appendBlock(formula);
-      input.value = "";
-      updatePreview();
-      setStatus("");
-    });
-  });
-
-  const contextMenu = document.getElementById("menu-contextuel");
-  const advancedContextMenu = document.getElementById("menu-contextuel-avance");
-  const advancedContextToggle = document.getElementById("menu-options-avancees");
-  const closeContextMenu = () => {
-    contextMenu.hidden = true;
+  const closeAdvancedMenu = () => {
     advancedContextMenu.hidden = true;
+    advancedContextMenu.classList.remove("admin-menu-contextuel-avance--gauche");
     advancedContextToggle.setAttribute("aria-expanded", "false");
     advancedContextToggle.textContent = "Options avancées ▸";
   };
-  const openContextMenu = (event) => {
+  const closeContextMenu = () => {
+    contextMenu.hidden = true;
+    closeAdvancedMenu();
+  };
+
+  const caretRangeAt = (x, y) => {
+    if (document.caretRangeFromPoint) return document.caretRangeFromPoint(x, y);
+    const position = document.caretPositionFromPoint?.(x, y);
+    if (!position) return null;
+    const range = document.createRange();
+    range.setStart(position.offsetNode, position.offset);
+    range.collapse(true);
+    return range;
+  };
+
+  editor.addEventListener("contextmenu", (event) => {
     const selection = window.getSelection();
-    const selectionInsideEditor = selection?.rangeCount
+    const selectionInside = selection?.rangeCount
       && !selection.isCollapsed
       && editor.contains(selection.anchorNode)
       && editor.contains(selection.focusNode);
-    if (selectionInsideEditor) {
-      savedSelection = selection.getRangeAt(0).cloneRange();
+    if (selectionInside) {
+      ranges.set(editor, selection.getRangeAt(0).cloneRange());
     } else {
-      const pointRange = document.caretRangeFromPoint?.(event.clientX, event.clientY);
-      if (pointRange && editor.contains(pointRange.startContainer)) {
-        pointRange.collapse(true);
-        savedSelection = pointRange.cloneRange();
-      } else if (selection?.rangeCount && editor.contains(selection.anchorNode)) {
-        savedSelection = selection.getRangeAt(0).cloneRange();
+      const point = caretRangeAt(event.clientX, event.clientY);
+      if (point && editor.contains(point.startContainer)) {
+        point.collapse(true);
+        ranges.set(editor, point.cloneRange());
       }
     }
     activeEditor = editor;
     event.preventDefault();
-    advancedContextMenu.hidden = true;
-    advancedContextToggle.setAttribute("aria-expanded", "false");
-    advancedContextToggle.textContent = "Options avancées ▸";
+    closeAdvancedMenu();
     contextMenu.hidden = false;
     const bounds = contextMenu.getBoundingClientRect();
-    contextMenu.style.left = `${Math.max(8, Math.min(event.clientX, innerWidth - bounds.width - 8))}px`;
-    contextMenu.style.top = `${Math.max(8, Math.min(event.clientY, innerHeight - bounds.height - 8))}px`;
-    contextMenu.querySelector("button[role='menuitem']").focus();
-  };
+    contextMenu.style.left = `${Math.max(8, Math.min(event.clientX, window.innerWidth - bounds.width - 8))}px`;
+    contextMenu.style.top = `${Math.max(8, Math.min(event.clientY, window.innerHeight - bounds.height - 8))}px`;
+    contextMenu.querySelector("button[role='menuitem']").focus({ preventScroll: true });
+  });
 
-  editor.addEventListener("contextmenu", openContextMenu);
   contextMenu.addEventListener("mousedown", (event) => {
     if (event.target instanceof HTMLInputElement) return;
     event.preventDefault();
   });
+
+  const toggleAdvancedMenu = () => {
+    const expanded = advancedContextToggle.getAttribute("aria-expanded") !== "true";
+    if (!expanded) {
+      closeAdvancedMenu();
+      return;
+    }
+    advancedContextToggle.setAttribute("aria-expanded", "true");
+    advancedContextToggle.textContent = "Options avancées ▾";
+    advancedContextMenu.hidden = false;
+    advancedContextMenu.style.top = `${advancedContextToggle.offsetTop}px`;
+    let rect = advancedContextMenu.getBoundingClientRect();
+    if (rect.right > window.innerWidth - 8) {
+      advancedContextMenu.classList.add("admin-menu-contextuel-avance--gauche");
+      rect = advancedContextMenu.getBoundingClientRect();
+    }
+    if (rect.bottom > window.innerHeight - 8) {
+      const overflow = rect.bottom - window.innerHeight + 8;
+      advancedContextMenu.style.top = `${advancedContextToggle.offsetTop - overflow}px`;
+    }
+    advancedContextMenu.querySelector("button")?.focus({ preventScroll: true });
+  };
+
   contextMenu.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof HTMLButtonElement)) return;
+    const target = event.target instanceof Element ? event.target.closest("button") : null;
+    if (!target) return;
     if (target === advancedContextToggle) {
-      const expanded = target.getAttribute("aria-expanded") !== "true";
-      target.setAttribute("aria-expanded", String(expanded));
-      target.textContent = expanded ? "Options avancées ▾" : "Options avancées ▸";
-      advancedContextMenu.hidden = !expanded;
-      
-      if (expanded) {
-        // On aligne le sous-menu sur la hauteur du bouton "Options avancées"
-        advancedContextMenu.style.top = `${target.offsetTop}px`;
-        
-        // Sécurité anti-débordement en bas de page : 
-        // si le sous-menu dépasse de l'écran, on le remonte automatiquement
-        const advRect = advancedContextMenu.getBoundingClientRect();
-        if (advRect.bottom > window.innerHeight) {
-          const overflow = advRect.bottom - window.innerHeight + 12;
-          advancedContextMenu.style.top = `${target.offsetTop - overflow}px`;
-        }
-        
-        advancedContextMenu.querySelector("button")?.focus();
-      }
+      toggleAdvancedMenu();
       return;
     }
     if (target.id === "menu-contextuel-note") {
@@ -375,249 +645,301 @@
       return;
     }
     if (target.dataset.contextFormule) {
-      document.getElementById("latex-formule").value = document.getElementById("menu-latex-formule").value;
-      document.querySelector(`[data-formule="${target.dataset.contextFormule}"]`).click();
-      if (status.dataset.type !== "erreur") closeContextMenu();
+      if (insertFormula(menuLatexInput.value, target.dataset.contextFormule)) {
+        menuLatexInput.value = "";
+        closeContextMenu();
+      }
       return;
     }
     if (target.dataset.contextTarget) {
-      document.querySelector(target.dataset.contextTarget).click();
+      const action = document.querySelector(target.dataset.contextTarget);
       closeContextMenu();
+      action?.click();
     }
   });
+
   contextMenu.addEventListener("keydown", (event) => {
-    const items = Array.from(contextMenu.querySelectorAll("button[role='menuitem']:not(:disabled)"))
+    if (event.target instanceof HTMLInputElement && event.key !== "Escape") return;
+    const items = Array.from(contextMenu.querySelectorAll("button[role='menuitem']"))
       .filter((item) => item.getClientRects().length > 0);
     const currentIndex = items.indexOf(document.activeElement);
     if (event.key === "Escape") {
       event.preventDefault();
       closeContextMenu();
-      editor.focus();
-      return;
-    }
-    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      focusEditor(editor);
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();
       const direction = event.key === "ArrowDown" ? 1 : -1;
       items[(currentIndex + direction + items.length) % items.length]?.focus();
     } else if (event.key === "ArrowRight" && document.activeElement === advancedContextToggle) {
       event.preventDefault();
-      advancedContextToggle.click();
+      if (advancedContextMenu.hidden) toggleAdvancedMenu();
     } else if (event.key === "ArrowLeft" && !advancedContextMenu.hidden) {
       event.preventDefault();
-      advancedContextToggle.click();
+      closeAdvancedMenu();
       advancedContextToggle.focus();
     }
   });
   document.addEventListener("pointerdown", (event) => {
     if (!contextMenu.hidden && !contextMenu.contains(event.target)) closeContextMenu();
   });
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape" && !contextMenu.hidden) {
-      closeContextMenu();
-      editor.focus();
-    }
-  });
   window.addEventListener("resize", closeContextMenu);
   window.addEventListener("scroll", (event) => {
-    // Si on utilise la molette à l'intérieur du menu contextuel, on ne le ferme pas
-    if (contextMenu.contains(event.target)) {
-      return;
-    }
+    if (contextMenu.contains(event.target)) return;
     closeContextMenu();
   }, true);
+
+  /* Entrée dans un champ simple ne doit pas envoyer le formulaire par accident. */
+  form.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.isComposing) return;
+    const target = event.target;
+    if (!(target instanceof HTMLInputElement) || target === tokenInput) return;
+    event.preventDefault();
+    if (target === latexInput) document.querySelector("[data-formule='formule']").click();
+    else if (target === menuLatexInput) document.querySelector("[data-context-formule='formule']").click();
+  });
+
+  /* ======================================================================
+     Images
+     ====================================================================== */
+  const formatSize = (bytes) => (bytes >= 1024 * 1024
+    ? `${(bytes / 1024 / 1024).toFixed(1)} Mo`
+    : `${(bytes / 1024).toFixed(1)} Ko`);
+
+  const readDimensions = (url) => new Promise((resolve) => {
+    const probe = new Image();
+    probe.onload = () => resolve({ width: probe.naturalWidth, height: probe.naturalHeight });
+    probe.onerror = () => resolve(null);
+    probe.src = url;
+  });
+
+  const syncImageToEditor = (image) => {
+    editor.querySelectorAll(`img[data-upload-id="${image.id}"]`).forEach((img) => {
+      img.alt = image.alt;
+      const caption = img.closest("figure")?.querySelector("figcaption");
+      if (caption) caption.textContent = image.caption;
+    });
+  };
+
+  const isImageUsed = (image) => Boolean(editor.querySelector(`img[data-upload-id="${image.id}"]`));
+
+  function refreshImageStates() {
+    imageList.querySelectorAll(".admin-image").forEach((row) => {
+      const image = images.find((item) => item.id === row.dataset.imageId);
+      const state = row.querySelector(".admin-image-etat");
+      if (image && state) {
+        state.textContent = isImageUsed(image)
+          ? ""
+          : "Cette image n’est plus dans le texte : elle ne sera pas envoyée.";
+      }
+    });
+  }
+
   const renderImageList = () => {
     imageList.replaceChildren();
-    queuedImages.forEach((file, index) => {
+    images.forEach((image) => {
       const row = document.createElement("div");
       row.className = "admin-image";
+      row.dataset.imageId = image.id;
+
       const name = document.createElement("span");
-      const size = file.size >= 1024 * 1024
-        ? `${(file.size / 1024 / 1024).toFixed(1)} Mo`
-        : `${(file.size / 1024).toFixed(1)} Ko`;
-      name.textContent = `${file.name} (${size})`;
+      name.textContent = `${image.file.name} (${formatSize(image.file.size)})`;
+      const state = document.createElement("small");
+      state.className = "admin-image-etat";
+      name.append(document.createElement("br"), state);
+
       const fields = document.createElement("div");
       fields.className = "admin-image-fields";
       const descriptionLabel = document.createElement("label");
       descriptionLabel.textContent = "Description de l’image (obligatoire)";
       const description = document.createElement("input");
       description.type = "text";
-      description.required = true;
       description.maxLength = 500;
-      description.value = imageDescriptions.get(file)?.alt || "";
+      description.value = image.alt;
       description.addEventListener("input", () => {
-        const values = imageDescriptions.get(file) || { alt: "", caption: "" };
-        values.alt = description.value.trim();
-        imageDescriptions.set(file, values);
-        const image = editor.querySelector(`[data-upload-index="${index}"]`);
-        if (image) image.alt = values.alt;
-        updatePreview();
+        image.alt = description.value.trim();
+        syncImageToEditor(image);
+        schedulePreview();
       });
       descriptionLabel.append(description);
+
       const captionLabel = document.createElement("label");
       captionLabel.textContent = "Légende (facultative)";
       const caption = document.createElement("input");
       caption.type = "text";
       caption.maxLength = 300;
-      caption.value = imageDescriptions.get(file)?.caption || "";
+      caption.value = image.caption;
       caption.addEventListener("input", () => {
-        const values = imageDescriptions.get(file) || { alt: "", caption: "" };
-        values.caption = caption.value.trim();
-        imageDescriptions.set(file, values);
-        const image = editor.querySelector(`[data-upload-index="${index}"]`);
-        const figureCaption = image?.closest("figure")?.querySelector("figcaption");
-        if (figureCaption) figureCaption.textContent = values.caption;
-        updatePreview();
+        image.caption = caption.value.trim();
+        syncImageToEditor(image);
+        schedulePreview();
       });
       captionLabel.append(caption);
       fields.append(descriptionLabel, captionLabel);
+
       const remove = document.createElement("button");
       remove.type = "button";
       remove.textContent = "Retirer";
-      remove.setAttribute("aria-label", `Retirer ${file.name}`);
+      remove.setAttribute("aria-label", `Retirer ${image.file.name}`);
       remove.addEventListener("click", () => {
-        editor.querySelectorAll("[data-upload-index]").forEach((image) => {
-          const currentIndex = Number(image.dataset.uploadIndex);
-          if (currentIndex === index) image.closest("figure")?.remove();
-          else if (currentIndex > index) image.dataset.uploadIndex = String(currentIndex - 1);
+        editor.querySelectorAll(`img[data-upload-id="${image.id}"]`).forEach((img) => {
+          img.closest("figure")?.remove();
         });
-        queuedImages.splice(index, 1);
-        imageDescriptions.delete(file);
+        URL.revokeObjectURL(image.url);
+        images.splice(images.indexOf(image), 1);
         renderImageList();
-        updatePreview();
+        schedulePreview();
       });
+
       row.append(name, fields, remove);
       imageList.append(row);
     });
+    refreshImageStates();
   };
 
-  imageInput.addEventListener("change", () => {
+  imageInput.addEventListener("change", async () => {
     const files = Array.from(imageInput.files || []);
     imageInput.value = "";
-    const validFiles = [];
-    const rejectedFiles = [];
+    const rejected = [];
+    const added = [];
     for (const file of files) {
       if (!IMAGE_EXTENSIONS[file.type]) {
-        rejectedFiles.push(`Format non pris en charge pour « ${file.name} ». Utilisez PNG, JPEG, GIF ou WebP.`);
+        rejected.push(`Format non pris en charge pour « ${file.name} ». Utilisez PNG, JPEG, GIF ou WebP.`);
       } else if (file.size > MAX_IMAGE_BYTES) {
-        rejectedFiles.push(`« ${file.name} » dépasse la limite de 10 Mo.`);
+        rejected.push(`« ${file.name} » dépasse la limite de 10 Mo.`);
       } else {
-        validFiles.push(file);
+        imageCounter += 1;
+        const url = URL.createObjectURL(file);
+        const dimensions = await readDimensions(url);
+        added.push({
+          id: `img${imageCounter}`,
+          file,
+          url,
+          alt: "",
+          caption: "",
+          width: dimensions?.width || 0,
+          height: dimensions?.height || 0,
+        });
       }
     }
-
-    if (!validFiles.length) {
-      if (rejectedFiles.length) setStatus(rejectedFiles.join(" "), "erreur");
+    if (!added.length) {
+      if (rejected.length) setStatus(rejected.join(" "), "erreur");
       return;
     }
-    restoreSelection();
-    for (const file of validFiles) {
-      const index = queuedImages.push(file) - 1;
-      imageDescriptions.set(file, { alt: "", caption: "" });
+    added.forEach((image) => {
+      images.push(image);
       const figure = document.createElement("figure");
-      figure.dataset.uploadName = file.name;
-      const image = document.createElement("img");
-      image.dataset.uploadIndex = String(index);
-      image.alt = "";
-      const caption = document.createElement("figcaption");
-      caption.textContent = "";
-      figure.append(image, caption);
-      const paragraph = document.createElement("p");
-      paragraph.dataset.imageFollowup = "";
-      paragraph.append(document.createElement("br"));
-      editor.append(figure, paragraph);
-      editor.focus();
-      const range = document.createRange();
-      range.selectNodeContents(paragraph);
-      range.collapse(true);
-      const selection = window.getSelection();
-      selection?.removeAllRanges();
-      selection?.addRange(range);
-      savedSelection = range.cloneRange();
-      activeEditor = editor;
-    }
+      figure.setAttribute("contenteditable", "false");
+      const img = document.createElement("img");
+      img.src = image.url;
+      img.alt = "";
+      img.setAttribute("data-upload-id", image.id);
+      figure.append(img, document.createElement("figcaption"));
+      insertBlock(figure);
+    });
     renderImageList();
-    updatePreview();
-    setStatus(rejectedFiles.length
-      ? `${rejectedFiles.join(" ")} Les autres images ont été ajoutées.`
-      : "");
+    schedulePreview();
+    setStatus(rejected.length
+      ? `${rejected.join(" ")} Les autres images ont été ajoutées.`
+      : "Image ajoutée : renseignez sa description dans la liste ci-dessous.");
   });
 
+  /* ======================================================================
+     Nettoyage du HTML (le même code sert pour l'aperçu et la publication)
+     ====================================================================== */
   const safeHref = (value) => {
     const href = value.trim();
-    if (/^(?:https?:\/\/[^\s]+|mailto:[^\s]+|#[^\s]*|\/(?!\/)[^\s]*|\.\.?\/[^\s]*)$/i.test(href)) return href;
-    return "";
+    return /^(?:https?:\/\/[^\s]+|mailto:[^\s]+|#[^\s]*|\/(?!\/)[^\s]*|\.\.?\/[^\s]*)$/i.test(href) ? href : "";
   };
 
   const safeImageSrc = (value) => {
     const src = value.trim();
-    if (/^(?:https?:\/\/[^\s]+|\/(?!\/)[^\s]*|\.\.?\/[^\s]*)$/i.test(src)) return src;
-    return "";
+    return /^(?:https?:\/\/[^\s]+|\/(?!\/)[^\s]*|\.\.?\/[^\s]*)$/i.test(src) ? src : "";
   };
 
-  const allowedClasses = new Set([
-    "footnote-back", "footnote-ref", "formule", "large", "numerotee",
-    "tableau-defile", "texte", "total",
-  ]);
-  const cleanNode = (node, destination) => {
+  const cleanClasses = (value) => value.split(/\s+/)
+    .filter((name) => ALLOWED_CLASSES.has(name)).join(" ");
+
+  function cleanNode(node, destination) {
     if (node.nodeType === Node.TEXT_NODE) {
       destination.append(document.createTextNode(node.nodeValue || ""));
       return;
     }
     if (node.nodeType !== Node.ELEMENT_NODE) return;
-    const source = node;
-    if (["SCRIPT", "STYLE", "IFRAME", "OBJECT", "SVG", "MATH"].includes(source.tagName)) return;
-    if (!ALLOWED_TAGS.has(source.tagName)) {
-      source.childNodes.forEach((child) => cleanNode(child, destination));
+    const tag = node.localName.toUpperCase();
+    if (DROPPED_TAGS.has(tag)) return;
+    const unwrap = () => node.childNodes.forEach((child) => cleanNode(child, destination));
+    const classes = cleanClasses(node.getAttribute("class") || "");
+
+    let outTag = RENAMED_TAGS.get(tag) || tag.toLowerCase();
+    if (tag === "DIV" && !classes) {
+      // <div> sans classe : un simple paragraphe (ou rien s'il contient déjà des blocs).
+      if (node.querySelector(BLOCK_SELECTOR)) {
+        unwrap();
+        return;
+      }
+      outTag = "p";
+    } else if (!ALLOWED_TAGS.has(tag) && !RENAMED_TAGS.has(tag)) {
+      unwrap();
       return;
     }
-    const clean = document.createElement(source.tagName.toLowerCase());
-    if (source.tagName === "A") {
-      const href = safeHref(source.getAttribute("href") || "");
-      if (href) clean.setAttribute("href", href);
-      clean.setAttribute("rel", "noopener noreferrer");
-      const id = source.getAttribute("id") || "";
-      if (/^fnref[1-9]\d*$/.test(id)) clean.id = id;
-      const className = source.getAttribute("class") || "";
-      if (allowedClasses.has(className)) clean.className = className;
-      const role = source.getAttribute("role");
-      if (role === "doc-noteref" || role === "doc-backlink") clean.setAttribute("role", role);
-      if (className === "footnote-back") {
+
+    const clean = document.createElement(outTag);
+    if (tag === "A") {
+      const href = safeHref(node.getAttribute("href") || "");
+      if (!href) {
+        unwrap();
+        return;
+      }
+      clean.setAttribute("href", href);
+      if (/^https?:/i.test(href)) clean.setAttribute("rel", "noopener noreferrer");
+      if (classes.includes("footnote-ref") && noteNumberOf(node.id, "fnref")) {
+        clean.id = node.id;
+        clean.className = "footnote-ref";
+        clean.setAttribute("role", "doc-noteref");
+      } else if (classes.includes("footnote-back")) {
+        clean.className = "footnote-back";
+        clean.setAttribute("role", "doc-backlink");
         clean.setAttribute("aria-label", "Revenir à l’appel de note");
         clean.title = "Revenir à l’appel de note";
       }
-    } else if (source.tagName === "IMG") {
-      const uploadIndex = source.getAttribute("data-upload-index");
-      const src = source.getAttribute("src") || "";
-      if (uploadIndex !== null && /^\d+$/.test(uploadIndex)) {
-        clean.setAttribute("data-upload-index", uploadIndex);
+    } else if (tag === "IMG") {
+      const uploadId = node.getAttribute("data-upload-id") || "";
+      if (/^img\d+$/.test(uploadId)) {
+        clean.setAttribute("data-upload-id", uploadId);
       } else {
-        const safeSrc = safeImageSrc(src);
-        if (safeSrc) clean.setAttribute("src", safeSrc);
+        const src = safeImageSrc(node.getAttribute("src") || "");
+        if (!src) return; // image sans chemin exploitable (collée depuis un autre document)
+        clean.setAttribute("src", src);
+        ["width", "height"].forEach((name) => {
+          const value = node.getAttribute(name) || "";
+          if (/^\d+$/.test(value)) clean.setAttribute(name, value);
+        });
       }
-      clean.setAttribute("alt", source.getAttribute("alt") || "");
+      clean.setAttribute("alt", node.getAttribute("alt") || "");
       clean.setAttribute("loading", "lazy");
-    } else if (source.tagName === "LI") {
-      const id = source.getAttribute("id") || "";
-      if (/^fn[1-9]\d*$/.test(id)) clean.id = id;
-    } else if (source.tagName === "H2") {
-      const id = source.getAttribute("id") || "";
-      if (id === "annexe" || id === "sources") clean.id = id;
+    } else {
+      if (tag === "LI" && noteNumberOf(node.id, "fn")) clean.id = node.id;
+      if (tag === "H2" && (node.id === "annexe" || node.id === "sources")) clean.id = node.id;
+      if (classes) clean.className = classes;
     }
-    const className = source.getAttribute("class") || "";
-    if (source.tagName !== "A" && source.tagName !== "LI" && allowedClasses.has(className)) {
-      clean.className = className;
+    if (!["IMG", "BR", "HR"].includes(tag)) {
+      node.childNodes.forEach((child) => cleanNode(child, clean));
     }
-    source.childNodes.forEach((child) => cleanNode(child, clean));
     destination.append(clean);
-  };
+  }
 
-  const sanitizeEditor = (sourceEditor) => {
-    const parsed = new DOMParser().parseFromString(sourceEditor.innerHTML, "text/html");
+  function sanitizeElement(source) {
+    const parsed = new DOMParser().parseFromString(source.innerHTML, "text/html");
     const container = document.createElement("div");
     parsed.body.childNodes.forEach((node) => cleanNode(node, container));
     container.querySelectorAll("p").forEach((paragraph) => {
       if (!paragraph.textContent.trim() && !paragraph.querySelector("img")) paragraph.remove();
     });
+    container.querySelectorAll("figure").forEach((figure) => {
+      if (!figure.querySelector("img")) figure.remove();
+    });
+    // Tout texte resté à la racine est regroupé dans un paragraphe.
     const normalized = document.createElement("div");
     let inlineParagraph = null;
     Array.from(container.childNodes).forEach((node) => {
@@ -634,416 +956,374 @@
       inlineParagraph.append(node);
     });
     return normalized;
-  };
-  const sanitizedBody = () => sanitizeEditor(editor);
-  const sanitizedNotes = () => sanitizeEditor(notesEditor);
+  }
 
+  const serializeBlocks = (root) => Array.from(root.children).map((child) => child.outerHTML).join("\n");
+
+  /* ======================================================================
+     Collage depuis Word (notes de bas de page) et nettoyage du collage
+     ====================================================================== */
   const normalizeFootnoteId = (value) => value
     .replace(/^#/, "")
     .replace(/^_+/, "")
-    .replace(/^ftn/i, "")
+    .replace(/^(?:ftn|edn)/i, "")
     .toLowerCase();
 
-  editor.addEventListener("paste", (event) => {
-    const clipboardHtml = event.clipboardData?.getData("text/html");
-    if (!clipboardHtml) return;
-
-    const pasted = new DOMParser().parseFromString(clipboardHtml, "text/html");
-    const footnoteBlocks = Array.from(pasted.body.querySelectorAll("[id]")).filter((node) => {
+  // Extrait les notes d'un document Word collé ; renvoie null s'il n'y en a pas.
+  const extractWordFootnotes = (pasted) => {
+    const blocks = Array.from(pasted.body.querySelectorAll("[id]")).filter((node) => {
       const style = node.getAttribute("style") || "";
-      return /mso-element:\s*(?:footnote|endnote)/i.test(style)
-        || /^(?:_)?(?:ftn|endnote)\d+$/i.test(node.id);
+      return /mso-element:\s*(?:footnote|endnote)\b(?!-list)/i.test(style)
+        || /^(?:_)?(?:ftn|edn|endnote)\d+$/i.test(node.id);
     });
-    if (!footnoteBlocks.length) return;
+    if (!blocks.length) return null;
 
-    const blockIds = new Set(footnoteBlocks.map((block) => normalizeFootnoteId(block.id)));
-    const footnotes = new Map(footnoteBlocks.map((block) => [
-      normalizeFootnoteId(block.id),
-      block,
-    ]));
+    const footnotes = new Map(blocks.map((block) => [normalizeFootnoteId(block.id), block]));
     const references = Array.from(pasted.body.querySelectorAll("a")).filter((anchor) => {
-      if (footnoteBlocks.some((block) => block.contains(anchor))) return false;
+      if (blocks.some((block) => block.contains(anchor))) return false;
       const href = anchor.getAttribute("href") || "";
-      const footnoteId = href.startsWith("#") ? normalizeFootnoteId(href) : "";
-      return blockIds.has(footnoteId)
+      const target = href.startsWith("#") ? normalizeFootnoteId(href) : "";
+      return footnotes.has(target)
         || /mso-footnote-id\s*:/i.test(anchor.getAttribute("style") || "");
     });
-    if (!references.length) return;
+    if (!references.length) return null;
 
-    const existingNumbers = Array.from(notesEditor.querySelectorAll("li[id^='fn']"))
-      .map((item) => Number(item.id.slice(2)))
-      .filter(Number.isInteger);
-    let number = Math.max(0, ...existingNumbers);
-    const importedNotes = new Map();
-
+    const imported = new Map(); // identifiant Word -> numéro provisoire
+    let temporary = 100000;
     references.forEach((sourceReference) => {
-      const href = sourceReference.getAttribute("href") || "";
       const styleId = (sourceReference.getAttribute("style") || "")
         .match(/mso-footnote-id\s*:\s*([^;\s]+)/i)?.[1];
-      const footnoteId = normalizeFootnoteId(styleId || href);
-      const sourceNote = footnotes.get(footnoteId);
-      if (!sourceNote) return;
-
-      let noteNumber = importedNotes.get(footnoteId);
-      if (!noteNumber) {
-        noteNumber = ++number;
-        importedNotes.set(footnoteId, noteNumber);
-      }
-
-      const reference = pasted.createElement("a");
-      reference.href = `#fn${noteNumber}`;
-      reference.className = "footnote-ref";
-      reference.id = `fnref${noteNumber}`;
-      reference.setAttribute("role", "doc-noteref");
-      const superscript = pasted.createElement("sup");
-      superscript.textContent = String(noteNumber);
-      reference.append(superscript);
+      const footnoteId = normalizeFootnoteId(styleId || sourceReference.getAttribute("href") || "");
+      if (!footnotes.has(footnoteId)) return;
+      if (!imported.has(footnoteId)) imported.set(footnoteId, (temporary += 1));
+      const reference = createNoteRef(imported.get(footnoteId));
       sourceReference.replaceWith(reference);
     });
+    if (!imported.size) return null;
 
-    if (!importedNotes.size) {
-      return;
-    }
+    // On retire les notes et leurs conteneurs (qui laissent sinon <hr> et <br> parasites).
+    pasted.body.querySelectorAll("[style]").forEach((node) => {
+      if (/mso-element:\s*(?:footnote|endnote)-list/i.test(node.getAttribute("style") || "")) node.remove();
+    });
+    blocks.forEach((block) => block.remove());
+    return { imported, footnotes };
+  };
 
-    event.preventDefault();
-    footnoteBlocks.forEach((block) => block.remove());
-    const pastedContent = document.createElement("div");
-    pasted.body.childNodes.forEach((node) => cleanNode(node, pastedContent));
-
-    const selection = window.getSelection();
-    const pasteRange = selection?.rangeCount && editor.contains(selection.anchorNode)
-      ? selection.getRangeAt(0).cloneRange()
-      : savedSelection;
-    if (pasteRange && selection && editor.contains(pasteRange.startContainer)) {
-      selection.removeAllRanges();
-      selection.addRange(pasteRange);
-      const range = selection.getRangeAt(0);
-      range.deleteContents();
-      const insertedNodes = Array.from(pastedContent.childNodes);
-      range.insertNode(pastedContent);
-      const lastNode = insertedNodes.at(-1);
-      if (lastNode) {
-        range.setStartAfter(lastNode);
-        range.collapse(true);
-        selection.removeAllRanges();
-        selection.addRange(range);
-        savedSelection = range.cloneRange();
-      }
-    } else {
-      editor.append(pastedContent);
-    }
-
+  const appendImportedNotes = ({ imported, footnotes }) => {
     let list = notesEditor.querySelector("ol");
     if (!list) {
       list = document.createElement("ol");
       notesEditor.replaceChildren(list);
     }
-    importedNotes.forEach((noteNumber, footnoteId) => {
-      const sourceNote = footnotes.get(footnoteId);
+    const base = Math.max(
+      0,
+      ...Array.from(notesEditor.querySelectorAll("li[id]")).map((li) => noteNumberOf(li.id, "fn") || 0),
+    );
+    // On donne des numéros provisoires libres aux nouvelles notes puis on renumérote.
+    const shift = new Map();
+    imported.forEach((temporaryNumber, footnoteId) => {
+      shift.set(temporaryNumber, base + shift.size + 1);
       const item = document.createElement("li");
-      item.id = `fn${noteNumber}`;
-      const sourceContent = sourceNote.cloneNode(true);
-      sourceContent.querySelectorAll("a").forEach((anchor) => {
+      item.id = `fn${base + shift.size}`;
+      const content = footnotes.get(footnoteId).cloneNode(true);
+      content.querySelectorAll("a").forEach((anchor) => {
         if (/mso-footnote-id\s*:/i.test(anchor.getAttribute("style") || "")
-          || /^#_?ftnref/i.test(anchor.getAttribute("href") || "")
-          || /^_?ftn\d+$/i.test(anchor.getAttribute("name") || "")) {
+          || /^#_?(?:ftn|edn)ref/i.test(anchor.getAttribute("href") || "")
+          || /^_?(?:ftn|edn)\d+$/i.test(anchor.getAttribute("name") || "")) {
           anchor.remove();
         }
       });
-      const paragraphs = Array.from(sourceContent.querySelectorAll("p"));
+      const paragraphs = Array.from(content.querySelectorAll("p"));
       if (paragraphs.length) {
-        paragraphs.forEach((paragraph, paragraphIndex) => {
-          if (paragraphIndex) item.append(document.createElement("br"));
+        paragraphs.forEach((paragraph, index) => {
+          if (index) item.append(document.createElement("br"));
           paragraph.childNodes.forEach((node) => cleanNode(node, item));
         });
       } else {
-        sourceContent.childNodes.forEach((node) => cleanNode(node, item));
+        content.childNodes.forEach((node) => cleanNode(node, item));
       }
-      while (item.firstChild?.nodeType === Node.TEXT_NODE
-        && !item.firstChild.textContent.trim()) {
+      while (item.firstChild?.nodeType === Node.TEXT_NODE && !item.firstChild.textContent.trim()) {
         item.firstChild.remove();
       }
-      const backlink = document.createElement("a");
-      backlink.href = `#fnref${noteNumber}`;
-      backlink.className = "footnote-back";
-      backlink.setAttribute("role", "doc-backlink");
-      backlink.setAttribute("aria-label", "Revenir à l’appel de note");
-      backlink.title = "Revenir à l’appel de note";
-      backlink.textContent = "↩";
-      item.append(backlink);
+      if (item.firstChild?.nodeType === Node.TEXT_NODE) {
+        item.firstChild.textContent = item.firstChild.textContent.replace(/^\s+/, "");
+      }
       list.append(item);
     });
+    return shift;
+  };
 
-    activeEditor = editor;
-    rememberSelection({ currentTarget: editor });
-    updatePreview();
-    setStatus(
-      `${importedNotes.size} note${importedNotes.size === 1 ? "" : "s"} de bas de page importée${importedNotes.size === 1 ? "" : "s"} depuis Word.`,
-      "succes",
-    );
-  });
+  editor.addEventListener("paste", (event) => {
+    const clipboardHtml = event.clipboardData?.getData("text/html");
+    if (!clipboardHtml) return; // texte brut : collage natif
 
-  const updatePreview = () => {
-    const activeFiles = new Set(queuedImages);
-    for (const [file, url] of imagePreviewUrls) {
-      if (!activeFiles.has(file)) {
-        URL.revokeObjectURL(url);
-        imagePreviewUrls.delete(file);
-      }
-    }
-    const body = sanitizedBody();
-    body.querySelectorAll("img[data-upload-index]").forEach((image) => {
-      const file = queuedImages[Number(image.dataset.uploadIndex)];
-      if (!file) return;
-      if (!imagePreviewUrls.has(file)) imagePreviewUrls.set(file, URL.createObjectURL(file));
-      image.setAttribute("src", imagePreviewUrls.get(file));
+    event.preventDefault();
+    const pasted = new DOMParser().parseFromString(clipboardHtml, "text/html");
+    const droppedImages = Array.from(pasted.body.querySelectorAll("img"))
+      .filter((img) => !safeImageSrc(img.getAttribute("src") || "")).length;
+    const wordNotes = extractWordFootnotes(pasted);
+
+    const container = document.createElement("div");
+    pasted.body.childNodes.forEach((node) => cleanNode(node, container));
+    container.querySelectorAll("p").forEach((paragraph) => {
+      if (!paragraph.textContent.trim() && !paragraph.querySelector("img")) paragraph.remove();
     });
-    preview.replaceChildren(body);
-    notesPreview.replaceChildren(sanitizedNotes());
-    if (typeof window.renderMathInElement === "function") {
-      window.renderMathInElement(preview, {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "\\[", right: "\\]", display: true },
-          { left: "\\(", right: "\\)", display: false },
-        ],
-        throwOnError: false,
+
+    let html = container.innerHTML;
+    let shift = null;
+    if (wordNotes) {
+      shift = appendImportedNotes(wordNotes);
+      // Les appels provisoires (fn100001…) deviennent les numéros réservés aux nouvelles notes.
+      shift.forEach((finalNumber, temporaryNumber) => {
+        html = html
+          .split(`href="#fn${temporaryNumber}"`).join(`href="#fn${finalNumber}"`)
+          .split(`id="fnref${temporaryNumber}"`).join(`id="fnref${finalNumber}"`)
+          .split(`<sup>${temporaryNumber}</sup>`).join(`<sup>${finalNumber}</sup>`);
       });
     }
-  };
+    if (html.trim()) document.execCommand("insertHTML", false, html);
+    if (wordNotes) renumberLive();
+    schedulePreview();
 
-  const setStatus = (message, type = "") => {
-    status.textContent = message;
-    if (type) status.dataset.type = type;
-    else delete status.dataset.type;
-  };
+    if (wordNotes) {
+      const count = wordNotes.imported.size;
+      setStatus(`${count} note${count > 1 ? "s" : ""} de bas de page importée${count > 1 ? "s" : ""} depuis Word.`, "succes");
+    } else if (droppedImages) {
+      setStatus("Les images collées depuis un autre document ne sont pas conservées : utilisez « Insérer une image ».", "erreur");
+    }
+  });
 
+  /* ======================================================================
+     Publication sur GitHub
+     ====================================================================== */
   const parseList = (value) => value.split(",").map((item) => item.trim()).filter(Boolean);
-
   const encodePath = (path) => path.split("/").map(encodeURIComponent).join("/");
 
-  const apiRequest = async (path, token, options = {}) => {
+  const explainHttpError = async (response) => {
+    let detail = "";
+    try {
+      detail = (await response.json()).message || "";
+    } catch (error) { /* corps vide */ }
+    if (response.status === 401) return "jeton GitHub invalide ou expiré";
+    if (response.status === 403) return `accès refusé par GitHub${detail ? ` (${detail})` : ""} : vérifiez la permission « Contents : Read and write »`;
+    if (response.status === 404) return "dépôt introuvable ou jeton sans accès à ce dépôt";
+    return detail || `erreur HTTP ${response.status}`;
+  };
+
+  const githubHeaders = (token, withBody = false) => ({
+    Accept: "application/vnd.github+json",
+    Authorization: `Bearer ${token}`,
+    "X-GitHub-Api-Version": "2022-11-28",
+    ...(withBody ? { "Content-Type": "application/json" } : {}),
+  });
+
+  const putFile = async (path, token, message, bytes) => {
     const response = await fetch(`${API_ROOT}${encodePath(path)}`, {
-      ...options,
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${token}`,
-        "X-GitHub-Api-Version": "2022-11-28",
-        ...(options.body ? { "Content-Type": "application/json" } : {}),
-        ...options.headers,
-      },
+      method: "PUT",
+      headers: githubHeaders(token, true),
+      body: JSON.stringify({ message, content: encodeBase64(bytes), branch: BRANCH }),
     });
-    const responseBody = await response.json();
-    if (!response.ok) {
-      const detail = responseBody.message || `Erreur HTTP ${response.status}`;
-      throw new Error(detail);
-    }
-    return responseBody;
+    if (!response.ok) throw new Error(await explainHttpError(response));
   };
 
   const pathExists = async (path, token) => {
     const response = await fetch(`${API_ROOT}${encodePath(path)}?ref=${encodeURIComponent(BRANCH)}`, {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${token}`,
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
+      headers: githubHeaders(token),
     });
     if (response.status === 404) return false;
-    if (!response.ok) {
-      const body = await response.json();
-      throw new Error(body.message || `Vérification impossible (HTTP ${response.status}).`);
-    }
+    if (!response.ok) throw new Error(await explainHttpError(response));
     return true;
   };
 
-  const encodeBase64 = (bytes) => {
+  function encodeBase64(bytes) {
     let binary = "";
     for (let offset = 0; offset < bytes.length; offset += 0x8000) {
       binary += String.fromCharCode(...bytes.subarray(offset, offset + 0x8000));
     }
     return btoa(binary);
-  };
+  }
 
-  const safeFilename = (name) => {
-    const base = slugify(name.replace(/\.[^.]+$/, "")) || "image";
-    return base;
-  };
-
-  const uploadImages = async (slug, token) => {
-    const paths = [];
-    for (let index = 0; index < queuedImages.length; index += 1) {
-      const file = queuedImages[index];
-      const baseName = safeFilename(file.name);
-      const extension = IMAGE_EXTENSIONS[file.type];
-      const numbered = `${slug}-${String(index + 1).padStart(2, "0")}-${baseName}.${extension}`;
-      let candidate = `images/${numbered}`;
-      const base = numbered.slice(0, -(extension.length + 1));
+  const uploadImages = async (slug, token, used) => {
+    const paths = new Map();
+    let sent = 0;
+    for (const image of used) {
+      sent += 1;
+      const extension = IMAGE_EXTENSIONS[image.file.type];
+      const baseName = slugify(image.file.name.replace(/\.[^.]+$/, "")) || "image";
+      const stem = `${slug}-${String(sent).padStart(2, "0")}-${baseName}`;
+      let candidate = `images/${stem}.${extension}`;
       let suffix = 2;
       while (await pathExists(candidate, token)) {
-        candidate = `images/${base}-${suffix}.${extension}`;
+        candidate = `images/${stem}-${suffix}.${extension}`;
         suffix += 1;
       }
-      const bytes = new Uint8Array(await file.arrayBuffer());
-      await apiRequest(candidate, token, {
-        method: "PUT",
-        body: JSON.stringify({
-          message: `Ajout de l’image ${candidate}`,
-          content: encodeBase64(bytes),
-          branch: BRANCH,
-        }),
-      });
-      paths.push(candidate);
-      imagesWereUploaded = true;
-      setStatus(`Image ${index + 1}/${queuedImages.length} envoyée : ${file.name}`);
+      setStatus(`Envoi de l’image ${sent}/${used.length} : ${image.file.name}…`);
+      const bytes = new Uint8Array(await image.file.arrayBuffer());
+      await putFile(candidate, token, `Ajout de l’image ${candidate}`, bytes);
+      paths.set(image.id, candidate);
     }
     return paths;
   };
 
+  // Valide le formulaire et prépare l'article (sans toucher à l'éditeur).
   const buildArticle = () => {
-    const slug = document.getElementById("slug").value.trim();
-    const article = {
-      slug,
-      titre: document.getElementById("titre").value.trim(),
-      soustitre: document.getElementById("soustitre").value.trim(),
-      date: document.getElementById("date").value,
-      description: document.getElementById("description").value.trim(),
-      temps_lecture: document.getElementById("temps-lecture").value.trim(),
-      tags: parseList(document.getElementById("tags").value),
-      disciplines: parseList(document.getElementById("disciplines").value),
-      motscles: parseList(document.getElementById("motscles").value),
-      corps: "",
-    };
+    const slug = $("slug").value.trim();
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
       throw new Error("Le slug doit contenir uniquement des minuscules non accentuées, chiffres et tirets.");
     }
-    if (!article.date || Number.isNaN(Date.parse(`${article.date}T00:00:00`))) {
+    const date = $("date").value;
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || Number.isNaN(Date.parse(`${date}T00:00:00`))) {
       throw new Error("La date de publication est invalide.");
     }
-    const body = sanitizedBody();
+
+    const body = sanitizeElement(editor);
     if (!body.textContent.trim() && !body.querySelector("img")) {
       throw new Error("Ajoutez du texte ou une image au corps de l’article.");
     }
-    const bodyImages = Array.from(body.querySelectorAll("img"));
-    if (bodyImages.some((image) => !image.getAttribute("alt")?.trim())) {
-      throw new Error("Renseignez une description détaillée pour chaque image.");
+
+    const used = [];
+    const missingAlt = [];
+    body.querySelectorAll("img[data-upload-id]").forEach((img) => {
+      const image = images.find((item) => item.id === img.getAttribute("data-upload-id"));
+      if (!image) throw new Error("Une image du texte n’est associée à aucun fichier. Retirez-la puis réinsérez-la.");
+      if (!used.includes(image)) used.push(image);
+      if (!image.alt.trim() && !missingAlt.includes(image.file.name)) missingAlt.push(image.file.name);
+    });
+    if (missingAlt.length) {
+      throw new Error(`Renseignez une description détaillée pour : ${missingAlt.join(", ")}.`);
     }
-    if (bodyImages.some((image) => !image.getAttribute("src") && !image.hasAttribute("data-upload-index"))) {
-      throw new Error("Une image n’a pas de fichier ou de chemin valide.");
+
+    const notes = sanitizeElement(notesEditor);
+    const check = renumberNotes(body, notes);
+    if (check.duplicates) {
+      throw new Error("Un même appel de note apparaît plusieurs fois. Utilisez le bouton « Ajouter une note » pour chaque nouvel appel.");
     }
-    const notes = sanitizedNotes();
-    const footnotes = Array.from(notes.querySelectorAll("li[id^='fn']"));
-    const referenceLinks = Array.from(body.querySelectorAll("a.footnote-ref"));
-    const referenceIds = new Set();
-    const noteIds = new Set();
-    for (const reference of referenceLinks) {
-      const id = reference.id.replace(/^fnref/, "");
-      if (!/^fnref[1-9]\d*$/.test(reference.id) || referenceIds.has(reference.id)) {
-        throw new Error("Les appels de notes doivent avoir des numéros uniques. Utilisez le bouton « Ajouter une note ».");
-      }
-      referenceIds.add(reference.id);
-      const note = notes.querySelector(`#fn${id}`);
-      if (!note || reference.getAttribute("href") !== `#fn${id}`) {
-        throw new Error(`L’appel de note ${id} n’a pas de note correspondante.`);
-      }
+    if (check.unmatched) {
+      throw new Error("Un appel de note n’a pas de note correspondante dans la zone « Notes de bas de page ».");
     }
-    for (const note of footnotes) {
-      const id = note.id.replace(/^fn/, "");
-      if (noteIds.has(note.id)) {
-        throw new Error(`Le numéro de note ${id} est utilisé plusieurs fois.`);
-      }
-      noteIds.add(note.id);
-      if (!referenceIds.has(`fnref${id}`) || !note.querySelector(`a[href="#fnref${id}"]`)) {
-        throw new Error(`La note ${id} n’a pas d’appel correspondant dans le texte.`);
-      }
-      if (note.textContent.includes("Référence à compléter.")) {
-        throw new Error(`Complétez la référence de la note ${id} avant de publier.`);
-      }
+    if (check.orphans) {
+      throw new Error("Une note n’est reliée à aucun appel dans le texte. Supprimez-la ou replacez son appel avec « Ajouter une note ».");
     }
-    if (notes.textContent.trim() && footnotes.length === 0) {
-      throw new Error("La zone des notes contient du texte sans note numérotée. Utilisez le bouton « Ajouter une note ».");
+    if (notes.querySelector(":scope > :not(ol)")) {
+      throw new Error("La zone des notes contient du texte hors d’une note numérotée. Utilisez le bouton « Ajouter une note ».");
     }
-    article.meta_title = document.getElementById("meta-title").value.trim();
-    article.meta_description = document.getElementById("meta-description").value.trim();
-    article.corps = body.innerHTML;
-    article.notes = notes.innerHTML;
-    return article;
+    const list = notes.querySelector("ol");
+    list?.querySelectorAll("li").forEach((item) => {
+      if (item.textContent.includes(NOTE_PLACEHOLDER)) {
+        throw new Error(`Complétez la référence de la note ${item.id.replace(/^fn/, "")} avant de publier.`);
+      }
+    });
+
+    const article = {
+      slug,
+      titre: $("titre").value.trim(),
+      soustitre: $("soustitre").value.trim(),
+      date,
+      description: $("description").value.trim(),
+      temps_lecture: $("temps-lecture").value.trim(),
+      tags: parseList($("tags").value),
+      disciplines: parseList($("disciplines").value),
+      motscles: parseList($("motscles").value),
+      meta_title: $("meta-title").value.trim(),
+      meta_description: $("meta-description").value.trim(),
+      corps: "",
+      notes: "",
+    };
+    return { article, body, notes, list, used };
+  };
+
+  const resetAfterPublication = () => {
+    images.forEach((image) => URL.revokeObjectURL(image.url));
+    images.length = 0;
+    form.reset();
+    editor.replaceChildren();
+    notesEditor.replaceChildren();
+    renderImageList();
+    slugEdited = false;
+    setToday();
+    updatePreview();
   };
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    if (!form.reportValidity()) return;
+    if (publishing || !form.reportValidity()) return;
 
-    let article;
+    let prepared;
     try {
-      article = buildArticle();
+      prepared = buildArticle();
     } catch (error) {
       setStatus(error.message, "erreur");
       return;
     }
-
     const token = tokenInput.value.trim();
     if (!token) {
       setStatus("Saisissez un jeton GitHub pour publier.", "erreur");
       return;
     }
-    tokenInput.value = "";
+
+    const { article, body, notes, list, used } = prepared;
+    publishing = true;
     publishButton.disabled = true;
     setStatus("Vérification du dépôt et du slug…");
-
-    imagesWereUploaded = false;
+    let uploadedSome = false;
     try {
       const dataPath = `articles-data/${article.slug}.json`;
       if (await pathExists(dataPath, token)) {
-        throw new Error(`Le slug « ${article.slug} » existe déjà dans le dépôt. Choisissez-en un autre.`);
+        throw new Error(`le slug « ${article.slug} » existe déjà dans le dépôt. Choisissez-en un autre`);
       }
       if (await pathExists(`articles/${article.slug}.html`, token)) {
-        throw new Error(`Une page articles/${article.slug}.html existe déjà. Choisissez un autre slug pour éviter de l’écraser.`);
+        throw new Error(`une page articles/${article.slug}.html existe déjà. Choisissez un autre slug pour ne pas l’écraser`);
       }
 
-      const imagePaths = await uploadImages(article.slug, token);
-      imagesWereUploaded = imagePaths.length > 0;
-      editor.querySelectorAll("[data-upload-index]").forEach((image) => {
-        const index = Number(image.dataset.uploadIndex);
-        const path = imagePaths[index];
-        if (path) {
-          image.setAttribute("src", `../${path}`);
-          image.removeAttribute("data-upload-index");
-          image.closest("figure")?.removeAttribute("data-upload-name");
+      const paths = await uploadImages(article.slug, token, used);
+      uploadedSome = paths.size > 0;
+      body.querySelectorAll("img[data-upload-id]").forEach((img) => {
+        const id = img.getAttribute("data-upload-id");
+        const image = images.find((item) => item.id === id);
+        img.setAttribute("src", `../${paths.get(id)}`);
+        img.setAttribute("alt", image.alt);
+        if (image.width && image.height) {
+          img.setAttribute("width", String(image.width));
+          img.setAttribute("height", String(image.height));
+        }
+        img.removeAttribute("data-upload-id");
+        const caption = img.closest("figure")?.querySelector("figcaption");
+        if (image.caption) {
+          if (caption) caption.textContent = image.caption;
+          else img.closest("figure").append(Object.assign(document.createElement("figcaption"), { textContent: image.caption }));
+        } else {
+          caption?.remove();
         }
       });
-      if (editor.querySelector("[data-upload-index]")) {
-        throw new Error("Une image du contenu n’est associée à aucun fichier téléversé.");
-      }
 
-      article.corps = sanitizedBody().innerHTML;
-      article.notes = sanitizedNotes().innerHTML;
-      setStatus("Envoi de l’article sur GitHub…");
-      await apiRequest(dataPath, token, {
-        method: "PUT",
-        body: JSON.stringify({
-          message: `Publication de l’article ${article.slug}`,
-          content: encodeBase64(new TextEncoder().encode(`${JSON.stringify(article, null, 2)}\n`)),
-          branch: BRANCH,
-        }),
-      });
-      setStatus("Article envoyé ! GitHub Actions va générer sa page et ses aperçus. La publication sur le site peut prendre quelques minutes.", "succes");
-      form.reset();
-      editor.replaceChildren();
-      notesEditor.replaceChildren();
-      queuedImages = [];
-      imageDescriptions.clear();
-      renderImageList();
-      slugEdited = false;
-      setToday();
-      updatePreview();
-    } catch (error) {
-      const partialUpload = imagesWereUploaded
-        ? " Certaines images ont peut-être déjà été ajoutées dans images/ ; vous pourrez les réutiliser ou les retirer plus tard."
+      article.corps = serializeBlocks(body);
+      article.notes = list && list.children.length
+        ? `<ol>\n${Array.from(list.children).map((item) => item.outerHTML).join("\n")}\n</ol>`
         : "";
-      setStatus(`Publication impossible : ${error.message}.${partialUpload}`, "erreur");
+      setStatus("Envoi de l’article sur GitHub…");
+      const json = `${JSON.stringify(article, null, 2)}\n`;
+      await putFile(dataPath, token, `Publication de l’article ${article.slug}`, new TextEncoder().encode(json));
+
+      resetAfterPublication();
+      setStatus("Article envoyé ! GitHub Actions va générer sa page et mettre à jour l’accueil et la liste des articles ; comptez environ une à deux minutes avant sa mise en ligne.", "succes");
+    } catch (error) {
+      const partial = uploadedSome
+        ? " Certaines images ont déjà été ajoutées dans images/ ; elles seront renvoyées sous un autre nom lors d’un nouvel essai."
+        : "";
+      setStatus(`Publication impossible : ${error.message}.${partial}`, "erreur");
     } finally {
+      publishing = false;
       publishButton.disabled = false;
     }
   });
+
+  window.addEventListener("beforeunload", (event) => {
+    if (publishing || editor.textContent.trim() || images.length) {
+      event.preventDefault();
+      event.returnValue = "";
+    }
+  });
+
+  renderImageList();
+  updatePreview();
 })();
