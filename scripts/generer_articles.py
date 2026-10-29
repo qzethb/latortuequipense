@@ -290,13 +290,15 @@ def generer_sitemap(articles: list[dict[str, Any]]) -> None:
         slug = echapper(article["slug"])
         url_elements.append(f"  <url>\n    <loc>{DOMAINE_SITE}/articles/{slug}.html</loc>\n  </url>")
         
+    # CORRECTION : On fait le join en dehors de la f-string
+    corps_sitemap = "\n".join(url_elements)
+    
     sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{'\n'.join(url_elements)}
+{corps_sitemap}
 </urlset>
 """
     SITEMAP_PATH.write_text(sitemap_content, encoding="utf-8")
-
 
 def main() -> None:
     articles = charger_articles()
