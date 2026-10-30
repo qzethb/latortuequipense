@@ -45,6 +45,15 @@
   ];
   const NOTE_PLACEHOLDER = "Référence à compléter.";
 
+  const DATA_FOLDER = "articles-data";
+  const AVENIR_FOLDER = "articles-data-avenir";
+  const EDITO_PATH = "site-data/edito.json";
+  const MODE_LABELS = {
+    nouveau:  { titre: "Nouvel article",       bouton: "Publier l’article" },
+    avenir:   { titre: "Article à venir",      bouton: "Programmer l’article" },
+    modifier: { titre: "Modifier ou supprimer", bouton: "Enregistrer les modifications" },
+    edito:    { titre: "Modifier l’édito",     bouton: "Enregistrer l’édito" },
+  };
   /* ======================================================================
      Éléments et état
      ====================================================================== */
@@ -52,6 +61,8 @@
   const editor = $("corps");
   const notesEditor = $("notes");
   const form = $("formulaire-article");
+    form.addEventListener("input", () => { dirty = true; });
+    form.addEventListener("change", () => { dirty = true; });
   const tokenInput = $("jeton");
   const imageInput = $("fichiers-images");
   const imageList = $("liste-images");
@@ -61,6 +72,11 @@
   const notesPreview = $("apercu-notes");
   const latexInput = $("latex-formule");
   const menuLatexInput = $("menu-latex-formule");
+  const heading = document.querySelector(".admin-entete h1");
+  const tabButtons = Array.from(document.querySelectorAll(".admin-onglets [role='tab']"));
+  const picker = $("panneau-modifier");
+  const listContainer = $("liste-articles-admin");
+  const listStatus = $("statut-liste");
 
   const images = []; // { id, file, url, alt, caption, width, height }
   let imageCounter = 0;
@@ -69,17 +85,26 @@
   let slugEdited = false;
   let publishing = false;
   let previewTimer = 0;
-
-  try {
-    // Sans cela, Chrome crée des <div> à chaque Entrée au lieu de <p>.
-    document.execCommand("defaultParagraphSeparator", false, "p");
-  } catch (error) { /* navigateur sans cette commande */ }
+  let mode = "nouveau";
+  let editing = null;
+  let articleList = [];
+  let listLoading = false;
+  let dirty = false;
 
   const setStatus = (message, type = "") => {
     status.textContent = message;
     if (type) status.dataset.type = type;
     else delete status.dataset.type;
   };
+  const markDirty = () => { dirty = true; };
+  const clearDirty = () => { dirty = false; };
+  // Un article ou l'édito chargé depuis GitHub n'est « en cours » qu'une fois modifié (dirty).
+  const hasUnsavedWork = () => dirty || (editing === null && (
+    images.length > 0
+    || Boolean(editor.textContent.trim())
+    || Boolean(notesEditor.textContent.trim())
+    || Boolean($("titre").value.trim())
+  ));
 
   /* ======================================================================
      Date et slug
@@ -174,7 +199,7 @@
     editor.insertBefore(node, reference);
     const after = emptyParagraph();
     editor.insertBefore(after, node.nextSibling);
-    caretIn(editor, after);
+    caretIn(editor, after); 
     schedulePreview();
   };
 
@@ -1107,6 +1132,9 @@
     if (response.status === 401) return "jeton GitHub invalide ou expiré";
     if (response.status === 403) return `accès refusé par GitHub${detail ? ` (${detail})` : ""} : vérifiez la permission « Contents : Read and write »`;
     if (response.status === 404) return "dépôt introuvable ou jeton sans accès à ce dépôt";
+    if (response.status === 409 || response.status === 422) {
+      return `conflit avec GitHub${detail ? ` (${detail})` : ""} : le fichier a changé depuis son chargement. Rechargez-le puis recommencez`;
+    }
     return detail || `erreur HTTP ${response.status}`;
   };
 
@@ -1117,13 +1145,57 @@
     ...(withBody ? { "Content-Type": "application/json" } : {}),
   });
 
-  const putFile = async (path, token, message, bytes) => {
+  const putFile = async (path, token, message, bytes, sha = null) => {
+    const payload = { message, content: encodeBase64(bytes), branch: BRANCH };
+    if (sha) payload.sha = sha;
     const response = await fetch(`${API_ROOT}${encodePath(path)}`, {
       method: "PUT",
       headers: githubHeaders(token, true),
-      body: JSON.stringify({ message, content: encodeBase64(bytes), branch: BRANCH }),
+      body: JSON.stringify(payload),
     });
     if (!response.ok) throw new Error(await explainHttpError(response));
+    return response.json();
+  };
+
+  const deleteFile = async (path, token, message, sha) => {
+    const response = await fetch(`${API_ROOT}${encodePath(path)}`, {
+      method: "DELETE",
+      headers: githubHeaders(token, true),
+      body: JSON.stringify({ message, sha, branch: BRANCH }),
+    });
+    if (!response.ok) throw new Error(await explainHttpError(response));
+  };
+
+  const contentsUrl = (path) => `${API_ROOT}${encodePath(path)}?ref=${encodeURIComponent(BRANCH)}`;
+
+  // Renvoie le sha d'un fichier, ou null s'il n'existe pas.
+  const getSha = async (path, token) => {
+    const response = await fetch(contentsUrl(path), { headers: githubHeaders(token) });
+    if (response.status === 404) return null;
+    if (!response.ok) throw new Error(await explainHttpError(response));
+    return (await response.json()).sha || null;
+  };
+
+  // Lit un fichier texte (UTF-8) ; renvoie null s'il manque et que allowMissing est vrai.
+  const getFile = async (path, token, allowMissing = false) => {
+    const response = await fetch(contentsUrl(path), { headers: githubHeaders(token) });
+    if (response.status === 404 && allowMissing) return null;
+    if (!response.ok) throw new Error(await explainHttpError(response));
+    const data = await response.json();
+    if (!data.content) throw new Error("fichier trop volumineux pour l’API GitHub (plus de 1 Mo)");
+    const binary = atob(data.content.replace(/\s/g, ""));
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    return { sha: data.sha, text: new TextDecoder().decode(bytes) };
+  };
+
+  // Liste les fichiers .json d'un dossier ; un dossier absent (Git ne garde pas les dossiers vides) = liste vide.
+  const listFolder = async (folder, token) => {
+    const response = await fetch(contentsUrl(folder), { headers: githubHeaders(token) });
+    if (response.status === 404) return [];
+    if (!response.ok) throw new Error(await explainHttpError(response));
+    const files = await response.json();
+    return files.filter((file) => file.type === "file" && file.name.endsWith(".json"));
   };
 
   const pathExists = async (path, token) => {
@@ -1233,7 +1305,7 @@
     return { article, body, notes, list, used };
   };
 
-  const resetAfterPublication = () => {
+  const resetForm = (preserveToken = true) => {
     images.forEach((image) => URL.revokeObjectURL(image.url));
     images.length = 0;
     form.reset();
@@ -1241,14 +1313,362 @@
     notesEditor.replaceChildren();
     renderImageList();
     slugEdited = false;
+    editing = null;
+    if (!preserveToken) tokenInput.value = "";
     setToday();
+    updatePreview();
+    updateFormVisibility();
+    dirty = false;
+  };
+  /* ======================================================================
+     Onglets, liste des articles, suppression, édito, publication
+     ====================================================================== */
+  const infosSet = $("fieldset-infos");
+  const notesSet = $("fieldset-notes");
+  const bodyLegend = $("legende-corps");
+  const dateLabel = $("date-etiquette");
+  const editoPanel = $("panneau-edito");
+  const editoStatus = $("statut-edito");
+
+  const todayString = () => {
+    const now = new Date();
+    return [
+      now.getFullYear(),
+      String(now.getMonth() + 1).padStart(2, "0"),
+      String(now.getDate()).padStart(2, "0"),
+    ].join("-");
+  };
+
+  const updateFormVisibility = () => {
+    form.hidden = (mode === "modifier" || mode === "edito") && !editing;
+    infosSet.hidden = mode === "edito";
+    notesSet.hidden = mode === "edito";
+    bodyLegend.textContent = mode === "edito" ? "Texte de l’édito" : "Corps de l’article";
+    dateLabel.textContent = mode === "avenir"
+      ? "Date de mise en ligne (publication automatique)"
+      : "Date de publication";
+  };
+
+  // Dans l'éditeur, les images déjà publiées sont affichées depuis la racine du site (admin.html y est).
+  // Le préfixe « ./ » est exigé par le nettoyage du HTML ; il est retiré ou converti à l'enregistrement.
+  const showImages = (html) => html
+    .split('src="../images/').join('src="./images/')
+    .split('src="images/').join('src="./images/');
+
+  const applyUploadedImages = (body, paths, prefix) => {
+    body.querySelectorAll("img[data-upload-id]").forEach((img) => {
+      const id = img.getAttribute("data-upload-id");
+      const image = images.find((item) => item.id === id);
+      img.setAttribute("src", `${prefix}${paths.get(id)}`);
+      img.setAttribute("alt", image.alt);
+      if (image.width && image.height) {
+        img.setAttribute("width", String(image.width));
+        img.setAttribute("height", String(image.height));
+      }
+      img.removeAttribute("data-upload-id");
+      const figure = img.closest("figure");
+      const caption = figure?.querySelector("figcaption");
+      if (image.caption) {
+        if (caption) caption.textContent = image.caption;
+        else figure?.append(Object.assign(document.createElement("figcaption"), { textContent: image.caption }));
+      } else {
+        caption?.remove();
+      }
+    });
+  };
+
+  /* ---------- Liste des articles (publiés et à venir) ---------- */
+  const renderArticleList = () => {
+    listContainer.replaceChildren();
+    if (!articleList.length) {
+      const empty = document.createElement("p");
+      empty.className = "admin-aide";
+      empty.textContent = "Aucun article pour l’instant dans le dépôt.";
+      listContainer.append(empty);
+      return;
+    }
+    articleList.forEach((file) => {
+      const row = document.createElement("div");
+      row.className = "admin-article-row";
+
+      const name = document.createElement("span");
+      name.textContent = file.name.replace(/\.json$/, "");
+      if (file.avenir) {
+        const badge = document.createElement("em");
+        badge.className = "admin-badge";
+        badge.textContent = " (à venir)";
+        name.append(badge);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "admin-article-actions";
+      const addButton = (label, handler, className = "") => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = label;
+        if (className) button.className = className;
+        button.setAttribute("aria-label", `${label} : ${name.textContent.trim()}`);
+        button.addEventListener("click", handler);
+        actions.append(button);
+      };
+      addButton("Modifier", () => loadArticleForEdit(file));
+      if (file.avenir) addButton("Publier maintenant", () => promoteNow(file));
+      addButton("Supprimer", () => deleteArticle(file), "admin-danger");
+
+      row.append(name, actions);
+      listContainer.append(row);
+    });
+  };
+
+  const loadArticleList = async () => {
+    if (listLoading) return;
+    const token = tokenInput.value.trim();
+    if (!token) {
+      listContainer.replaceChildren();
+      listStatus.textContent = "Saisissez un jeton GitHub ci-dessus puis cliquez sur « Charger la liste ».";
+      return;
+    }
+    listLoading = true;
+    listStatus.textContent = "Chargement de la liste…";
+    try {
+      const [published, upcoming] = await Promise.all([
+        listFolder(DATA_FOLDER, token),
+        listFolder(AVENIR_FOLDER, token),
+      ]);
+      articleList = [
+        ...upcoming.map((file) => ({ ...file, avenir: true })),
+        ...published.map((file) => ({ ...file, avenir: false })),
+      ];
+      renderArticleList();
+      listStatus.textContent = `${published.length} article${published.length > 1 ? "s" : ""} publié${published.length > 1 ? "s" : ""}, ${upcoming.length} à venir.`;
+    } catch (error) {
+      articleList = [];
+      renderArticleList();
+      listStatus.textContent = `Impossible de charger la liste : ${error.message}.`;
+    } finally {
+      listLoading = false;
+    }
+  };
+
+  // Recharge la liste puis affiche le message d'une action devant le décompte.
+  const finishList = async (message) => {
+    await loadArticleList();
+    listStatus.textContent = `${message} ${listStatus.textContent}`;
+  };
+
+  /* ---------- Modifier ---------- */
+  const populateForm = (article) => {
+    $("titre").value = article.titre || "";
+    $("soustitre").value = article.soustitre || "";
+    $("slug").value = article.slug || "";
+    $("date").value = article.date || "";
+    $("temps-lecture").value = article.temps_lecture || "";
+    $("description").value = article.description || "";
+    $("meta-title").value = article.meta_title || "";
+    $("meta-description").value = article.meta_description || "";
+    $("tags").value = (article.tags || []).join(", ");
+    $("disciplines").value = (article.disciplines || []).join(", ");
+    $("motscles").value = (article.motscles || []).join(", ");
+    editor.innerHTML = showImages(article.corps || "");
+    notesEditor.innerHTML = article.notes || "";
+    images.forEach((image) => URL.revokeObjectURL(image.url));
+    images.length = 0;
+    renderImageList();
+    slugEdited = true;
     updatePreview();
   };
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    if (publishing || !form.reportValidity()) return;
+  const loadArticleForEdit = async (file) => {
+    const token = tokenInput.value.trim();
+    if (!token) {
+      listStatus.textContent = "Jeton requis pour charger un article.";
+      return;
+    }
+    if (hasUnsavedWork() && !window.confirm("Abandonner le travail en cours et charger cet article ?")) return;
+    listStatus.textContent = `Chargement de ${file.name}…`;
+    try {
+      const current = await getFile(file.path, token);
+      const article = JSON.parse(current.text);
+      resetForm(true);
+      populateForm(article);
+      editing = {
+        kind: "article",
+        path: file.path,
+        sha: current.sha,
+        slug: article.slug,
+        publie_le: article.publie_le || "",
+        avenir: Boolean(file.avenir),
+      };
+      listStatus.textContent = `« ${article.titre} » chargé${file.avenir ? " (article à venir)" : ""}. Modifiez puis enregistrez.`;
+      updateFormVisibility();
+      form.scrollIntoView({ behavior: "smooth", block: "start" });
+      setStatus("");
+    } catch (error) {
+      listStatus.textContent = `Chargement impossible : ${error.message}.`;
+    }
+  };
 
+  /* ---------- Supprimer ---------- */
+  const imagePathsOf = (corps, slug) => Array.from(new Set(
+    Array.from(String(corps).matchAll(/(?:\.\.\/)?(images\/[^"'\s<>)]+)/g), (match) => match[1]),
+  )).filter((path) => !path.includes("..") && path.startsWith(`images/${slug}-`));
+
+  const deleteArticle = async (file) => {
+    const token = tokenInput.value.trim();
+    if (!token) {
+      listStatus.textContent = "Jeton requis pour supprimer un article.";
+      return;
+    }
+    const slug = file.name.replace(/\.json$/, "");
+    const question = `Supprimer définitivement l’article « ${slug} » ?\n\n`
+      + "Sa page sera retirée du site après la prochaine génération (1 à 2 minutes).";
+    if (!window.confirm(question)) return;
+    listStatus.textContent = `Suppression de ${file.name}…`;
+    try {
+      const current = await getFile(file.path, token);
+      const article = JSON.parse(current.text);
+      const paths = imagePathsOf(article.corps, slug);
+      const withImages = paths.length > 0
+        && window.confirm(`Supprimer aussi les ${paths.length} image${paths.length > 1 ? "s" : ""} de cet article (dossier images/) ?`);
+      await deleteFile(file.path, token, `Suppression de l’article ${slug}`, current.sha);
+      let removed = 0;
+      if (withImages) {
+        for (const path of paths) {
+          const sha = await getSha(path, token);
+          if (!sha) continue;
+          await deleteFile(path, token, `Suppression de l’image ${path}`, sha);
+          removed += 1;
+        }
+      }
+      if (editing && editing.path === file.path) resetForm(true);
+      await finishList(`« ${slug} » supprimé${removed ? ` avec ${removed} image${removed > 1 ? "s" : ""}` : ""} ; GitHub Actions retire sa page.`);
+    } catch (error) {
+      listStatus.textContent = `Suppression impossible : ${error.message}.`;
+    }
+  };
+
+  /* ---------- Publier tout de suite un article à venir ---------- */
+  const promoteNow = async (file) => {
+    const token = tokenInput.value.trim();
+    if (!token) {
+      listStatus.textContent = "Jeton requis pour publier un article.";
+      return;
+    }
+    const slug = file.name.replace(/\.json$/, "");
+    if (!window.confirm(`Publier « ${slug} » maintenant ?\n\nSa date sera remplacée par celle d’aujourd’hui.`)) return;
+    listStatus.textContent = `Publication de ${file.name}…`;
+    try {
+      const target = `${DATA_FOLDER}/${file.name}`;
+      if (await pathExists(target, token)) throw new Error(`un article « ${slug} » est déjà publié`);
+      const current = await getFile(file.path, token);
+      const article = JSON.parse(current.text);
+      article.date = todayString();
+      article.publie_le = new Date().toISOString();
+      await putFile(
+        target,
+        token,
+        `Publication de l’article ${slug}`,
+        new TextEncoder().encode(`${JSON.stringify(article, null, 2)}\n`),
+      );
+      await deleteFile(file.path, token, `Retrait de ${slug} des articles à venir`, current.sha);
+      if (editing && editing.path === file.path) resetForm(true);
+      await finishList(`« ${slug} » publié ; GitHub Actions génère sa page (1 à 2 minutes).`);
+    } catch (error) {
+      listStatus.textContent = `Publication impossible : ${error.message}.`;
+    }
+  };
+
+  $("charger-liste").addEventListener("click", loadArticleList);
+
+  /* ---------- Édito ---------- */
+  const loadEdito = async () => {
+    const token = tokenInput.value.trim();
+    if (!token) {
+      editoStatus.textContent = "Saisissez d’abord un jeton GitHub ci-dessus.";
+      return;
+    }
+    if (editing && dirty && !window.confirm("Recharger l’édito et abandonner les modifications en cours ?")) return;
+    editoStatus.textContent = "Chargement de l’édito…";
+    try {
+      const file = await getFile(EDITO_PATH, token, true);
+      let corps = "";
+      if (file) {
+        const data = JSON.parse(file.text);
+        corps = typeof data.corps === "string" ? data.corps : "";
+      }
+      resetForm(true);
+      editor.innerHTML = showImages(corps);
+      editing = { kind: "edito", path: EDITO_PATH, sha: file ? file.sha : null };
+      updatePreview();
+      updateFormVisibility();
+      editoStatus.textContent = file
+        ? "Édito actuel chargé. Modifiez-le puis enregistrez."
+        : "Aucun édito enregistré pour l’instant : rédigez-le puis enregistrez.";
+      setStatus("");
+    } catch (error) {
+      editoStatus.textContent = `Chargement impossible : ${error.message}.`;
+    }
+  };
+  $("charger-edito").addEventListener("click", loadEdito);
+
+  const saveEdito = async (token) => {
+    const body = sanitizeElement(editor);
+    if (!body.textContent.trim() && !body.querySelector("img")) {
+      setStatus("L’édito est vide.", "erreur");
+      return;
+    }
+    if (body.querySelector("a.footnote-ref")) {
+      setStatus("Les notes de bas de page ne sont pas disponibles dans l’édito.", "erreur");
+      return;
+    }
+    const used = [];
+    const missingAlt = [];
+    for (const img of body.querySelectorAll("img[data-upload-id]")) {
+      const image = images.find((item) => item.id === img.getAttribute("data-upload-id"));
+      if (!image) {
+        setStatus("Une image du texte n’est associée à aucun fichier. Retirez-la puis réinsérez-la.", "erreur");
+        return;
+      }
+      if (!used.includes(image)) used.push(image);
+      if (!image.alt.trim() && !missingAlt.includes(image.file.name)) missingAlt.push(image.file.name);
+    }
+    if (missingAlt.length) {
+      setStatus(`Renseignez une description détaillée pour : ${missingAlt.join(", ")}.`, "erreur");
+      return;
+    }
+
+    publishing = true;
+    publishButton.disabled = true;
+    let uploadedSome = false;
+    try {
+      const paths = await uploadImages("edito", token, used);
+      uploadedSome = paths.size > 0;
+      // L'accueil est à la racine : les images y sont référencées sans « ../ ».
+      applyUploadedImages(body, paths, "");
+      body.querySelectorAll("img[src^='./images/'], img[src^='../images/']").forEach((img) => {
+        img.setAttribute("src", img.getAttribute("src").replace(/^(?:\.\.?\/)/, ""));
+      });
+      // Même style de lien que dans le reste de l'accueil.
+      body.querySelectorAll("a").forEach((anchor) => anchor.classList.add("lien"));
+      const json = `${JSON.stringify({ corps: serializeBlocks(body), maj: new Date().toISOString() }, null, 2)}\n`;
+      setStatus("Enregistrement de l’édito sur GitHub…");
+      await putFile(EDITO_PATH, token, "Mise à jour de l’édito", new TextEncoder().encode(json), editing.sha);
+      dirty = false;
+      await loadEdito();
+      setStatus("Édito enregistré ! GitHub Actions va mettre à jour l’accueil (1 à 2 minutes).", "succes");
+    } catch (error) {
+      const partial = uploadedSome
+        ? " Certaines images ont déjà été ajoutées dans images/ ; elles seront renvoyées sous un autre nom lors d’un nouvel essai."
+        : "";
+      setStatus(`Enregistrement impossible : ${error.message}.${partial}`, "erreur");
+    } finally {
+      publishing = false;
+      publishButton.disabled = false;
+    }
+  };
+
+  /* ---------- Publier, programmer ou enregistrer un article ---------- */
+  const saveArticle = async (token) => {
     let prepared;
     try {
       prepared = buildArticle();
@@ -1256,58 +1676,78 @@
       setStatus(error.message, "erreur");
       return;
     }
-    const token = tokenInput.value.trim();
-    if (!token) {
-      setStatus("Saisissez un jeton GitHub pour publier.", "erreur");
+    const { article, body, list, used } = prepared;
+    if (mode === "modifier" && article.slug !== editing.slug) {
+      setStatus("Le slug ne peut pas être modifié en mode édition.", "erreur");
+      return;
+    }
+    if (mode === "avenir" && article.date <= todayString()
+      && !window.confirm("Cette date est déjà atteinte : l’article sera publié dès la prochaine génération (quelques minutes). Continuer ?")) {
       return;
     }
 
-    const { article, body, notes, list, used } = prepared;
     publishing = true;
     publishButton.disabled = true;
-    setStatus("Vérification du dépôt et du slug…");
     let uploadedSome = false;
+
     try {
-      const dataPath = `articles-data/${article.slug}.json`;
-      if (await pathExists(dataPath, token)) {
-        throw new Error(`le slug « ${article.slug} » existe déjà dans le dépôt. Choisissez-en un autre`);
-      }
-      if (await pathExists(`articles/${article.slug}.html`, token)) {
-        throw new Error(`une page articles/${article.slug}.html existe déjà. Choisissez un autre slug pour ne pas l’écraser`);
+      let dataPath;
+      let sha = null;
+      let verb;
+
+      if (mode === "modifier") {
+        dataPath = editing.path;
+        sha = editing.sha;
+        verb = "Mise à jour";
+      } else {
+        const folder = mode === "avenir" ? AVENIR_FOLDER : DATA_FOLDER;
+        dataPath = `${folder}/${article.slug}.json`;
+        setStatus("Vérification du dépôt et du slug…");
+        if (await pathExists(dataPath, token)) {
+          throw new Error(`le slug « ${article.slug} » existe déjà dans ${folder}/. Choisissez-en un autre`);
+        }
+        const otherFolder = mode === "avenir" ? DATA_FOLDER : AVENIR_FOLDER;
+        if (await pathExists(`${otherFolder}/${article.slug}.json`, token)) {
+          throw new Error(`le slug « ${article.slug} » existe déjà dans ${otherFolder}/. Choisissez-en un autre`);
+        }
+        if (mode === "nouveau" && await pathExists(`articles/${article.slug}.html`, token)) {
+          throw new Error(`une page articles/${article.slug}.html existe déjà. Choisissez un autre slug`);
+        }
+        verb = mode === "avenir" ? "Programmation" : "Publication";
       }
 
       const paths = await uploadImages(article.slug, token, used);
       uploadedSome = paths.size > 0;
-      body.querySelectorAll("img[data-upload-id]").forEach((img) => {
-        const id = img.getAttribute("data-upload-id");
-        const image = images.find((item) => item.id === id);
-        img.setAttribute("src", `../${paths.get(id)}`);
-        img.setAttribute("alt", image.alt);
-        if (image.width && image.height) {
-          img.setAttribute("width", String(image.width));
-          img.setAttribute("height", String(image.height));
-        }
-        img.removeAttribute("data-upload-id");
-        const caption = img.closest("figure")?.querySelector("figcaption");
-        if (image.caption) {
-          if (caption) caption.textContent = image.caption;
-          else img.closest("figure").append(Object.assign(document.createElement("figcaption"), { textContent: image.caption }));
-        } else {
-          caption?.remove();
-        }
+      applyUploadedImages(body, paths, "../");
+      // Images déjà publiées : affichées avec « ./ » dans l'éditeur, rétablies en « ../ » pour la page de l'article.
+      body.querySelectorAll("img[src^='./images/']").forEach((img) => {
+        img.setAttribute("src", `.${img.getAttribute("src")}`);
       });
 
-      article.publie_le = new Date().toISOString(); // départage les articles publiés le même jour
+      if (mode === "modifier") article.publie_le = editing.publie_le;
+      else if (mode === "avenir") article.publie_le = "";
+      else article.publie_le = new Date().toISOString();
       article.corps = serializeBlocks(body);
       article.notes = list && list.children.length
         ? `<ol>\n${Array.from(list.children).map((item) => item.outerHTML).join("\n")}\n</ol>`
         : "";
-      setStatus("Envoi de l’article sur GitHub…");
-      const json = `${JSON.stringify(article, null, 2)}\n`;
-      await putFile(dataPath, token, `Publication de l’article ${article.slug}`, new TextEncoder().encode(json));
 
-      resetAfterPublication();
-      setStatus("Article envoyé ! GitHub Actions va générer sa page et mettre à jour l’accueil et la liste des articles ; comptez environ une à deux minutes avant sa mise en ligne.", "succes");
+      setStatus(`${verb} de l’article sur GitHub…`);
+      const json = `${JSON.stringify(article, null, 2)}\n`;
+      await putFile(dataPath, token, `${verb} de l’article ${article.slug}`, new TextEncoder().encode(json), sha);
+
+      if (mode === "modifier") {
+        resetForm(true);
+        await finishList("Article mis à jour ; GitHub Actions va régénérer sa page et les listes (1 à 2 minutes).");
+      } else {
+        resetForm(false);
+        setStatus(
+          mode === "avenir"
+            ? `Article programmé dans ${AVENIR_FOLDER}/. Il sera publié automatiquement à partir de sa date (génération quotidienne à 6 h UTC).`
+            : "Article envoyé ! GitHub Actions va générer sa page et mettre à jour l’accueil et la liste des articles ; comptez une à deux minutes.",
+          "succes",
+        );
+      }
     } catch (error) {
       const partial = uploadedSome
         ? " Certaines images ont déjà été ajoutées dans images/ ; elles seront renvoyées sous un autre nom lors d’un nouvel essai."
@@ -1317,10 +1757,71 @@
       publishing = false;
       publishButton.disabled = false;
     }
+  };
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (publishing) return;
+    if ((mode === "modifier" || mode === "edito") && !editing) {
+      setStatus(mode === "edito"
+        ? "Chargez d’abord l’édito actuel."
+        : "Choisissez d’abord un article à modifier dans la liste ci-dessus.", "erreur");
+      return;
+    }
+    const token = tokenInput.value.trim();
+    if (!token) {
+      setStatus("Saisissez un jeton GitHub ci-dessus pour continuer.", "erreur");
+      return;
+    }
+    if (mode === "edito") {
+      await saveEdito(token);
+      return;
+    }
+    if (!form.reportValidity()) return;
+    await saveArticle(token);
+  });
+
+  /* ---------- Onglets ---------- */
+  const switchMode = (newMode) => {
+    if (mode === newMode) return;
+    if (hasUnsavedWork() && !window.confirm("Abandonner le travail en cours et changer d’onglet ?")) return;
+
+    resetForm(true);
+    mode = newMode;
+    tabButtons.forEach((tab) => {
+      const active = tab.dataset.mode === mode;
+      tab.setAttribute("aria-selected", String(active));
+      tab.tabIndex = active ? 0 : -1;
+    });
+    picker.hidden = mode !== "modifier";
+    editoPanel.hidden = mode !== "edito";
+    heading.textContent = MODE_LABELS[mode].titre;
+    publishButton.textContent = MODE_LABELS[mode].bouton;
+    updateFormVisibility();
+    setStatus("");
+
+    if (mode === "modifier") loadArticleList();
+    if (mode === "edito") loadEdito();
+  };
+
+  tabButtons.forEach((tab) => {
+    tab.addEventListener("click", () => switchMode(tab.dataset.mode));
+    tab.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      event.preventDefault();
+      const currentIndex = tabButtons.indexOf(tab);
+      let nextIndex;
+      if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+      else if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabButtons.length;
+      else if (event.key === "Home") nextIndex = 0;
+      else nextIndex = tabButtons.length - 1;
+      tabButtons[nextIndex].focus();
+      switchMode(tabButtons[nextIndex].dataset.mode);
+    });
   });
 
   window.addEventListener("beforeunload", (event) => {
-    if (publishing || editor.textContent.trim() || images.length) {
+    if (publishing || hasUnsavedWork()) {
       event.preventDefault();
       event.returnValue = "";
     }
@@ -1328,4 +1829,5 @@
 
   renderImageList();
   updatePreview();
+  updateFormVisibility();
 })();

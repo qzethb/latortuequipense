@@ -1,18 +1,33 @@
 name: IndexNow Submission
 
+# L'envoi à IndexNow se fait APRÈS la génération du site (le sitemap est alors à jour),
+# ou lors d'un push qui ne concerne pas les données d'articles.
 on:
+  workflow_run:
+    workflows: ["Générer le site"]
+    types: [completed]
+    branches: [main]
   push:
     branches:
       - main
+    paths-ignore:
+      - "articles-data/**"
+      - "articles-data-avenir/**"
+      - "site-data/**"
+      - "images/**"
+  workflow_dispatch:
 
 jobs:
   indexnow:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Submit URLs to IndexNow
         run: |

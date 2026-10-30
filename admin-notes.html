@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Notes privées — La Tortue</title>
+<link rel="stylesheet" href="charte.css">
+<link rel="stylesheet" href="admin.css">
+<script src="menu.js" defer></script>
+<script src="admin-notes.js" defer></script>
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="contacts.html">Contacts</a>
+      </nav>
+    </header>
+
+    <main class="admin admin--notes">
+      <section class="billet-entete admin-entete">
+        <p class="etiquette">Espace administration</p>
+        <h1>Notes privées</h1>
+        <div class="ornement"></div>
+        <p>Vos notes sont enregistrées dans un dépôt GitHub privé, jamais dans le dépôt du site.</p>
+      </section>
+
+      <div class="admin-avertissement">
+        <strong>Un jeton distinct, limité au dépôt des notes.</strong>
+        Créez un dépôt <em>privé</em> <code>qzethb/latortuequipense-notes</code> (avec un fichier README), puis un
+        <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a>
+        limité à ce seul dépôt, avec la permission <code>Contents : Read and write</code>.
+        Ce jeton ne donne aucun accès au site : il peut donc être mémorisé sur cet appareil.
+        La page refuse d’enregistrer si le dépôt est public.
+      </div>
+
+      <form id="connexion" class="admin-jeton" autocomplete="off">
+        <fieldset class="admin-jeton">
+          <legend>Connexion</legend>
+          <label class="admin-champ admin-champ--large" for="jeton">
+            <span>Jeton du dépôt des notes</span>
+            <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+          </label>
+          <label class="admin-case">
+            <input id="memoriser" type="checkbox">
+            <span>Se souvenir de ce jeton sur cet appareil</span>
+          </label>
+          <div class="admin-outils">
+            <button type="submit" id="ouvrir">Ouvrir mes notes</button>
+            <button type="button" id="oublier" hidden>Oublier le jeton</button>
+          </div>
+        </fieldset>
+      </form>
+
+      <p id="statut" class="admin-statut" role="status" aria-live="polite"></p>
+
+      <div id="espace" class="notes-espace" hidden>
+        <aside class="notes-colonne" aria-label="Liste des notes">
+          <div class="notes-outils">
+            <label class="sr-only" for="recherche">Rechercher dans les notes</label>
+            <input id="recherche" type="search" placeholder="Rechercher" autocomplete="off">
+            <button type="button" id="nouvelle">Nouvelle note</button>
+          </div>
+          <ul id="liste" class="notes-liste"></ul>
+        </aside>
+
+        <form id="note" class="notes-edition" aria-label="Édition de la note" hidden>
+          <label class="admin-champ" for="note-titre">
+            <span>Titre</span>
+            <input id="note-titre" type="text" maxlength="200" autocomplete="off">
+          </label>
+          <label class="admin-champ" for="note-texte">
+            <span>Note</span>
+            <textarea id="note-texte" rows="16"></textarea>
+          </label>
+          <label class="admin-case">
+            <input id="note-epingle" type="checkbox">
+            <span>Épingler en haut de la liste</span>
+          </label>
+          <p id="note-meta" class="admin-aide"></p>
+          <div class="admin-outils">
+            <button type="submit" id="enregistrer" class="admin-publier">Enregistrer</button>
+            <button type="button" id="supprimer" class="admin-danger">Supprimer</button>
+          </div>
+        </form>
+      </div>
+
+      <p class="suite"><a href="admin.html">Administration des articles</a> — <a href="index.html">Retour au site</a></p>
+    </main>
+  </div>
+</body>
+</html>

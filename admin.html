@@ -41,13 +41,52 @@
       </section>
 
       <div class="admin-avertissement">
-        <strong>Accès GitHub requis pour publier.</strong>
+        <strong>Accès GitHub requis.</strong>
         Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>.
-        Le jeton est utilisé uniquement en mémoire pendant l’envoi : il n’est ni enregistré ni transmis ailleurs que sur l’API officielle de GitHub. Il est effacé du formulaire une fois l’article publié.
+        Le jeton est utilisé en mémoire pour charger, publier, modifier, supprimer et remplacer l’édito. Il n’est ni enregistré ni transmis ailleurs que sur l’API officielle de GitHub. Il est effacé du formulaire une fois un article publié. Les <a href="admin-notes.html">notes privées</a> utilisent un autre jeton, limité à un dépôt privé.
       </div>
 
-      <form id="formulaire-article" class="admin-formulaire">
+      <fieldset class="admin-jeton">
+        <legend>Jeton GitHub</legend>
+        <label class="admin-champ admin-champ--large" for="jeton">
+          <span>Jeton à granularité fine</span>
+          <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+          <small>Requis pour toutes les actions de cette page. Il n’est jamais stocké.</small>
+        </label>
+      </fieldset>
+
+      <nav class="admin-onglets" role="tablist" aria-label="Mode d’administration">
+        <button type="button" role="tab" id="onglet-nouveau" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-article">Nouvel article</button>
+        <button type="button" role="tab" id="onglet-avenir" data-mode="avenir" aria-selected="false" tabindex="-1" aria-controls="formulaire-article">Article à venir</button>
+        <button type="button" role="tab" id="onglet-modifier" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier">Modifier ou supprimer</button>
+        <button type="button" role="tab" id="onglet-edito" data-mode="edito" aria-selected="false" tabindex="-1" aria-controls="panneau-edito">Édito</button>
+      </nav>
+
+      <section id="panneau-modifier" class="admin-panneau-selecteur" hidden>
         <fieldset>
+          <legend>Choisir un article</legend>
+          <div class="admin-outils">
+            <button type="button" id="charger-liste">Charger la liste des articles</button>
+          </div>
+          <p id="statut-liste" class="admin-aide" role="status" aria-live="polite"></p>
+          <div id="liste-articles-admin" class="admin-articles-liste"></div>
+          <p class="admin-aide">Seuls les articles issus de l’administration (fichiers JSON) apparaissent ici. Les articles « à venir » sont signalés ; l’un d’eux peut être publié tout de suite.</p>
+        </fieldset>
+      </section>
+
+      <section id="panneau-edito" class="admin-panneau-selecteur" hidden>
+        <fieldset>
+          <legend>Édito de la page d’accueil</legend>
+          <div class="admin-outils">
+            <button type="button" id="charger-edito">Recharger l’édito actuel</button>
+          </div>
+          <p id="statut-edito" class="admin-aide" role="status" aria-live="polite"></p>
+          <p class="admin-aide">Le texte ci-dessous remplace l’édito affiché sur l’accueil. Les notes de bas de page n’y sont pas disponibles.</p>
+        </fieldset>
+      </section>
+
+      <form id="formulaire-article" class="admin-formulaire" novalidate>
+        <fieldset id="fieldset-infos">
           <legend>Informations de l’article</legend>
           <div class="admin-grille">
             <label class="admin-champ admin-champ--large">
@@ -64,7 +103,7 @@
               <small>Minuscules, chiffres et tirets ; il déterminera l’adresse de l’article.</small>
             </label>
             <label class="admin-champ">
-              <span>Date de publication</span>
+              <span id="date-etiquette">Date de publication</span>
               <input id="date" name="date" type="date" required>
             </label>
             <label class="admin-champ">
@@ -104,8 +143,8 @@
           </div>
         </fieldset>
 
-        <fieldset>
-          <legend>Corps de l’article</legend>
+        <fieldset id="fieldset-corps">
+          <legend id="legende-corps">Corps de l’article</legend>
           <div class="admin-outils" role="toolbar" aria-label="Mise en forme du texte">
             <button type="button" data-commande="bold" aria-label="Gras"><strong>G</strong></button>
             <button type="button" data-commande="italic" aria-label="Italique"><em>I</em></button>
@@ -168,7 +207,7 @@
           </details>
         </fieldset>
 
-        <fieldset>
+        <fieldset id="fieldset-notes">
           <legend>Notes de bas de page</legend>
           <p class="admin-aide">Placez le curseur dans le corps de l’article puis cliquez sur « Ajouter une note » : l’appel et la note numérotés seront créés ensemble. Vous pourrez ensuite compléter la référence dans cette liste. Si vous collez depuis Word un texte contenant des notes de bas de page, elles seront ajoutées ici automatiquement.</p>
           <div class="admin-outils" role="toolbar" aria-label="Insertion d’une note">
@@ -183,11 +222,6 @@
 
         <fieldset>
           <legend>Publication</legend>
-          <label class="admin-champ admin-champ--large" for="jeton">
-            <span>Jeton GitHub à granularité fine</span>
-            <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
-            <small>Il est effacé du formulaire après une publication réussie. Il doit avoir accès à l’écriture du contenu de ce seul dépôt.</small>
-          </label>
           <div class="admin-actions">
             <button type="submit" class="admin-publier" id="publier">Publier l’article</button>
             <p id="statut-publication" class="admin-statut" role="status" aria-live="polite"></p>
@@ -195,7 +229,7 @@
         </fieldset>
       </form>
 
-      <p class="suite"><a href="index.html">Retour au site</a></p>
+      <p class="suite"><a href="admin-notes.html">Notes privées</a> — <a href="index.html">Retour au site</a></p>
     </main>
   </div>
 </body>

@@ -1,44 +1,56 @@
-name: Générer les articles
+name: Générer le site
 
-# Se déclenche quand la page d'administration envoie un nouvel article (articles-data/*.json),
-# ou à la main depuis l'onglet « Actions » de GitHub.
+# Se déclenche quand l'administration envoie un article, un « à venir » ou l'édito,
+# et chaque jour à 6 h UTC pour publier les articles dont la date est atteinte.
 on:
   push:
     branches: [main]
     paths:
       - "articles-data/**"
-      - "scripts/generer_articles.py"
+      - "articles-data-avenir/**"
+      - "site-data/**"
+      - "scripts/**"
+  schedule:
+    - cron: "0 6 * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
 
+# Deux générations ne doivent jamais se chevaucher.
 concurrency:
-  group: generer-articles
+  group: generer-site
   cancel-in-progress: false
 
 jobs:
   generer:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+        with:
+          ref: main
 
-      - uses: actions/setup-python@v5
+      - name: Installer Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - name: Générer les pages, les aperçus et le sitemap
+      - name: Publier les articles à venir dont la date est atteinte
+        run: python scripts/promouvoir_articles.py
+
+      - name: Générer les pages, les listes, l'édito et le sitemap
         run: python scripts/generer_articles.py
 
-      - name: Publier les fichiers générés
+      - name: Enregistrer les changements
         run: |
+          git add -A articles articles-data articles-data-avenir site-data index.html articles.html sitemap.xml
+          if git diff --cached --quiet; then
+            echo "Rien à enregistrer."
+            exit 0
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add articles index.html articles.html sitemap.xml
-          if git diff --cached --quiet; then
-            echo "Rien à publier."
-          else
-            git commit -m "Génération automatique des articles"
-            git pull --rebase origin main
-            git push origin main
-          fi
+          git commit -m "Génération automatique du site"
+          git pull --rebase origin main
+          git push origin main

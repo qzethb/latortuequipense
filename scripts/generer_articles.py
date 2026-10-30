@@ -1,8 +1,12 @@
 """Génère les pages d'articles de La Tortue à partir des fichiers articles-data/*.json.
 
-Pour chaque article JSON :
+Pour chaque article JSON de articles-data/ :
   - crée articles/<slug>.html ;
+  - supprime les pages générées dont le JSON a disparu (les pages écrites à la main,
+    sans le repère de génération, ne sont jamais touchées) ;
   - met à jour les aperçus de index.html et articles.html (entre les marqueurs) ;
+  - met à jour la section « Articles à venir » de index.html (depuis articles-data-avenir/) ;
+  - remplace l'édito de index.html (depuis site-data/edito.json) ;
   - met à jour sitemap.xml.
 
 Usage (depuis la racine du dépôt) :  python scripts/generer_articles.py
@@ -13,11 +17,13 @@ import json
 import re
 from datetime import date
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
 
 ROOT_DIR = Path(__file__).resolve().parent.parent
 DATA_DIR = ROOT_DIR / "articles-data"
+AVENIR_DIR = ROOT_DIR / "articles-data-avenir"
+EDITO_PATH = ROOT_DIR / "site-data" / "edito.json"
 ARTICLES_DIR = ROOT_DIR / "articles"
 INDEX_PATH = ROOT_DIR / "index.html"
 LIST_PATH = ROOT_DIR / "articles.html"
@@ -26,6 +32,14 @@ DOMAINE_SITE = "https://latortuequipense.fr"
 
 MARKER_START = "<!-- ARTICLES_GENERES_DEBUT -->"
 MARKER_END = "<!-- ARTICLES_GENERES_FIN -->"
+EDITO_START = "<!-- EDITO_DEBUT -->"
+EDITO_END = "<!-- EDITO_FIN -->"
+AVENIR_START = "<!-- AVENIR_DEBUT -->"
+AVENIR_END = "<!-- AVENIR_FIN -->"
+# Repère placé dans chaque page générée : seules ces pages peuvent être supprimées automatiquement.
+MARQUEUR_GENERE = "<!-- Page générée par scripts/generer_articles.py : ne pas modifier à la main -->"
+# Dans « Articles à venir » : True affiche « Prévu le 3 novembre 2026 », False affiche « À venir ».
+AFFICHER_DATE_AVENIR = False
 REQUIRED_FIELDS = ("slug", "titre", "soustitre", "date", "description", "temps_lecture", "corps")
 OPTIONAL_LIST_FIELDS = ("tags", "disciplines", "motscles")
 OPTIONAL_TEXT_FIELDS = ("meta_title", "meta_description", "notes")
@@ -67,6 +81,7 @@ PIED_DE_PAGE = """    <footer class="pied">
             <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
             <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
             <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
             <li><a href="../report.html">Signaler un problème</a></li>
           </ul>
         </nav>
@@ -144,13 +159,14 @@ def valider_article(data: Any, source: Path) -> dict[str, Any]:
     return article
 
 
-def charger_articles() -> list[dict[str, Any]]:
-    if not DATA_DIR.exists():
-        raise FileNotFoundError(f"Le dossier des données est introuvable : {DATA_DIR}")
+def charger_articles(dossier: Path = DATA_DIR) -> list[dict[str, Any]]:
+    # Git ne garde pas les dossiers vides : un dossier absent signifie « aucun article ».
+    if not dossier.exists():
+        return []
 
     articles = []
     slugs = set()
-    for fichier_json in sorted(DATA_DIR.glob("*.json")):
+    for fichier_json in sorted(dossier.glob("*.json")):
         try:
             data = json.loads(lire(fichier_json))
         except json.JSONDecodeError as erreur:
@@ -216,6 +232,7 @@ def generer_page_article(article: dict[str, Any]) -> None:
     ).replace("</", "<\\/")
 
     html_content = f"""<!DOCTYPE html>
+{MARQUEUR_GENERE}
 <html lang="fr">
 <head>
 <meta charset="utf-8">
@@ -340,6 +357,70 @@ def mettre_a_jour_page(chemin_page: Path, snippets: list[str]) -> None:
             fichier.write(nouveau)
 
 
+def supprimer_pages_orphelines(slugs: set[str]) -> None:
+    """Supprime les pages générées dont l'article JSON n'existe plus."""
+    if not ARTICLES_DIR.exists():
+        return
+    for page in sorted(ARTICLES_DIR.glob("*.html")):
+        if page.stem in slugs:
+            continue
+        if MARQUEUR_GENERE in lire(page)[:600]:
+            page.unlink()
+            print(f"Page supprimée (article retiré) : {page.name}")
+
+
+def remplacer_entre_marqueurs(chemin: Path, debut: str, fin: str, bloc: str) -> None:
+    """Remplace le contenu entre deux marqueurs ; ignore la page si les marqueurs manquent."""
+    contenu = lire(chemin)
+    if contenu.count(debut) != 1 or contenu.count(fin) != 1:
+        print(f"Avertissement : marqueurs {debut} / {fin} absents de {chemin.name} ; bloc non mis à jour.")
+        return
+    if contenu.index(debut) > contenu.index(fin):
+        raise ValueError(f"{chemin}: les marqueurs {debut} et {fin} sont dans le désordre.")
+    fin_de_ligne = "\r\n" if "\r\n" in contenu else "\n"
+    position = contenu.index(debut) + len(debut)
+    bloc = bloc.replace("\r\n", "\n").replace("\n", fin_de_ligne)
+    nouveau = contenu[:position] + bloc + contenu[contenu.index(fin):]
+    if nouveau != contenu:
+        with chemin.open("w", encoding="utf-8", newline="") as fichier:
+            fichier.write(nouveau)
+
+
+def charger_edito() -> Optional[str]:
+    """Renvoie le HTML de l'édito, ou None si site-data/edito.json n'existe pas."""
+    if not EDITO_PATH.exists():
+        return None
+    try:
+        data = json.loads(lire(EDITO_PATH))
+    except json.JSONDecodeError as erreur:
+        raise ValueError(f"{EDITO_PATH}: JSON invalide ({erreur.msg}).") from erreur
+    corps = data.get("corps") if isinstance(data, dict) else None
+    if not isinstance(corps, str) or not corps.strip():
+        raise ValueError(f"{EDITO_PATH}: le champ « corps » doit être une chaîne non vide.")
+    return corps.strip()
+
+
+def generer_edito(corps: str) -> str:
+    lignes = "\n".join(f"        {ligne}" if ligne.strip() else "" for ligne in corps.splitlines())
+    return f"\n{lignes}\n        "
+
+
+def generer_avenir(articles: list[dict[str, Any]]) -> str:
+    elements = []
+    for article in articles:
+        libelle = f"Prévu le {article['date_affichee']}" if AFFICHER_DATE_AVENIR else "À venir"
+        elements.append(
+            f'''        <a class="article" href="error.html">
+          <span class="date">{echapper(libelle)}</span>
+          <h2>{echapper(article["titre"])}</h2>
+          <span class="fleche">→</span>
+        </a>'''
+        )
+    if not elements:
+        return "\n        "
+    return "\n" + "\n".join(elements) + "\n        "
+
+
 def generer_sitemap(articles: list[dict[str, Any]]) -> None:
     """Génère et met à jour automatiquement le fichier sitemap.xml."""
     pages_fixes = [
@@ -364,6 +445,12 @@ def generer_sitemap(articles: list[dict[str, Any]]) -> None:
             f"    <lastmod>{article['date_obj'].isoformat()}</lastmod>\n  </url>"
         )
 
+    slugs_generes = {article["slug"] for article in articles}
+    if ARTICLES_DIR.exists():
+        for page in sorted(ARTICLES_DIR.glob("*.html")):
+            if page.stem not in slugs_generes:
+                url_elements.append(f"  <url>\n    <loc>{DOMAINE_SITE}/articles/{echapper(page.stem)}.html</loc>\n  </url>")
+
     corps_sitemap = "\n".join(url_elements)
     sitemap_content = f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -374,9 +461,20 @@ def generer_sitemap(articles: list[dict[str, Any]]) -> None:
 
 
 def main() -> None:
-    articles = charger_articles()
+    articles = charger_articles(DATA_DIR)
+    avenir = charger_articles(AVENIR_DIR)
     if not articles:
-        raise ValueError(f"Aucun fichier JSON d’article trouvé dans {DATA_DIR}")
+        print(f"Aucun fichier JSON d’article dans {DATA_DIR} : les listes seront vides.")
+
+    # Un slug déjà publié ne peut pas rester « à venir ».
+    publies = {article["slug"] for article in articles}
+    for article in avenir:
+        if article["slug"] in publies:
+            print(f"Avertissement : « {article['slug']} » est déjà publié ; l'entrée « à venir » est ignorée.")
+    avenir = [article for article in avenir if article["slug"] not in publies]
+    avenir.sort(key=lambda article: (article["date_obj"], article["slug"]))
+
+    edito = charger_edito()
 
     # On vérifie tout avant d'écrire quoi que ce soit.
     verifier_marqueurs(INDEX_PATH)
@@ -384,14 +482,21 @@ def main() -> None:
 
     for article in articles:
         generer_page_article(article)
+    supprimer_pages_orphelines(publies)
 
     apercus_accueil = [generer_apercu(article, False) for article in articles[:3]]
     apercus_liste = [generer_apercu(article, True) for article in articles]
     mettre_a_jour_page(INDEX_PATH, apercus_accueil)
     mettre_a_jour_page(LIST_PATH, apercus_liste)
+    remplacer_entre_marqueurs(INDEX_PATH, AVENIR_START, AVENIR_END, generer_avenir(avenir))
+    if edito is not None:
+        remplacer_entre_marqueurs(INDEX_PATH, EDITO_START, EDITO_END, generer_edito(edito))
     generer_sitemap(articles)
 
-    print(f"{len(articles)} article(s) généré(s) dans {ARTICLES_DIR} ; index.html, articles.html et sitemap.xml mis à jour.")
+    print(
+        f"{len(articles)} article(s) généré(s), {len(avenir)} à venir ; "
+        "index.html, articles.html et sitemap.xml mis à jour."
+    )
 
 
 if __name__ == "__main__":

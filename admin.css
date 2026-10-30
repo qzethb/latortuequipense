@@ -549,3 +549,118 @@
 
 /* Message sous une image retirée du texte */
 .admin-image-etat { color: #b42318; }
+
+
+/* Liste « Modifier ou supprimer » : actions multiples par article
+   -------------------------------------------------------------------------- */
+.admin-article-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.admin-badge {
+  color: var(--texte-doux);
+  font-size: 14px;
+}
+.admin-article-row button.admin-danger,
+.admin-outils button.admin-danger,
+.notes-edition button.admin-danger {
+  border-color: #b42318;
+  background: transparent;
+  color: #b42318;
+}
+.admin-article-row button.admin-danger:hover,
+.admin-outils button.admin-danger:hover,
+.notes-edition button.admin-danger:hover {
+  background: #b42318;
+  color: #fff;
+}
+
+/* Case à cocher avec libellé */
+.admin-case {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  font-size: 15px;
+  color: var(--texte-doux);
+}
+.admin-case input { accent-color: var(--violet); }
+
+
+/* Page « Notes privées »
+   -------------------------------------------------------------------------- */
+.admin--notes { max-width: 980px; }
+
+.notes-espace {
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) minmax(0, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+.notes-espace[hidden], .notes-edition[hidden] { display: none; }
+
+.notes-outils {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.notes-outils input {
+  width: 100%;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+}
+.notes-outils button {
+  min-height: 42px;
+  padding: 8px 13px;
+  border: 1px solid var(--violet);
+  background: transparent;
+  color: var(--violet);
+  font: inherit;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition);
+}
+.notes-outils button:hover { background: var(--violet); color: var(--texte-sur-accent); }
+
+.notes-liste {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--lilas);
+}
+.notes-liste li { border-bottom: 1px solid var(--lilas); }
+.notes-element {
+  display: grid;
+  width: 100%;
+  gap: 2px;
+  padding: 12px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--texte);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+.notes-element:hover,
+.notes-element[aria-current="true"] { background: var(--brume); }
+.notes-element[aria-current="true"] { box-shadow: inset 2px 0 0 var(--violet); }
+.notes-element span { overflow-wrap: anywhere; }
+.notes-element small { color: var(--texte-doux); font-size: 13px; }
+.notes-vide { padding: 14px 10px; color: var(--texte-doux); font-style: italic; }
+
+.notes-edition { display: grid; gap: 16px; }
+.notes-edition textarea { min-height: 320px; line-height: 1.6; }
+
+form.admin-jeton { margin: 0 0 12px; padding: 0; border: 0; }
+#connexion .admin-outils { margin-top: 6px; }
+#statut.admin-statut { margin: 0 0 24px; min-height: 1.4em; }
+
+@media (max-width: 760px) {
+  .notes-espace { grid-template-columns: 1fr; }
+}
