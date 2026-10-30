@@ -144,10 +144,13 @@
    -------------------------------------------------------------------------- */
 .billet-texte h2 {
   margin: 2.8em 0 .9em;
-  font-size: 1.45em; font-style: italic; line-height: 1.3;
+  font-size: 1.45em;
+  font-style: italic;
+  line-height: 1.3;
   color: var(--violet);
   text-wrap: balance;
   break-after: avoid;
+  text-align: left;
 }
 
 .billet-texte h3 {
