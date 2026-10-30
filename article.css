@@ -1,488 +1,443 @@
-.admin {
-  max-width: 760px;
-  margin: 0 auto;
-  padding-bottom: 48px;
-}
+/* ==========================================================================
+  LA TORTUE — Page d'article (lecture)
+   À charger APRÈS charte.css (elle réutilise ses variables et ses bases :
+   .billet-entete, .billet-texte, lettrine, blockquote, figure, .ornement…).
 
-.admin-entete {
-  padding: 48px 0 34px;
-}
+   Ce fichier ne contient que ce qui est propre aux articles :
+   1. Barre de progression
+   2. En-tête de l'article
+   3. Colonne de lecture
+   4. Texte : intertitres, listes, annexe, bibliographie
+   5. Images
+   6. Tableaux
+   7. Formules
+   8. Notes de bas de page
+   9. Fin d'article
+   10. Mobile
+   11. Impression (bouton « Télécharger l'article en PDF »)
 
-.admin-entete h1 {
-  font-size: clamp(42px, 8vw, 72px);
-}
+   Les styles de l'administration sont dans admin.css.
+   ========================================================================== */
 
-.admin-entete > p:last-child {
-  max-width: 560px;
-  margin: 24px auto 0;
-  color: var(--texte-doux);
-}
 
-.admin-avertissement {
-  margin: 0 0 30px;
-  padding: 18px 20px;
-  border-left: 3px solid var(--violet);
-  background: var(--brume);
-  font-size: 15px;
-}
-
-.admin-avertissement strong {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--violet-profond);
-}
-
-.admin-avertissement code {
-  overflow-wrap: anywhere;
-}
-
-.admin-formulaire fieldset {
-  min-width: 0;
-  margin: 0 0 28px;
-  padding: 24px;
-  border: 1px solid var(--lilas);
-}
-
-.admin-formulaire legend {
-  padding: 0 10px;
-  color: var(--violet-profond);
-  font-size: 22px;
-}
-
-.admin-grille {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 20px 18px;
-}
-
-.admin-champ {
-  display: flex;
-  min-width: 0;
-  flex-direction: column;
-  gap: 7px;
-}
-
-.admin-champ--large {
-  grid-column: 1 / -1;
-}
-
-.admin-champ > span {
-  color: var(--violet-profond);
-  font-size: 16px;
-}
-
-.admin-champ input,
-.admin-champ textarea {
-  width: 100%;
-  min-height: 46px;
-  padding: 10px 12px;
-  border: 1px solid var(--lilas);
-  border-radius: 2px;
-  background: var(--surface);
-  color: var(--texte);
-  font: inherit;
-}
-
-.admin-champ textarea {
-  resize: vertical;
-}
-
-.admin-champ input:focus,
-.admin-champ textarea:focus,
-.admin-editeur:focus {
-  border-color: var(--violet);
-  outline: 1px solid var(--violet);
-  outline-offset: 1px;
-}
-
-.admin-champ small,
-.admin-aide {
-  color: var(--texte-doux);
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.admin-outils {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.admin-outils button,
-.admin-publier {
-  min-height: 42px;
-  padding: 8px 13px;
-  border: 1px solid var(--lilas);
-  background: var(--surface);
-  color: var(--violet-profond);
-  font: inherit;
-  cursor: pointer;
-}
-
-.admin-outils button:hover {
-  border-color: var(--violet);
-  color: var(--violet);
-}
-
-.admin-options-avancees {
-  margin-top: 12px;
-  border-top: 1px solid var(--lilas);
-  padding-top: 10px;
-}
-
-.admin-options-avancees > summary {
-  width: fit-content;
-  color: var(--violet);
-  cursor: pointer;
-  font-size: 15px;
-}
-
-.admin-options-avancees[open] > summary {
-  margin-bottom: 12px;
-}
-
-.admin-options-avancees .admin-outils {
-  padding: 12px;
-  background: var(--brume);
-}
-
-.admin-formule-saisie {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-  color: var(--texte-doux);
-  font-size: 15px;
-}
-
-.admin-formule-saisie input {
-  min-width: 150px;
-  min-height: 42px;
-  padding: 8px 10px;
-  border: 1px solid var(--lilas);
-  background: var(--surface);
-  color: var(--texte);
-  font: inherit;
-}
-
-.admin-aide {
-  margin: 12px 0;
-}
-
-.admin-editeur {
-  min-height: 340px;
-  padding: 18px;
-  border: 1px solid var(--lilas);
-  background: var(--surface);
-  color: var(--texte);
-  font-size: 18px;
-  line-height: 1.75;
-  overflow-wrap: anywhere;
-}
-
-.admin-editeur:empty::before {
-  content: attr(data-placeholder);
-  color: var(--texte-doux);
+/* 1. BARRE DE PROGRESSION
+   Fine ligne violette en haut de l'écran.
+   - Navigateurs qui gèrent les animations liées au défilement : aucun script.
+   - Sinon : menu.js peut renseigner la variable --progression (de 0 à 1)
+     sur .progression ; à défaut la barre reste invisible.
+   -------------------------------------------------------------------------- */
+.progression {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: 2px;
+  background: var(--violet);
+  transform: scaleX(var(--progression, 0));
+  transform-origin: 0 50%;
   pointer-events: none;
 }
 
-.admin-editeur h2 {
-  margin: 1.4em 0 .6em;
-  font-size: 27px;
+@supports (animation-timeline: scroll()) {
+  .progression {
+    animation: progression linear both;
+    animation-timeline: scroll(root block);
+  }
+  @keyframes progression {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
 }
 
-.admin-editeur blockquote {
-  margin: 1em 0;
-}
 
-.admin-editeur figure {
-  margin: 1.5em 0;
-}
-
-.admin-editeur figure img {
-  display: block;
-  max-width: 100%;
-  max-height: 560px;
-  height: auto;
-  margin: auto;
-  object-fit: contain;
-}
-
-.admin-editeur figure {
-  user-select: none;
-}
-
-.admin-editeur figcaption:empty {
-  display: none;
-}
-
-.admin-editeur .formule {
-  margin: 1em 0;
-  padding: .5em;
-  background: var(--brume);
-  font-family: ui-monospace, Consolas, monospace;
-  font-size: 15px;
-  text-align: center;
-}
-
-.admin-editeur table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 15px;
-}
-
-.admin-editeur th,
-.admin-editeur td {
-  padding: .4em .6em;
-  border: 1px solid var(--lilas);
-}
-
-.admin-editeur a.footnote-ref sup,
-.admin-apercu-corps a.footnote-ref sup {
-  color: var(--violet);
-}
-
-.admin-editeur li {
-  margin: .3em 0;
-}
-
-.admin-editeur figcaption {
+/* 2. EN-TÊTE DE L'ARTICLE
+   Le titre, l'ornement et la structure générale viennent de charte.css.
+   -------------------------------------------------------------------------- */
+.billet-entete .sous-titre {
+  max-width: 34em;
+  margin: 0 auto;
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.5;
   color: var(--texte-doux);
-  font-size: 14px;
-  text-align: center;
 }
 
-.admin-editeur .tableau-defile {
-  overflow-x: auto;
+/* Date et temps de lecture, séparés par un filet vertical */
+.billet-meta time,
+.billet-meta span { display: inline-block; }
+.billet-meta span {
+  margin-left: .9em;
+  padding-left: .9em;
+  border-left: 1px solid var(--lilas);
 }
 
-.admin-menu-contextuel {
-  position: fixed;
-  z-index: 1000;
-  display: grid;
-  width: min(220px, calc(100vw - 24px));
-  max-height: min(75vh, 560px);
-  /* On enlève overflow: auto ici pour éviter de couper le sous-menu, 
-     ou on applique le scroll uniquement sur la liste interne si besoin */
-  overflow: visible; 
-  padding: 4px;
+.billet-actions { margin-top: 28px; }
+.billet-actions button {
+  padding: 8px 20px;
   border: 1px solid var(--lilas);
-  background: var(--surface);
-  box-shadow: 0 6px 20px rgb(34 20 55 / 15%);
-  font-size: 13px;
-}
-
-.admin-menu-contextuel[hidden],
-.admin-menu-contextuel-avance[hidden] {
-  display: none;
-}
-
-.admin-menu-contextuel button {
-  min-height: 28px;
-  padding: 4px 8px;
-  border: 0;
   background: transparent;
-  color: var(--texte);
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  border-radius: 2px;
-}
-
-.admin-menu-contextuel button:hover,
-.admin-menu-contextuel button:focus-visible {
-  outline: 0;
-  background: var(--brume);
-  color: var(--violet-profond);
-}
-
-/* Le sous-menu en cascade propre qui dépasse sur le côté */
-.admin-menu-contextuel-avance {
-  position: absolute;
-  left: 100%; /* S'affiche sur la droite */
-  margin-left: 4px;
-  min-width: 210px;
-  max-height: 280px;
-  overflow-y: auto;
-  display: grid;
-  padding: 4px;
-  border: 1px solid var(--lilas);
-  border-left: 2px solid var(--violet);
-  background: var(--surface);
-  box-shadow: 0 6px 20px rgb(34 20 55 / 15%);
-}
-
-.admin-menu-contextuel-avance--gauche {
-  right: 100%;
-  left: auto;
-  margin-right: 4px;
-  margin-left: 0;
-}
-
-.admin-menu-contextuel-formule {
-  display: grid;
-  gap: 3px;
-  padding: 4px 8px;
-  color: var(--texte-doux);
-  font-size: 12px;
-}
-
-.admin-menu-contextuel-formule input {
-  width: 100%;
-  min-height: 28px;
-  padding: 4px 6px;
-  border: 1px solid var(--lilas);
-  background: var(--surface);
-  color: var(--texte);
-  font: inherit;
-  font-size: 12px;
-}
-
-.admin-editeur--notes {
-  min-height: 180px;
-}
-
-.admin-images {
-  display: grid;
-  gap: 8px;
-  margin-top: 12px;
-}
-
-.admin-image {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 9px 12px;
-  background: var(--brume);
-  font: 14px/1.4 sans-serif;
-}
-
-.admin-image span {
-  min-width: 0;
-  flex: 0 1 180px;
-  overflow-wrap: anywhere;
-}
-
-.admin-image-etat {
-  color: #b42318;
-}
-
-.admin-image-fields {
-  display: grid;
-  min-width: 180px;
-  flex: 1;
-  gap: 8px;
-}
-
-.admin-image > button {
-  margin-left: auto;
-}
-
-.admin-image-fields label {
-  display: grid;
-  gap: 4px;
-  color: var(--texte-doux);
-  font-size: 13px;
-}
-
-.admin-image-fields input {
-  width: 100%;
-  min-height: 38px;
-  padding: 7px 9px;
-  border: 1px solid var(--lilas);
-  background: var(--surface);
-  color: var(--texte);
-  font: inherit;
-}
-
-.admin-image button {
-  flex: 0 0 auto;
-  padding: 6px 9px;
-  border: 1px solid var(--lilas);
-  background: var(--surface);
-  color: var(--texte);
-  font: inherit;
-  cursor: pointer;
-}
-
-.admin-apercu {
-  margin-top: 18px;
-  border-top: 1px solid var(--lilas);
-  padding-top: 12px;
-}
-
-.admin-apercu summary {
   color: var(--violet);
+  font: inherit;
+  font-size: var(--t-petit);
+  font-style: italic;
   cursor: pointer;
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
 }
-
-.admin-apercu-corps {
-  padding: 18px 0 0;
-}
-
-.admin-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.admin-publier {
-  padding: 11px 20px;
+.billet-actions button:hover {
   border-color: var(--violet);
   background: var(--violet);
   color: var(--texte-sur-accent);
 }
 
-.admin-publier:hover {
-  filter: brightness(1.08);
+
+/* 3. COLONNE DE LECTURE
+   Les articles utilisent .page (880 px) : le texte et les notes sont resserrés
+   sur la largeur de lecture (680 px), ce qui garde des lignes de 65 à 75 signes.
+   -------------------------------------------------------------------------- */
+.billet-texte,
+.notes {
+  max-width: var(--largeur-lecture);
+  margin-inline: auto;
 }
 
-.admin-publier:disabled {
-  cursor: wait;
-  opacity: .65;
+.billet-texte {
+  counter-reset: equation;
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+  overflow-wrap: break-word;
 }
 
-.admin-statut {
-  flex: 1 1 240px;
+html { scroll-padding-top: 24px; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+
+/* 4. TEXTE
+   -------------------------------------------------------------------------- */
+.billet-texte h2 {
+  font-size: 28px;
+  text-align: left;
+  hyphens: none;
+  text-wrap: balance;
+}
+.billet-texte h3 {
+  margin: 1.8em 0 .6em;
+  text-align: left;
+  hyphens: none;
+}
+.billet-texte h4 {
+  margin: 1.6em 0 .5em;
+  text-align: left;
+}
+
+.billet-texte ul,
+.billet-texte ol { margin: 0 0 1.4em; padding-left: 1.5em; }
+.billet-texte li { margin: .4em 0; padding-left: .2em; }
+.billet-texte li::marker { color: var(--violet-doux); }
+.billet-texte li > ul,
+.billet-texte li > ol { margin: .4em 0 0; }
+
+.billet-texte blockquote p { margin: 0 0 .8em; }
+.billet-texte blockquote p:last-child { margin-bottom: 0; }
+
+.billet-texte sub,
+.billet-texte sup { line-height: 0; }
+
+/* Annexe : séparée du corps par un filet */
+.billet-texte h2#annexe {
+  margin-top: 3.4em;
+  padding-top: 1.4em;
+  border-top: 1px solid var(--lilas);
+}
+
+/* Bibliographie : retrait suspendu, sans puces */
+.billet-texte h2#sources { margin-top: 3.4em; }
+.billet-texte h2#sources + ul {
   margin: 0;
-  font-size: 15px;
+  padding: 0;
+  list-style: none;
+  font-size: 17px;
+  line-height: 1.6;
+  text-align: left;
+}
+.billet-texte h2#sources + ul li {
+  margin: 0 0 .8em;
+  padding-left: 1.6em;
+  text-indent: -1.6em;
+  overflow-wrap: anywhere;
 }
 
-.admin-statut[data-type="erreur"] {
-  color: #b42318;
+
+/* 5. IMAGES
+   -------------------------------------------------------------------------- */
+.billet-texte figure { margin: 2.4em 0; }
+.billet-texte figure img {
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  /* Les graphiques exportés en PNG transparent restent lisibles en thème sombre */
+  background: #fff;
+}
+.billet-texte figcaption {
+  margin-top: 12px;
+  text-align: center;
+  font-size: var(--t-petit);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--texte-doux);
+}
+.billet-texte figcaption:empty { display: none; }
+
+/* Figure ou tableau large : déborde de la colonne de lecture, jusqu'à 880 px */
+.billet-texte figure.large,
+.billet-texte .tableau-defile.large {
+  position: relative;
+  left: 50%;
+  width: min(var(--largeur), calc(100vw - 2 * var(--marge)));
+  max-width: none;
+  transform: translateX(-50%);
 }
 
-.admin-statut[data-type="succes"] {
-  color: #26734d;
+
+/* 6. TABLEAUX
+   Insérés par l'administration dans <div class="tableau-defile">.
+   -------------------------------------------------------------------------- */
+.billet-texte .tableau-defile {
+  margin: 2.2em 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.admin .suite {
-  margin-top: 48px;
+.billet-texte table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+  line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  text-align: left;
+  hyphens: none;
 }
 
-@media (max-width: 600px) {
-  .admin-entete {
-    padding-top: 36px;
+.billet-texte caption {
+  caption-side: top;
+  padding-bottom: 12px;
+  text-align: left;
+  font-style: italic;
+  color: var(--texte-doux);
+}
+
+.billet-texte th,
+.billet-texte td {
+  padding: .55em .9em .55em 0;
+  vertical-align: top;
+}
+
+.billet-texte th {
+  border-bottom: 1px solid var(--violet-doux);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--violet-profond);
+}
+
+.billet-texte td { border-bottom: 1px solid var(--lilas); }
+
+.billet-texte tbody tr:last-child td { border-bottom-color: var(--violet-doux); }
+
+/* Ligne ou cellule de total */
+.billet-texte .total,
+.billet-texte tr.total td,
+.billet-texte tr.total th {
+  border-top: 1px solid var(--violet-doux);
+  font-weight: 700;
+  font-style: normal;
+  color: var(--violet-profond);
+}
+
+
+/* 7. FORMULES (KaTeX)
+   <div class="formule"> ou <div class="formule numerotee">
+   -------------------------------------------------------------------------- */
+.billet-texte .formule {
+  position: relative;
+  margin: 1.6em 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  text-align: center;
+  hyphens: none;
+}
+.billet-texte .formule .katex-display { margin: 0; }
+
+/* Numéro d'équation, à droite : (1), (2)… */
+.billet-texte .formule.numerotee {
+  counter-increment: equation;
+  padding-inline: 3.4em;
+}
+.billet-texte .formule.numerotee::after {
+  content: "(" counter(equation) ")";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  font-size: var(--t-petit);
+  color: var(--texte-doux);
+}
+
+
+/* 8. NOTES DE BAS DE PAGE
+   Les appels sont des <a class="footnote-ref"> dans le texte ;
+   les notes forment une <ol> dans <section class="notes">.
+   -------------------------------------------------------------------------- */
+.billet-texte a.footnote-ref {
+  border-bottom: 0;
+  padding: 0 .1em;
+  scroll-margin-top: 35vh;
+}
+.billet-texte a.footnote-ref sup {
+  font-size: .72em;
+  line-height: 0;
+  color: var(--violet);
+}
+.billet-texte a.footnote-ref:hover sup,
+.billet-texte a.footnote-ref:focus-visible sup { color: var(--violet-profond); }
+
+section.notes {
+  margin-top: 5em;
+  padding-top: 2em;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--texte-doux);
+  text-align: left;
+}
+/* Petit ornement, comme celui du titre */
+section.notes::before {
+  content: "";
+  display: block;
+  width: 56px;
+  height: 1px;
+  margin-bottom: 1.8em;
+  background: var(--violet-doux);
+}
+
+.notes ol { margin: 0; padding-left: 2em; }
+.notes li {
+  margin: 0 0 .7em;
+  padding-left: .3em;
+  overflow-wrap: anywhere;
+  scroll-margin-top: 35vh;
+}
+.notes li::marker { color: var(--violet); font-variant-numeric: tabular-nums; }
+.notes li:target {
+  background: var(--brume);
+  box-shadow: -.6em 0 0 var(--brume), .6em 0 0 var(--brume);
+}
+
+.notes a {
+  color: var(--violet);
+  border-bottom: 1px solid var(--lilas);
+  transition: border-color var(--transition);
+}
+.notes a:hover { border-color: var(--violet); }
+
+.notes a.footnote-back {
+  margin-left: .5em;
+  border-bottom: 0;
+  font-style: normal;
+  text-decoration: none;
+}
+
+
+/* 9. FIN D'ARTICLE
+   -------------------------------------------------------------------------- */
+.billet-fin {
+  margin-top: 6em;
+  text-align: center;
+  font-style: italic;
+}
+.billet-fin .ornement { margin-top: 0; }
+
+
+/* 10. MOBILE
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .billet-entete { padding: 8vh 0 6vh; }
+  .billet-entete .sous-titre { font-size: 18px; }
+
+  /* Le texte justifié, même césuré, laisse des trous sur une colonne étroite */
+  .billet-texte { text-align: left; }
+  .billet-texte h2 { font-size: 24px; }
+  .billet-texte .formule.numerotee { padding-inline: 2.6em 2.2em; }
+
+  /* Sur mobile, les figures larges reprennent la largeur de la colonne */
+  .billet-texte figure.large,
+  .billet-texte .tableau-defile.large {
+    left: auto;
+    width: auto;
+    transform: none;
+  }
+}
+
+
+/* 11. IMPRESSION
+   Le bouton « Télécharger l'article en PDF » appelle window.print() :
+   on imprime toujours en clair et sans interface.
+   -------------------------------------------------------------------------- */
+@page { margin: 2cm; }
+
+@media print {
+  :root,
+  :root[data-theme="dark"],
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --fond: #fff;
+    --surface: #fff;
+    --brume: #f4f4f4;
+    --lilas: #bbb;
+    --violet-doux: #666;
+    --violet: #000;
+    --violet-profond: #000;
+    --texte: #000;
+    --texte-doux: #444;
   }
 
-  .admin-formulaire fieldset {
-    padding: 18px 14px;
+  header, nav, footer,
+  .progression, .billet-actions, .billet-fin { display: none !important; }
+
+  body { background: #fff; font-size: 11.5pt; line-height: 1.55; }
+  .page { max-width: none; padding: 0; }
+
+  .billet-entete { padding: 0 0 1.6em; }
+  .billet-entete h1 { font-size: 26pt; }
+  .billet-entete .ornement { margin: 1.2em auto; }
+  .billet-entete .sous-titre { font-size: 12.5pt; }
+
+  .billet-texte,
+  section.notes { max-width: none; }
+  .billet-texte { font-size: 11.5pt; line-height: 1.55; }
+  .billet-texte h2 { font-size: 16pt; break-after: avoid; }
+  .billet-texte h3, .billet-texte h4 { break-after: avoid; }
+  .billet-texte p { orphans: 3; widows: 3; }
+  .billet-texte a { border-bottom: 0; }
+  .billet-texte a.footnote-ref sup { color: #000; }
+
+  .billet-texte figure,
+  .billet-texte table,
+  .billet-texte blockquote,
+  .billet-texte .formule,
+  .notes li { break-inside: avoid; }
+  .billet-texte figure img { max-height: 20cm; width: auto; max-width: 100%; }
+  .billet-texte .tableau-defile { overflow: visible; }
+
+  /* Les figures larges retrouvent la page */
+  .billet-texte figure.large,
+  .billet-texte .tableau-defile.large {
+    position: static;
+    left: auto;
+    width: auto;
+    transform: none;
   }
 
-  .admin-grille {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-champ--large {
-    grid-column: auto;
-  }
-
-  .admin-editeur {
-    min-height: 280px;
-    padding: 13px;
-  }
+  section.notes { margin-top: 2.5em; font-size: 9.5pt; }
+  .notes a { color: #000; border-bottom: 0; }
+  .notes a.footnote-back { display: none; }
 }
