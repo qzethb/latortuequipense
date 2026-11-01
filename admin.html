@@ -34,9 +34,9 @@
       <label class="admin-champ" for="jeton">
         <span>Jeton à granularité fine</span>
         <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
-        <small>Requis pour toutes les actions. Il n’est jamais stocké.</small>
+        <small>Requis pour toutes les actions.</small>
       </label>
-      <p class="admin-aide">Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>. Il est utilisé en mémoire pour charger, publier, modifier, supprimer et remplacer l’édito, uniquement auprès de l’API officielle de GitHub, et effacé du formulaire une fois un article publié. Les <a href="admin-notes.html">notes privées</a> utilisent un autre jeton, limité à un dépôt privé.</p>
+      <p class="admin-aide">Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>.</p>
     </details>
 
     <div class="adm-liens">
@@ -49,7 +49,7 @@
     <section class="adm-entete">
       <h1 id="titre-page">Nouvel article</h1>
       <div class="ornement"></div>
-      <p id="intro-page">Rédigez votre article ici. Sa page et ses aperçus seront générés automatiquement après son envoi sur GitHub.</p>
+      <p id="intro-page">Rédigez un nouvel article ici. Pensez à remplir toutes les sections et à demander l'autorisation de publication.</p>
     </section>
 
     <section id="panneau-modifier" class="adm-panneau" hidden>
@@ -251,12 +251,12 @@
                 <label class="admin-champ">
                   <span>Tags</span>
                   <input id="tags" name="tags" type="text" placeholder="Société, Politique">
-                  <small>Séparez les valeurs par des virgules.</small>
+                  <small>Séparez les valeurs par des virgules. S'il manque un tag, il sera ajouté automatiquement.</small>
                 </label>
                 <label class="admin-champ">
                   <span>Disciplines</span>
                   <input id="disciplines" name="disciplines" type="text" placeholder="Sociologie, Droit">
-                  <small>Séparez les valeurs par des virgules.</small>
+                  <small>Séparez les valeurs par des virgules. S'il manque une discipline, elle sera ajoutée automatiquement.</small>
                 </label>
                 <label class="admin-champ admin-champ--large">
                   <span>Mots-clés de recherche</span>
