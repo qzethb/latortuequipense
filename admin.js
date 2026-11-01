@@ -49,10 +49,14 @@
   const AVENIR_FOLDER = "articles-data-avenir";
   const EDITO_PATH = "site-data/edito.json";
   const MODE_LABELS = {
-    nouveau:  { titre: "Nouvel article",       bouton: "Publier l’article" },
-    avenir:   { titre: "Article à venir",      bouton: "Programmer l’article" },
-    modifier: { titre: "Modifier ou supprimer", bouton: "Enregistrer les modifications" },
-    edito:    { titre: "Modifier l’édito",     bouton: "Enregistrer l’édito" },
+    nouveau:  { titre: "Nouvel article", bouton: "Publier l’article",
+      intro: "Rédigez votre article ici. Sa page et ses aperçus seront générés automatiquement après son envoi sur GitHub." },
+    avenir:   { titre: "Article à venir", bouton: "Programmer l’article",
+      intro: "Programmez un article : il sera publié automatiquement à la date choisie (génération quotidienne à 6 h UTC)." },
+    modifier: { titre: "Modifier ou supprimer", bouton: "Enregistrer les modifications",
+      intro: "Choisissez un article pour le modifier ou le supprimer ; un article « à venir » peut aussi être publié tout de suite." },
+    edito:    { titre: "Modifier l’édito", bouton: "Enregistrer l’édito",
+      intro: "Le texte remplace l’édito affiché sur la page d’accueil." },
   };
   /* ======================================================================
      Éléments et état
@@ -61,8 +65,8 @@
   const editor = $("corps");
   const notesEditor = $("notes");
   const form = $("formulaire-article");
-    form.addEventListener("input", () => { dirty = true; });
-    form.addEventListener("change", () => { dirty = true; });
+    form.addEventListener("input", () => { dirty = true; refreshState(); });
+    form.addEventListener("change", () => { dirty = true; refreshState(); });
   const tokenInput = $("jeton");
   const imageInput = $("fichiers-images");
   const imageList = $("liste-images");
@@ -72,11 +76,21 @@
   const notesPreview = $("apercu-notes");
   const latexInput = $("latex-formule");
   const menuLatexInput = $("menu-latex-formule");
-  const heading = document.querySelector(".admin-entete h1");
-  const tabButtons = Array.from(document.querySelectorAll(".admin-onglets [role='tab']"));
+  const heading = $("titre-page");
+  const intro = $("intro-page");
+  const tabButtons = Array.from(document.querySelectorAll(".adm-onglets [role='tab']"));
+  const stepButtons = Array.from(document.querySelectorAll("[data-etape-bouton]"));
+  const stepPanels = Array.from(document.querySelectorAll("[data-etape]"));
+  const connectionBadge = $("etat-connexion");
+  const draftState = $("etat-brouillon");
+  const barBlock = $("barre-bloc");
+  const imagesBlock = $("bloc-images");
   const picker = $("panneau-modifier");
   const listContainer = $("liste-articles-admin");
   const listStatus = $("statut-liste");
+  const bodySet = $("fieldset-corps");
+  const pagePreview = $("page-apercu");
+  const previewScroller = $("defilement-apercu");
 
   const images = []; // { id, file, url, alt, caption, width, height }
   let imageCounter = 0;
@@ -105,6 +119,42 @@
     || Boolean(notesEditor.textContent.trim())
     || Boolean($("titre").value.trim())
   ));
+
+  // Indicateur de l'état du travail dans la barre d'action.
+  function refreshState() {
+    let state = "vide";
+    let text = "Aucun contenu";
+    if (hasUnsavedWork()) {
+      state = "modifie";
+      text = editing ? "Modifications non enregistrées" : "Brouillon non envoyé";
+    } else if (editing) {
+      state = "ok";
+      text = "À jour avec GitHub";
+    }
+    draftState.dataset.etat = state;
+    draftState.textContent = text;
+  }
+
+  // Pastille de connexion de la colonne latérale.
+  const CONNECTION_LABELS = {
+    absent: "Non connecté", saisi: "Jeton saisi", ok: "Connexion vérifiée", erreur: "Jeton refusé",
+  };
+  const setConnection = (state) => {
+    connectionBadge.dataset.etat = state;
+    connectionBadge.textContent = CONNECTION_LABELS[state];
+  };
+  tokenInput.addEventListener("input", () => setConnection(tokenInput.value.trim() ? "saisi" : "absent"));
+  const requireToken = () => {
+    document.querySelector(".adm-connexion").open = true;
+    tokenInput.focus();
+  };
+
+  // La barre d'action reste collée en haut : les barres d'outils se placent juste dessous.
+  const syncBarHeight = () => {
+    document.documentElement.style.setProperty("--adm-barre-h", `${barBlock.offsetHeight || 64}px`);
+  };
+  if ("ResizeObserver" in window) new ResizeObserver(syncBarHeight).observe(barBlock);
+  syncBarHeight();
 
   /* ======================================================================
      Date et slug
@@ -143,6 +193,7 @@
     if (!target) return;
     activeEditor = target;
     ranges.set(target, selection.getRangeAt(0).cloneRange());
+    if (target === editor) scheduleSync();
   });
 
   const focusEditor = (target = activeEditor) => {
@@ -245,6 +296,7 @@
     const body = sanitizeElement(editor);
     const notes = sanitizeElement(notesEditor);
     renumberNotes(body, notes);
+    wordCount = countWords(body);
 
     body.querySelectorAll("img[data-upload-id]").forEach((img) => {
       const image = images.find((item) => item.id === img.getAttribute("data-upload-id"));
@@ -262,17 +314,190 @@
         caption?.remove();
       }
     });
-    // Évite les identifiants en double avec l'éditeur ; les liens d'aperçu restent inertes.
+    if (mode === "edito") body.querySelectorAll("a").forEach((anchor) => anchor.classList.add("lien"));
+    // Les identifiants de l'aperçu sont préfixés (pas de doublon avec l'éditeur) : les appels de note
+    // et les retours restent cliquables dans l'aperçu ; les liens externes s'ouvrent dans un autre onglet.
     [body, notes].forEach((root) => {
-      root.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
-      root.querySelectorAll("a[href^='#']").forEach((anchor) => anchor.removeAttribute("href"));
+      root.querySelectorAll("[id]").forEach((element) => { element.id = `ap-${element.id}`; });
+      root.querySelectorAll("a[href]").forEach((anchor) => {
+        const href = anchor.getAttribute("href") || "";
+        if (href.startsWith("#")) {
+          anchor.setAttribute("href", `#ap-${href.slice(1)}`);
+        } else {
+          anchor.setAttribute("target", "_blank");
+          anchor.setAttribute("rel", "noopener noreferrer");
+        }
+      });
     });
-    preview.replaceChildren(body);
-    notesPreview.replaceChildren(notes);
+    // Les blocs sont placés directement dans l'aperçu (comme sur la page d'article) : lettrine et marges fidèles.
+    preview.replaceChildren(...Array.from(body.childNodes));
+    notesPreview.replaceChildren(...Array.from(notes.childNodes));
     renderMath(preview);
     renderMath(notesPreview);
     refreshImageStates();
+    updateMeta();
+    refreshState();
+    if (editor.contains(document.activeElement)) scheduleSync();
   }
+
+  /* ======================================================================
+     Aperçus : en-tête de page, carte de liste, résultat de recherche, vues
+     ====================================================================== */
+  const SITE_URL = "https://latortuequipense.fr";
+  const MOIS_FR = [
+    "janvier", "février", "mars", "avril", "mai", "juin",
+    "juillet", "août", "septembre", "octobre", "novembre", "décembre",
+  ];
+  const WORDS_PER_MINUTE = 220;
+  const SEO_TITLE_MAX = 60;
+  const SEO_DESCRIPTION_MAX = 160;
+  const VIEW_KEY = "tortue-admin-vue";
+  let wordCount = 0;
+  let following = true;
+  let syncFrame = 0;
+
+  const countWords = (element) => (element.textContent.trim().match(/\S+/g) || []).length;
+  const readingMinutes = () => Math.max(1, Math.round(wordCount / WORDS_PER_MINUTE));
+  const truncate = (text, max) => (text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text);
+
+  const formatDateFr = (iso) => {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+    const month = match ? MOIS_FR[Number(match[2]) - 1] : "";
+    if (!month) return "";
+    const day = Number(match[3]);
+    return `${day === 1 ? "1er" : day} ${month} ${match[1]}`;
+  };
+
+  const setPlaceholderText = (element, value, placeholder) => {
+    element.textContent = value || placeholder;
+    element.classList.toggle("is-vide", !value);
+  };
+
+  const setCounter = (element, label, length, max) => {
+    element.textContent = length ? `${label} : ${length} / ${max} caractères${length > max ? " (trop long, il sera coupé)" : ""}` : "";
+    if (length) element.dataset.etat = length > max ? "long" : "ok";
+    else delete element.dataset.etat;
+  };
+
+  function updateMeta() {
+    const title = $("titre").value.trim();
+    const subtitle = $("soustitre").value.trim();
+    const slug = $("slug").value.trim();
+    const date = $("date").value;
+    const reading = $("temps-lecture").value.trim();
+    const description = $("description").value.trim();
+    const metaTitle = $("meta-title").value.trim();
+    const metaDescription = $("meta-description").value.trim();
+    const dateText = formatDateFr(date);
+
+    // En-tête de la page d'article
+    $("apercu-titre").textContent = title;
+    $("apercu-soustitre").textContent = subtitle;
+    const pageDate = $("apercu-date");
+    pageDate.textContent = dateText;
+    pageDate.hidden = !dateText;
+    if (dateText) pageDate.setAttribute("datetime", date);
+    const pageReading = $("apercu-lecture");
+    pageReading.textContent = reading ? `${reading} de lecture` : "";
+    pageReading.hidden = !reading;
+
+    // Carte dans la liste des articles
+    setPlaceholderText($("carte-date"), dateText, "Date");
+    setPlaceholderText($("carte-titre"), title, "Titre de l’article");
+    setPlaceholderText($("carte-description"), description, "La description courte s’affichera ici.");
+
+    // Résultat dans un moteur de recherche (mêmes valeurs par défaut que le générateur de pages)
+    const seoTitle = metaTitle || (title ? `${title} — La Tortue` : "");
+    const seoDescription = metaDescription || description;
+    $("serp-url").textContent = `${SITE_URL.replace("https://", "")} › articles › ${slug || "slug-de-l-article"}`;
+    setPlaceholderText($("serp-titre"), truncate(seoTitle, SEO_TITLE_MAX), "Titre de la page");
+    setPlaceholderText($("serp-desc"), truncate(seoDescription, SEO_DESCRIPTION_MAX), "La description s’affichera ici.");
+    setCounter($("serp-titre-compte"), "Titre", seoTitle.length, SEO_TITLE_MAX);
+    setCounter($("serp-desc-compte"), "Description", seoDescription.length, SEO_DESCRIPTION_MAX);
+
+    // Statistiques du texte et estimation du temps de lecture
+    const minutes = readingMinutes();
+    $("compteur-texte").textContent = wordCount
+      ? `${wordCount.toLocaleString("fr-FR")} mot${wordCount > 1 ? "s" : ""} · ≈ ${minutes} min de lecture`
+      : "0 mot";
+    const apply = $("appliquer-lecture");
+    apply.textContent = wordCount ? `${minutes} min` : "—";
+    apply.disabled = !wordCount;
+  }
+
+  form.addEventListener("input", (event) => {
+    if (event.target instanceof Element && !event.target.closest(".admin-editeur")) updateMeta();
+  });
+  $("appliquer-lecture").addEventListener("click", () => {
+    const field = $("temps-lecture");
+    field.value = `${readingMinutes()} min`;
+    field.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+
+  /* ---------- Disposition (rédaction / côte à côte / aperçu), largeur de l'aperçu ---------- */
+  const viewButtons = Array.from(document.querySelectorAll("[data-vue-bouton]"));
+  const deviceButtons = Array.from(document.querySelectorAll("[data-appareil-bouton]"));
+  const followButton = $("suivre-curseur");
+
+  const setView = (view, remember = true) => {
+    const chosen = ["ecrire", "cote", "apercu"].includes(view) ? view : "cote";
+    bodySet.dataset.vue = chosen;
+    viewButtons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.vueBouton === chosen)));
+    if (remember) {
+      try { window.localStorage.setItem(VIEW_KEY, chosen); } catch (error) { /* stockage indisponible */ }
+    }
+    closeContextMenu();
+    if (chosen !== "ecrire") schedulePreview();
+  };
+  viewButtons.forEach((button) => button.addEventListener("click", () => setView(button.dataset.vueBouton)));
+
+  const setDevice = (device) => {
+    pagePreview.dataset.appareil = device === "mobile" ? "mobile" : "ordinateur";
+    deviceButtons.forEach((button) => button.setAttribute(
+      "aria-pressed",
+      String(button.dataset.appareilBouton === pagePreview.dataset.appareil),
+    ));
+  };
+  deviceButtons.forEach((button) => button.addEventListener("click", () => setDevice(button.dataset.appareilBouton)));
+
+  followButton.addEventListener("click", () => {
+    following = !following;
+    followButton.setAttribute("aria-pressed", String(following));
+    if (following) scheduleSync();
+  });
+
+  /* ---------- L'aperçu suit le curseur de l'éditeur (seulement en vue côte à côte) ---------- */
+  function syncPreviewToCaret() {
+    syncFrame = 0;
+    if (!following || bodySet.dataset.vue !== "cote") return;
+    if (previewScroller.scrollHeight <= previewScroller.clientHeight + 4) return;
+    if (previewScroller.matches(":hover") || previewScroller.contains(document.activeElement)) return;
+    const selection = window.getSelection();
+    if (!selection || !selection.rangeCount || !editor.contains(selection.anchorNode)) return;
+    const node = selection.anchorNode.nodeType === Node.ELEMENT_NODE
+      ? selection.anchorNode
+      : selection.anchorNode.parentElement;
+    if (!node || node === editor) return;
+    const box = editor.getBoundingClientRect();
+    const ratio = Math.min(1, Math.max(0, (node.getBoundingClientRect().top - box.top) / Math.max(1, box.height)));
+    previewScroller.scrollTop = ratio * (previewScroller.scrollHeight - previewScroller.clientHeight);
+  }
+  function scheduleSync() {
+    if (!syncFrame) syncFrame = window.requestAnimationFrame(syncPreviewToCaret);
+  }
+
+  /* ---------- Appels de note et retours : défilement dans l'aperçu ---------- */
+  pagePreview.addEventListener("click", (event) => {
+    const link = event.target instanceof Element ? event.target.closest("a[href^='#ap-']") : null;
+    if (!link) return;
+    event.preventDefault();
+    const target = pagePreview.querySelector(`#${CSS.escape(link.getAttribute("href").slice(1))}`);
+    if (!target) return;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
+    target.classList.add("admin-cible");
+    window.setTimeout(() => target.classList.remove("admin-cible"), 1600);
+  });
 
   /* ======================================================================
      Boutons de mise en forme
@@ -760,6 +985,7 @@
     });
   }
 
+  let shownImages = 0;
   const renderImageList = () => {
     imageList.replaceChildren();
     images.forEach((image) => {
@@ -816,9 +1042,17 @@
         schedulePreview();
       });
 
-      row.append(name, fields, remove);
+      const thumbnail = document.createElement("img");
+      thumbnail.className = "admin-image-vignette";
+      thumbnail.src = image.url;
+      thumbnail.alt = "";
+
+      row.append(thumbnail, name, fields, remove);
       imageList.append(row);
     });
+    $("images-compte").textContent = String(images.length);
+    if (images.length > shownImages) imagesBlock.open = true;
+    shownImages = images.length;
     refreshImageStates();
   };
 
@@ -1314,17 +1548,19 @@
     renderImageList();
     slugEdited = false;
     editing = null;
-    if (!preserveToken) tokenInput.value = "";
+    if (!preserveToken) {
+      tokenInput.value = "";
+      setConnection("absent");
+    }
     setToday();
     updatePreview();
     updateFormVisibility();
     dirty = false;
+    refreshState();
   };
   /* ======================================================================
      Onglets, liste des articles, suppression, édito, publication
      ====================================================================== */
-  const infosSet = $("fieldset-infos");
-  const notesSet = $("fieldset-notes");
   const bodyLegend = $("legende-corps");
   const dateLabel = $("date-etiquette");
   const editoPanel = $("panneau-edito");
@@ -1339,14 +1575,56 @@
     ].join("-");
   };
 
+  let showLibrary = false;
+  $("changer-article").addEventListener("click", () => {
+    showLibrary = !showLibrary;
+    $("changer-article").textContent = showLibrary ? "Masquer la liste" : "Changer d’article";
+    $("changer-article").setAttribute("aria-expanded", String(showLibrary));
+    updateFormVisibility();
+  });
+
+  /* ---------- Étapes : Rédaction / Informations ---------- */
+  function showStep(name) {
+    stepButtons.forEach((button) => {
+      const active = button.dataset.etapeBouton === name;
+      button.setAttribute("aria-selected", String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+    stepPanels.forEach((panel) => { panel.hidden = panel.dataset.etape !== name; });
+    if (name === "infos") updateMeta();
+  }
+  stepButtons.forEach((button) => {
+    button.addEventListener("click", () => showStep(button.dataset.etapeBouton));
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+      const available = stepButtons.filter((item) => !item.hidden);
+      const next = available[(available.indexOf(button) + (event.key === "ArrowRight" ? 1 : -1) + available.length) % available.length];
+      event.preventDefault();
+      next.focus();
+      showStep(next.dataset.etapeBouton);
+    });
+  });
+
   const updateFormVisibility = () => {
     form.hidden = (mode === "modifier" || mode === "edito") && !editing;
-    infosSet.hidden = mode === "edito";
-    notesSet.hidden = mode === "edito";
+    document.querySelectorAll("[data-hors-edito]").forEach((element) => { element.hidden = mode === "edito"; });
+    if (mode === "edito") showStep("redaction");
+    // Modifier : la liste se replie quand un article est chargé.
+    const editingArticle = mode === "modifier" && Boolean(editing);
+    $("bandeau-edition").hidden = !editingArticle;
+    $("bibliotheque").hidden = editingArticle && !showLibrary;
+    if (editingArticle) $("edition-nom").textContent = $("titre").value.trim() || editing.slug;
     bodyLegend.textContent = mode === "edito" ? "Texte de l’édito" : "Corps de l’article";
     dateLabel.textContent = mode === "avenir"
       ? "Date de mise en ligne (publication automatique)"
       : "Date de publication";
+    // L'édito s'affiche sur l'accueil comme un texte seul : pas d'en-tête d'article ni de notes.
+    pagePreview.dataset.contexte = mode === "edito" ? "edito" : "article";
+    preview.classList.toggle("billet-texte", mode !== "edito");
+    preview.classList.toggle("lecture-texte", mode === "edito");
+    $("apercu-etiquette").hidden = mode !== "edito";
+    schedulePreview();
+    refreshState();
   };
 
   // Dans l'éditeur, les images déjà publiées sont affichées depuis la racine du site (admin.html y est).
@@ -1378,8 +1656,23 @@
   };
 
   /* ---------- Liste des articles (publiés et à venir) ---------- */
+  let listFilter = "tous";
+  const filterInput = $("filtre-articles");
+  const filterButtons = Array.from(document.querySelectorAll("[data-filtre]"));
+  const FILTER_LABELS = { tous: "Tous", publies: "Publiés", avenir: "À venir" };
+
   const renderArticleList = () => {
     listContainer.replaceChildren();
+    const counts = {
+      tous: articleList.length,
+      publies: articleList.filter((file) => !file.avenir).length,
+      avenir: articleList.filter((file) => file.avenir).length,
+    };
+    filterButtons.forEach((button) => {
+      const key = button.dataset.filtre;
+      button.textContent = articleList.length ? `${FILTER_LABELS[key]} (${counts[key]})` : FILTER_LABELS[key];
+      button.setAttribute("aria-pressed", String(key === listFilter));
+    });
     if (!articleList.length) {
       const empty = document.createElement("p");
       empty.className = "admin-aide";
@@ -1387,18 +1680,31 @@
       listContainer.append(empty);
       return;
     }
-    articleList.forEach((file) => {
+    const query = filterInput.value.trim().toLowerCase();
+    const visible = articleList.filter((file) => (
+      (listFilter === "tous" || (listFilter === "avenir") === Boolean(file.avenir))
+      && (!query || file.name.toLowerCase().includes(query))
+    ));
+    if (!visible.length) {
+      const empty = document.createElement("p");
+      empty.className = "admin-aide";
+      empty.textContent = "Aucun article ne correspond à ce filtre.";
+      listContainer.append(empty);
+      return;
+    }
+    visible.forEach((file) => {
       const row = document.createElement("div");
       row.className = "admin-article-row";
 
-      const name = document.createElement("span");
-      name.textContent = file.name.replace(/\.json$/, "");
-      if (file.avenir) {
-        const badge = document.createElement("em");
-        badge.className = "admin-badge";
-        badge.textContent = " (à venir)";
-        name.append(badge);
-      }
+      const slugName = file.name.replace(/\.json$/, "");
+      const name = document.createElement("div");
+      name.className = "admin-article-nom";
+      const slugText = document.createElement("span");
+      slugText.textContent = slugName;
+      const badge = document.createElement("em");
+      badge.className = `admin-badge${file.avenir ? " admin-badge--avenir" : ""}`;
+      badge.textContent = file.avenir ? "À venir" : "Publié";
+      name.append(slugText, badge);
 
       const actions = document.createElement("div");
       actions.className = "admin-article-actions";
@@ -1407,7 +1713,7 @@
         button.type = "button";
         button.textContent = label;
         if (className) button.className = className;
-        button.setAttribute("aria-label", `${label} : ${name.textContent.trim()}`);
+        button.setAttribute("aria-label", `${label} : ${slugName}`);
         button.addEventListener("click", handler);
         actions.append(button);
       };
@@ -1420,12 +1726,19 @@
     });
   };
 
+  filterInput.addEventListener("input", renderArticleList);
+  filterButtons.forEach((button) => button.addEventListener("click", () => {
+    listFilter = button.dataset.filtre;
+    renderArticleList();
+  }));
+
   const loadArticleList = async () => {
     if (listLoading) return;
     const token = tokenInput.value.trim();
     if (!token) {
       listContainer.replaceChildren();
-      listStatus.textContent = "Saisissez un jeton GitHub ci-dessus puis cliquez sur « Charger la liste ».";
+      listStatus.textContent = "Saisissez un jeton GitHub dans « Connexion GitHub » puis cliquez sur « Charger la liste des articles ».";
+      requireToken();
       return;
     }
     listLoading = true;
@@ -1440,9 +1753,11 @@
         ...published.map((file) => ({ ...file, avenir: false })),
       ];
       renderArticleList();
+      setConnection("ok");
       listStatus.textContent = `${published.length} article${published.length > 1 ? "s" : ""} publié${published.length > 1 ? "s" : ""}, ${upcoming.length} à venir.`;
     } catch (error) {
       articleList = [];
+      if (/jeton GitHub invalide/.test(error.message)) setConnection("erreur");
       renderArticleList();
       listStatus.textContent = `Impossible de charger la liste : ${error.message}.`;
     } finally {
@@ -1500,7 +1815,12 @@
         avenir: Boolean(file.avenir),
       };
       listStatus.textContent = `« ${article.titre} » chargé${file.avenir ? " (article à venir)" : ""}. Modifiez puis enregistrez.`;
+      showLibrary = false;
+      $("changer-article").textContent = "Changer d’article";
+      $("changer-article").setAttribute("aria-expanded", "false");
+      showStep("redaction");
       updateFormVisibility();
+      refreshState();
       form.scrollIntoView({ behavior: "smooth", block: "start" });
       setStatus("");
     } catch (error) {
@@ -1584,7 +1904,7 @@
   const loadEdito = async () => {
     const token = tokenInput.value.trim();
     if (!token) {
-      editoStatus.textContent = "Saisissez d’abord un jeton GitHub ci-dessus.";
+      editoStatus.textContent = "Saisissez d’abord un jeton GitHub dans « Connexion GitHub ».";
       return;
     }
     if (editing && dirty && !window.confirm("Recharger l’édito et abandonner les modifications en cours ?")) return;
@@ -1601,6 +1921,7 @@
       editing = { kind: "edito", path: EDITO_PATH, sha: file ? file.sha : null };
       updatePreview();
       updateFormVisibility();
+      setConnection("ok");
       editoStatus.textContent = file
         ? "Édito actuel chargé. Modifiez-le puis enregistrez."
         : "Aucun édito enregistré pour l’instant : rédigez-le puis enregistrez.";
@@ -1673,6 +1994,7 @@
     try {
       prepared = buildArticle();
     } catch (error) {
+      if (/^Le slug|^La date/.test(error.message)) showStep("infos");
       setStatus(error.message, "erreur");
       return;
     }
@@ -1770,14 +2092,23 @@
     }
     const token = tokenInput.value.trim();
     if (!token) {
-      setStatus("Saisissez un jeton GitHub ci-dessus pour continuer.", "erreur");
+      setStatus("Saisissez un jeton GitHub dans « Connexion GitHub » pour continuer.", "erreur");
+      requireToken();
       return;
     }
     if (mode === "edito") {
       await saveEdito(token);
       return;
     }
-    if (!form.reportValidity()) return;
+    const invalid = Array.from(form.elements).find((element) => element.willValidate && !element.validity.valid);
+    if (invalid) {
+      // Le champ fautif peut se trouver dans l'autre étape : on l'affiche avant de le signaler.
+      const panel = invalid.closest("[data-etape]");
+      if (panel && panel.hidden) showStep(panel.dataset.etape);
+      invalid.focus();
+      form.reportValidity();
+      return;
+    }
     await saveArticle(token);
   });
 
@@ -1796,7 +2127,10 @@
     picker.hidden = mode !== "modifier";
     editoPanel.hidden = mode !== "edito";
     heading.textContent = MODE_LABELS[mode].titre;
+    intro.textContent = MODE_LABELS[mode].intro;
     publishButton.textContent = MODE_LABELS[mode].bouton;
+    showStep("redaction");
+    showLibrary = false;
     updateFormVisibility();
     setStatus("");
 
@@ -1807,12 +2141,12 @@
   tabButtons.forEach((tab) => {
     tab.addEventListener("click", () => switchMode(tab.dataset.mode));
     tab.addEventListener("keydown", (event) => {
-      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) return;
       event.preventDefault();
       const currentIndex = tabButtons.indexOf(tab);
       let nextIndex;
-      if (event.key === "ArrowLeft") nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
-      else if (event.key === "ArrowRight") nextIndex = (currentIndex + 1) % tabButtons.length;
+      if (event.key === "ArrowLeft" || event.key === "ArrowUp") nextIndex = (currentIndex - 1 + tabButtons.length) % tabButtons.length;
+      else if (event.key === "ArrowRight" || event.key === "ArrowDown") nextIndex = (currentIndex + 1) % tabButtons.length;
       else if (event.key === "Home") nextIndex = 0;
       else nextIndex = tabButtons.length - 1;
       tabButtons[nextIndex].focus();
@@ -1828,6 +2162,10 @@
   });
 
   renderImageList();
+  let storedView = null;
+  try { storedView = window.localStorage.getItem(VIEW_KEY); } catch (error) { /* stockage indisponible */ }
+  setView(storedView || (window.matchMedia("(min-width: 1000px)").matches ? "cote" : "ecrire"), false);
+  setDevice("ordinateur");
   updatePreview();
   updateFormVisibility();
 })();

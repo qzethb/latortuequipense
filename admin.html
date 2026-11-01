@@ -10,227 +10,323 @@
 <link rel="stylesheet" href="article.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
 <link rel="stylesheet" href="admin.css">
-<script src="menu.js" defer></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.js" integrity="sha384-CwjPRVHTvLiMBFjEoij+QZViMV5rhTOIp7CJzl24JEqpRDA1sJFHVXXLURktbYYp" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous"></script>
 <script src="admin.js" defer></script>
 <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
 </head>
-<body>
-  <div class="page">
-    <header>
-      <a class="marque" href="index.html">
-        <img class="logo" src="logo.svg" alt="La Tortue">
-      </a>
-      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
-        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-      </button>
-      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
-        <a href="articles.html">Articles</a>
-        <a href="a-propos.html">À propos</a>
-        <a href="contacts.html">Contacts</a>
-      </nav>
-    </header>
+<body class="adm">
+<div class="adm-app">
 
-    <main class="admin">
-      <section class="billet-entete admin-entete">
-        <p class="etiquette">Espace administration</p>
-        <h1>Nouvel article</h1>
-        <div class="ornement"></div>
-        <p>Rédigez votre article ici. Sa page et ses aperçus seront générés automatiquement après son envoi sur GitHub.</p>
-      </section>
+  <aside class="adm-lateral" aria-label="Administration">
+    <a class="marque adm-marque" href="index.html"><img class="logo" src="logo.svg" alt="La Tortue"></a>
+    <p class="etiquette">Espace administration</p>
 
-      <div class="admin-avertissement">
-        <strong>Accès GitHub requis.</strong>
-        Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>.
-        Le jeton est utilisé en mémoire pour charger, publier, modifier, supprimer et remplacer l’édito. Il n’est ni enregistré ni transmis ailleurs que sur l’API officielle de GitHub. Il est effacé du formulaire une fois un article publié. Les <a href="admin-notes.html">notes privées</a> utilisent un autre jeton, limité à un dépôt privé.
+    <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration">
+      <button type="button" class="adm-onglet" role="tab" id="onglet-nouveau" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-article"><span>Nouvel article</span></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-avenir" data-mode="avenir" aria-selected="false" tabindex="-1" aria-controls="formulaire-article"><span>Ajouter un article à venir</span></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-modifier" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier"><span>Éditer un article</span></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-edito" data-mode="edito" aria-selected="false" tabindex="-1" aria-controls="panneau-edito"><span>Édito</span></button>
+    </div>
+
+    <details class="adm-connexion" open>
+      <summary>Connexion GitHub <span class="adm-pastille" id="etat-connexion" data-etat="absent">Non connecté</span></summary>
+      <label class="admin-champ" for="jeton">
+        <span>Jeton à granularité fine</span>
+        <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+        <small>Requis pour toutes les actions. Il n’est jamais stocké.</small>
+      </label>
+      <p class="admin-aide">Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>. Il est utilisé en mémoire pour charger, publier, modifier, supprimer et remplacer l’édito, uniquement auprès de l’API officielle de GitHub, et effacé du formulaire une fois un article publié. Les <a href="admin-notes.html">notes privées</a> utilisent un autre jeton, limité à un dépôt privé.</p>
+    </details>
+
+    <div class="adm-liens">
+      <a href="admin-notes.html">Notes privées</a>
+      <a href="index.html">Retour au site</a>
+    </div>
+  </aside>
+
+  <main class="adm-principal">
+    <section class="adm-entete">
+      <h1 id="titre-page">Nouvel article</h1>
+      <div class="ornement"></div>
+      <p id="intro-page">Rédigez votre article ici. Sa page et ses aperçus seront générés automatiquement après son envoi sur GitHub.</p>
+    </section>
+
+    <section id="panneau-modifier" class="adm-panneau" hidden>
+      <div class="adm-bandeau" id="bandeau-edition" hidden>
+        <p>Vous modifiez : <strong id="edition-nom"></strong></p>
+        <button type="button" class="admin-lien" id="changer-article" aria-expanded="false" aria-controls="bibliotheque">Changer d’article</button>
+      </div>
+      <div id="bibliotheque">
+        <div class="adm-bib-outils">
+          <label class="sr-only" for="filtre-articles">Filtrer les articles</label>
+          <input type="search" id="filtre-articles" placeholder="Filtrer les articles" autocomplete="off">
+          <div class="admin-segment" role="group" aria-label="Filtrer par état">
+            <button type="button" data-filtre="tous" aria-pressed="true">Tous</button>
+            <button type="button" data-filtre="publies" aria-pressed="false">Publiés</button>
+            <button type="button" data-filtre="avenir" aria-pressed="false">À venir</button>
+          </div>
+          <button type="button" id="charger-liste">Charger la liste des articles</button>
+        </div>
+        <p id="statut-liste" class="admin-aide" role="status" aria-live="polite"></p>
+        <div id="liste-articles-admin" class="admin-articles-liste"></div>
+        <p class="admin-aide">Seuls les articles issus de l’administration (fichiers JSON) apparaissent ici. Les articles « à venir » sont signalés ; l’un d’eux peut être publié tout de suite.</p>
+      </div>
+    </section>
+
+    <section id="panneau-edito" class="adm-panneau" hidden>
+      <div class="adm-bib-outils">
+        <button type="button" id="charger-edito">Recharger l’édito actuel</button>
+      </div>
+      <p id="statut-edito" class="admin-aide" role="status" aria-live="polite"></p>
+      <p class="admin-aide">Le texte ci-dessous remplace l’édito affiché sur l’accueil. Les notes de bas de page n’y sont pas disponibles.</p>
+    </section>
+
+    <form id="formulaire-article" class="adm-formulaire" novalidate>
+
+      <div class="adm-barre-bloc" id="barre-bloc">
+        <div class="adm-barre">
+          <div class="adm-etapes" role="tablist" aria-label="Étapes">
+            <button type="button" class="adm-etape-bouton" role="tab" id="etape-bouton-redaction" data-etape-bouton="redaction" aria-selected="true" aria-controls="etape-redaction">Rédaction</button>
+            <button type="button" class="adm-etape-bouton" role="tab" id="etape-bouton-infos" data-etape-bouton="infos" data-hors-edito aria-selected="false" tabindex="-1" aria-controls="etape-infos">Informations</button>
+          </div>
+          <p class="adm-etat" id="etat-brouillon" data-etat="vide">Aucun contenu</p>
+          <button type="submit" class="admin-publier" id="publier">Publier l’article</button>
+        </div>
+        <p id="statut-publication" class="admin-statut" role="status" aria-live="polite"></p>
       </div>
 
-      <fieldset class="admin-jeton">
-        <legend>Jeton GitHub</legend>
-        <label class="admin-champ admin-champ--large" for="jeton">
-          <span>Jeton à granularité fine</span>
-          <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
-          <small>Requis pour toutes les actions de cette page. Il n’est jamais stocké.</small>
-        </label>
-      </fieldset>
+      <!-- Étape 1 : rédaction -->
+      <div id="etape-redaction" class="adm-etape" role="tabpanel" aria-labelledby="etape-bouton-redaction" data-etape="redaction">
+        <div id="fieldset-corps" class="adm-redaction" data-vue="cote">
 
-      <nav class="admin-onglets" role="tablist" aria-label="Mode d’administration">
-        <button type="button" role="tab" id="onglet-nouveau" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-article">Nouvel article</button>
-        <button type="button" role="tab" id="onglet-avenir" data-mode="avenir" aria-selected="false" tabindex="-1" aria-controls="formulaire-article">Article à venir</button>
-        <button type="button" role="tab" id="onglet-modifier" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier">Modifier ou supprimer</button>
-        <button type="button" role="tab" id="onglet-edito" data-mode="edito" aria-selected="false" tabindex="-1" aria-controls="panneau-edito">Édito</button>
-      </nav>
-
-      <section id="panneau-modifier" class="admin-panneau-selecteur" hidden>
-        <fieldset>
-          <legend>Choisir un article</legend>
-          <div class="admin-outils">
-            <button type="button" id="charger-liste">Charger la liste des articles</button>
-          </div>
-          <p id="statut-liste" class="admin-aide" role="status" aria-live="polite"></p>
-          <div id="liste-articles-admin" class="admin-articles-liste"></div>
-          <p class="admin-aide">Seuls les articles issus de l’administration (fichiers JSON) apparaissent ici. Les articles « à venir » sont signalés ; l’un d’eux peut être publié tout de suite.</p>
-        </fieldset>
-      </section>
-
-      <section id="panneau-edito" class="admin-panneau-selecteur" hidden>
-        <fieldset>
-          <legend>Édito de la page d’accueil</legend>
-          <div class="admin-outils">
-            <button type="button" id="charger-edito">Recharger l’édito actuel</button>
-          </div>
-          <p id="statut-edito" class="admin-aide" role="status" aria-live="polite"></p>
-          <p class="admin-aide">Le texte ci-dessous remplace l’édito affiché sur l’accueil. Les notes de bas de page n’y sont pas disponibles.</p>
-        </fieldset>
-      </section>
-
-      <form id="formulaire-article" class="admin-formulaire" novalidate>
-        <fieldset id="fieldset-infos">
-          <legend>Informations de l’article</legend>
-          <div class="admin-grille">
-            <label class="admin-champ admin-champ--large">
-              <span>Titre</span>
-              <input id="titre" name="titre" type="text" required maxlength="180" autocomplete="off">
+          <div class="adm-document" data-hors-edito>
+            <label class="adm-saisie-titre">
+              <span class="sr-only">Titre</span>
+              <input id="titre" name="titre" type="text" required maxlength="180" autocomplete="off" placeholder="Titre de l’article">
             </label>
-            <label class="admin-champ admin-champ--large">
-              <span>Sous-titre</span>
-              <input id="soustitre" name="soustitre" type="text" required maxlength="240">
-            </label>
-            <label class="admin-champ admin-champ--large">
-              <span>Identifiant d’URL (slug)</span>
-              <input id="slug" name="slug" type="text" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" required maxlength="100" autocapitalize="off" spellcheck="false">
-              <small>Minuscules, chiffres et tirets ; il déterminera l’adresse de l’article.</small>
-            </label>
-            <label class="admin-champ">
-              <span id="date-etiquette">Date de publication</span>
-              <input id="date" name="date" type="date" required>
-            </label>
-            <label class="admin-champ">
-              <span>Temps de lecture</span>
-              <input id="temps-lecture" name="temps_lecture" type="text" placeholder="8 min" required maxlength="40">
-            </label>
-            <label class="admin-champ admin-champ--large">
-              <span>Description courte</span>
-              <textarea id="description" name="description" rows="3" maxlength="400" required></textarea>
-              <small>Elle apparaît dans les cartes et la recherche du site.</small>
-            </label>
-            <label class="admin-champ admin-champ--large">
-              <span>Titre SEO (facultatif)</span>
-              <input id="meta-title" name="meta_title" type="text" maxlength="180">
-              <small>Utilisé dans l’onglet et les partages. Par défaut : le titre de l’article suivi de « — La Tortue ».</small>
-            </label>
-            <label class="admin-champ admin-champ--large">
-              <span>Méta-description SEO (facultative)</span>
-              <textarea id="meta-description" name="meta_description" rows="3" maxlength="320"></textarea>
-              <small>Résumé destiné aux moteurs de recherche et aux aperçus de partage. Par défaut : la description courte ci-dessus.</small>
-            </label>
-            <label class="admin-champ">
-              <span>Tags</span>
-              <input id="tags" name="tags" type="text" placeholder="Société, Politique">
-              <small>Séparez les valeurs par des virgules.</small>
-            </label>
-            <label class="admin-champ">
-              <span>Disciplines</span>
-              <input id="disciplines" name="disciplines" type="text" placeholder="Sociologie, Droit">
-              <small>Séparez les valeurs par des virgules.</small>
-            </label>
-            <label class="admin-champ admin-champ--large">
-              <span>Mots-clés de recherche</span>
-              <input id="motscles" name="motscles" type="text" placeholder="sujet principal, autre formulation">
-              <small>Facultatif ; séparez les mots-clés par des virgules.</small>
+            <label class="adm-saisie-soustitre">
+              <span class="sr-only">Sous-titre</span>
+              <input id="soustitre" name="soustitre" type="text" required maxlength="240" placeholder="Sous-titre">
             </label>
           </div>
-        </fieldset>
 
-        <fieldset id="fieldset-corps">
-          <legend id="legende-corps">Corps de l’article</legend>
-          <div class="admin-outils" role="toolbar" aria-label="Mise en forme du texte">
-            <button type="button" data-commande="bold" aria-label="Gras"><strong>G</strong></button>
-            <button type="button" data-commande="italic" aria-label="Italique"><em>I</em></button>
-            <button type="button" data-bloc="h2">Intertitre</button>
-            <button type="button" data-bloc="blockquote">Citation</button>
-            <button type="button" data-commande="insertUnorderedList">Liste</button>
-            <button type="button" data-commande="createLink">Lien</button>
-            <button type="button" data-commande="unlink">Retirer le lien</button>
-            <button type="button" id="ajouter-image">Insérer une image</button>
-            <input id="fichiers-images" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple hidden>
-          </div>
-          <details class="admin-options-avancees">
-            <summary>Options avancées</summary>
-            <div class="admin-outils" role="toolbar" aria-label="Outils avancés de mise en forme">
-              <button type="button" data-commande="superscript" aria-label="Exposant">x<sup>2</sup></button>
-              <button type="button" data-commande="subscript" aria-label="Indice">x<sub>2</sub></button>
-              <button type="button" data-commande="insertOrderedList">Liste numérotée</button>
-              <button type="button" id="ajouter-tableau">Insérer un tableau</button>
-              <label class="admin-formule-saisie" for="latex-formule">Expression LaTeX
-                <input id="latex-formule" type="text" placeholder="x^2 + 1" autocomplete="off">
-              </label>
-              <button type="button" data-formule="formule">Formule LaTeX</button>
-              <button type="button" data-formule="formule numerotee">Formule numérotée</button>
-              <button type="button" id="ajouter-annexe">Ajouter une annexe</button>
-              <button type="button" id="ajouter-sources">Ajouter une bibliographie</button>
+          <div class="admin-vues">
+            <h2 class="adm-intertitre" id="legende-corps">Corps de l’article</h2>
+            <div class="admin-segment" role="group" aria-label="Disposition de l’éditeur">
+              <button type="button" data-vue-bouton="ecrire" aria-pressed="false">Rédaction</button>
+              <button type="button" data-vue-bouton="cote" aria-pressed="true">Côte à côte</button>
+              <button type="button" data-vue-bouton="apercu" aria-pressed="false">Aperçu seul</button>
             </div>
-          </details>
-          <p class="admin-aide">Rédigez ou collez votre texte dans la zone. L’image est insérée à l’endroit du curseur. Pour chacune, renseignez une description détaillée (texte alternatif) et, si utile, une légende. Les images PNG, JPEG, GIF et WebP jusqu’à 10 Mo chacune seront ajoutées au dépôt.</p>
-          <div id="corps" class="admin-editeur" contenteditable="true" role="textbox" aria-label="Corps de l’article" aria-multiline="true" data-placeholder="Commencez à rédiger votre article…"></div>
-          <div id="menu-contextuel" class="admin-menu-contextuel" role="menu" aria-label="Options d’édition" hidden>
-            <button type="button" role="menuitem" data-context-target="[data-commande='bold']">Gras</button>
-            <button type="button" role="menuitem" data-context-target="[data-commande='italic']">Italique</button>
-            <button type="button" role="menuitem" data-context-target="[data-bloc='h2']">Intertitre</button>
-            <button type="button" role="menuitem" data-context-target="[data-bloc='blockquote']">Citation</button>
-            <button type="button" role="menuitem" data-context-target="[data-commande='insertUnorderedList']">Liste</button>
-            <button type="button" role="menuitem" data-context-target="[data-commande='createLink']">Lien</button>
-            <button type="button" role="menuitem" data-context-target="[data-commande='unlink']">Retirer le lien</button>
-            <button type="button" role="menuitem" id="menu-contextuel-note">Ajouter une note avec sa référence…</button>
-            <button type="button" role="menuitem" data-context-target="#ajouter-image">Insérer une image…</button>
-            <button type="button" role="menuitem" id="menu-options-avancees" aria-haspopup="true" aria-expanded="false">Options avancées ▸</button>
-            <div id="menu-contextuel-avance" class="admin-menu-contextuel-avance" role="group" aria-label="Options avancées" hidden>
-              <button type="button" role="menuitem" data-context-target="[data-commande='superscript']">Exposant</button>
-              <button type="button" role="menuitem" data-context-target="[data-commande='subscript']">Indice</button>
-              <button type="button" role="menuitem" data-context-target="[data-commande='insertOrderedList']">Liste numérotée</button>
-              <button type="button" role="menuitem" data-context-target="#ajouter-tableau">Insérer un tableau</button>
-              <label class="admin-menu-contextuel-formule">
-                Expression LaTeX
-                <input id="menu-latex-formule" type="text" placeholder="x^2 + 1" autocomplete="off">
-              </label>
-              <button type="button" role="menuitem" data-context-formule="formule">Insérer une formule LaTeX</button>
-              <button type="button" role="menuitem" data-context-formule="formule numerotee">Insérer une formule numérotée</button>
-              <button type="button" role="menuitem" data-context-target="#ajouter-annexe">Ajouter une annexe</button>
-              <button type="button" role="menuitem" data-context-target="#ajouter-sources">Ajouter une bibliographie</button>
+            <p class="admin-compteur" id="compteur-texte" aria-live="off">0 mot</p>
+          </div>
+
+          <div class="admin-espace" id="espace-redaction">
+            <div class="admin-colonne-editeur">
+              <div class="adm-outils-editeur">
+                <div class="admin-outils" role="toolbar" aria-label="Mise en forme du texte">
+                  <button type="button" data-commande="bold" aria-label="Gras"><strong>G</strong></button>
+                  <button type="button" data-commande="italic" aria-label="Italique"><em>I</em></button>
+                  <button type="button" data-bloc="h2">Intertitre</button>
+                  <button type="button" data-bloc="blockquote">Citation</button>
+                  <button type="button" data-commande="insertUnorderedList">Liste</button>
+                  <button type="button" data-commande="createLink">Lien</button>
+                  <button type="button" data-commande="unlink">Retirer le lien</button>
+                  <button type="button" id="ajouter-image">Insérer une image</button>
+                  <input id="fichiers-images" type="file" accept="image/png,image/jpeg,image/gif,image/webp" multiple hidden>
+                </div>
+        <details class="admin-options-avancees">
+          <summary>Options avancées</summary>
+          <div class="admin-outils" role="toolbar" aria-label="Outils avancés de mise en forme">
+            <button type="button" data-commande="superscript" aria-label="Exposant">x<sup>2</sup></button>
+            <button type="button" data-commande="subscript" aria-label="Indice">x<sub>2</sub></button>
+            <button type="button" data-commande="insertOrderedList">Liste numérotée</button>
+            <button type="button" id="ajouter-tableau">Insérer un tableau</button>
+            <label class="admin-formule-saisie" for="latex-formule">Expression LaTeX
+              <input id="latex-formule" type="text" placeholder="x^2 + 1" autocomplete="off">
+            </label>
+            <button type="button" data-formule="formule">Formule LaTeX</button>
+            <button type="button" data-formule="formule numerotee">Formule numérotée</button>
+            <button type="button" id="ajouter-annexe">Ajouter une annexe</button>
+            <button type="button" id="ajouter-sources">Ajouter une bibliographie</button>
+          </div>
+        </details>
+              </div>
+              <details class="adm-aide-details">
+                <summary>Aide à la rédaction</summary>
+                <p class="admin-aide">Rédigez ou collez votre texte dans la zone ; un clic droit ouvre le menu d’édition complet. L’image est insérée à l’endroit du curseur. Pour chacune, renseignez une description détaillée (texte alternatif) et, si utile, une légende. Les images PNG, JPEG, GIF et WebP jusqu’à 10 Mo chacune seront ajoutées au dépôt.</p>
+              </details>
+              <div id="corps" class="admin-editeur" contenteditable="true" role="textbox" aria-label="Corps de l’article" aria-multiline="true" data-placeholder="Commencez à rédiger votre article…"></div>
+
+              <details class="adm-bloc adm-images" id="bloc-images">
+                <summary>Images de l’article <span class="adm-pastille" id="images-compte">0</span></summary>
+                <div id="liste-images" class="admin-images" aria-live="polite"></div>
+              </details>
+
+              <section class="adm-bloc" id="fieldset-notes" data-hors-edito>
+                <h2 class="adm-intertitre">Notes de bas de page</h2>
+                <p class="admin-aide">Placez le curseur dans le corps de l’article puis cliquez sur « Ajouter une note » : l’appel et la note numérotés seront créés ensemble. Vous pourrez ensuite compléter la référence dans cette liste. Si vous collez depuis Word un texte contenant des notes de bas de page, elles seront ajoutées ici automatiquement. Les notes apparaissent en bas de l’aperçu ; un clic sur un appel de note y fait défiler jusqu’à la note, et inversement.</p>
+                <div class="admin-outils" role="toolbar" aria-label="Insertion d’une note">
+                  <button type="button" id="ajouter-note">Ajouter une note à l’endroit du curseur</button>
+                </div>
+                <div id="notes" class="admin-editeur admin-editeur--notes" contenteditable="true" role="textbox" aria-label="Notes de bas de page" aria-multiline="true" data-placeholder="Les notes de bas de page apparaîtront ici."></div>
+              </section>
             </div>
-          </div>
-          <div id="liste-images" class="admin-images" aria-live="polite"></div>
-          <details class="admin-apercu" open>
-            <summary>Aperçu du contenu</summary>
-            <div id="apercu-corps" class="admin-apercu-corps billet-texte"></div>
-          </details>
-        </fieldset>
 
-        <fieldset id="fieldset-notes">
-          <legend>Notes de bas de page</legend>
-          <p class="admin-aide">Placez le curseur dans le corps de l’article puis cliquez sur « Ajouter une note » : l’appel et la note numérotés seront créés ensemble. Vous pourrez ensuite compléter la référence dans cette liste. Si vous collez depuis Word un texte contenant des notes de bas de page, elles seront ajoutées ici automatiquement.</p>
-          <div class="admin-outils" role="toolbar" aria-label="Insertion d’une note">
-            <button type="button" id="ajouter-note">Ajouter une note à l’endroit du curseur</button>
+            <aside class="admin-colonne-apercu" aria-label="Aperçu de l’article">
+              <div class="admin-apercu-barre">
+                <span class="admin-apercu-etiquette">Aperçu en direct</span>
+                <div class="admin-segment" role="group" aria-label="Largeur de l’aperçu">
+                  <button type="button" data-appareil-bouton="ordinateur" aria-pressed="true">Ordinateur</button>
+                  <button type="button" data-appareil-bouton="mobile" aria-pressed="false">Mobile</button>
+                </div>
+                <button type="button" class="admin-bascule" id="suivre-curseur" aria-pressed="true" title="Fait défiler l’aperçu à la hauteur du curseur">Suivre le curseur</button>
+              </div>
+              <div class="admin-apercu-defilant" id="defilement-apercu" tabindex="0" aria-label="Aperçu défilant">
+                <div class="admin-apercu-page" id="page-apercu" data-appareil="ordinateur">
+                  <p class="etiquette" id="apercu-etiquette" hidden>Édito</p>
+                  <div class="billet-entete admin-apercu-entete" id="apercu-entete">
+                    <h1 id="apercu-titre" data-vide="Titre de l’article"></h1>
+                    <div class="ornement"></div>
+                    <p class="sous-titre" id="apercu-soustitre" data-vide="Le sous-titre s’affichera ici."></p>
+                    <p class="billet-meta"><time id="apercu-date"></time><span id="apercu-lecture"></span></p>
+                  </div>
+                  <div id="apercu-corps" class="admin-apercu-corps billet-texte"></div>
+                  <section id="apercu-notes" class="admin-apercu-corps notes" aria-label="Notes"></section>
+                </div>
+              </div>
+            </aside>
           </div>
-          <div id="notes" class="admin-editeur admin-editeur--notes" contenteditable="true" role="textbox" aria-label="Notes de bas de page" aria-multiline="true" data-placeholder="Les notes de bas de page apparaîtront ici."></div>
-          <details class="admin-apercu" open>
-            <summary>Aperçu des notes</summary>
-            <div id="apercu-notes" class="admin-apercu-corps notes"></div>
-          </details>
-        </fieldset>
+        </div>
+      </div>
 
-        <fieldset>
-          <legend>Publication</legend>
-          <div class="admin-actions">
-            <button type="submit" class="admin-publier" id="publier">Publier l’article</button>
-            <p id="statut-publication" class="admin-statut" role="status" aria-live="polite"></p>
+      <!-- Étape 2 : informations de l’article -->
+      <div id="etape-infos" class="adm-etape" role="tabpanel" aria-labelledby="etape-bouton-infos" data-etape="infos" hidden>
+        <div class="adm-infos" id="fieldset-infos">
+          <div class="adm-infos-champs">
+            <section class="adm-bloc">
+              <h2 class="adm-intertitre">Identification</h2>
+              <div class="admin-grille">
+                <label class="admin-champ admin-champ--large">
+                  <span>Identifiant d’URL (slug)</span>
+                  <input id="slug" name="slug" type="text" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" required maxlength="100" autocapitalize="off" spellcheck="false">
+                  <small>Minuscules, chiffres et tirets ; il déterminera l’adresse de l’article.</small>
+                </label>
+                <label class="admin-champ">
+                  <span id="date-etiquette">Date de publication</span>
+                  <input id="date" name="date" type="date" required>
+                </label>
+                <label class="admin-champ">
+                  <span>Temps de lecture</span>
+                  <input id="temps-lecture" name="temps_lecture" type="text" placeholder="8 min" required maxlength="40">
+                  <small>Estimation d’après le texte : <button type="button" class="admin-lien" id="appliquer-lecture" disabled>—</button> (cliquer pour l’utiliser)</small>
+                </label>
+                <label class="admin-champ admin-champ--large">
+                  <span>Description courte</span>
+                  <textarea id="description" name="description" rows="3" maxlength="400" required></textarea>
+                  <small>Elle apparaît dans les cartes et la recherche du site.</small>
+                </label>
+              </div>
+            </section>
+
+            <section class="adm-bloc">
+              <h2 class="adm-intertitre">Référencement</h2>
+              <div class="admin-grille">
+                <label class="admin-champ admin-champ--large">
+                  <span>Titre SEO (facultatif)</span>
+                  <input id="meta-title" name="meta_title" type="text" maxlength="180">
+                  <small>Utilisé dans l’onglet et les partages. Par défaut : le titre de l’article suivi de « — La Tortue ».</small>
+                </label>
+                <label class="admin-champ admin-champ--large">
+                  <span>Méta-description SEO (facultative)</span>
+                  <textarea id="meta-description" name="meta_description" rows="3" maxlength="320"></textarea>
+                  <small>Résumé destiné aux moteurs de recherche et aux aperçus de partage. Par défaut : la description courte ci-dessus.</small>
+                </label>
+              </div>
+            </section>
+
+            <section class="adm-bloc">
+              <h2 class="adm-intertitre">Classement</h2>
+              <div class="admin-grille">
+                <label class="admin-champ">
+                  <span>Tags</span>
+                  <input id="tags" name="tags" type="text" placeholder="Société, Politique">
+                  <small>Séparez les valeurs par des virgules.</small>
+                </label>
+                <label class="admin-champ">
+                  <span>Disciplines</span>
+                  <input id="disciplines" name="disciplines" type="text" placeholder="Sociologie, Droit">
+                  <small>Séparez les valeurs par des virgules.</small>
+                </label>
+                <label class="admin-champ admin-champ--large">
+                  <span>Mots-clés de recherche</span>
+                  <input id="motscles" name="motscles" type="text" placeholder="sujet principal, autre formulation">
+                  <small>Facultatif ; séparez les mots-clés par des virgules.</small>
+                </label>
+              </div>
+            </section>
           </div>
-        </fieldset>
-      </form>
 
-      <p class="suite"><a href="admin-notes.html">Notes privées</a> — <a href="index.html">Retour au site</a></p>
-    </main>
-  </div>
+          <aside class="adm-infos-apercus" aria-label="Aperçus">
+            <div class="admin-apercu-bloc">
+              <h2 class="admin-apercu-titre">Dans la liste des articles</h2>
+              <div class="liste admin-carte" aria-label="Aperçu de la carte de l’article">
+                <div class="article-row">
+                  <div class="article">
+                    <span class="date" id="carte-date"></span>
+                    <div class="article-corps">
+                      <h2 id="carte-titre"></h2>
+                      <span class="article-description" id="carte-description"></span>
+                    </div>
+                    <span class="fleche" aria-hidden="true">→</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="admin-apercu-bloc">
+              <h2 class="admin-apercu-titre">Dans un moteur de recherche</h2>
+              <div class="admin-serp" aria-label="Aperçu du résultat de recherche">
+                <p class="admin-serp-url" id="serp-url"></p>
+                <p class="admin-serp-titre" id="serp-titre"></p>
+                <p class="admin-serp-desc" id="serp-desc"></p>
+              </div>
+              <p class="admin-serp-compteurs">
+                <span id="serp-titre-compte"></span>
+                <span id="serp-desc-compte"></span>
+              </p>
+            </div>
+          </aside>
+        </div>
+      </div>
+
+      <div id="menu-contextuel" class="admin-menu-contextuel" role="menu" aria-label="Options d’édition" hidden>
+        <button type="button" role="menuitem" data-context-target="[data-commande='bold']">Gras</button>
+        <button type="button" role="menuitem" data-context-target="[data-commande='italic']">Italique</button>
+        <button type="button" role="menuitem" data-context-target="[data-bloc='h2']">Intertitre</button>
+        <button type="button" role="menuitem" data-context-target="[data-bloc='blockquote']">Citation</button>
+        <button type="button" role="menuitem" data-context-target="[data-commande='insertUnorderedList']">Liste</button>
+        <button type="button" role="menuitem" data-context-target="[data-commande='createLink']">Lien</button>
+        <button type="button" role="menuitem" data-context-target="[data-commande='unlink']">Retirer le lien</button>
+        <button type="button" role="menuitem" id="menu-contextuel-note">Ajouter une note avec sa référence…</button>
+        <button type="button" role="menuitem" data-context-target="#ajouter-image">Insérer une image…</button>
+        <button type="button" role="menuitem" id="menu-options-avancees" aria-haspopup="true" aria-expanded="false">Options avancées ▸</button>
+        <div id="menu-contextuel-avance" class="admin-menu-contextuel-avance" role="group" aria-label="Options avancées" hidden>
+          <button type="button" role="menuitem" data-context-target="[data-commande='superscript']">Exposant</button>
+          <button type="button" role="menuitem" data-context-target="[data-commande='subscript']">Indice</button>
+          <button type="button" role="menuitem" data-context-target="[data-commande='insertOrderedList']">Liste numérotée</button>
+          <button type="button" role="menuitem" data-context-target="#ajouter-tableau">Insérer un tableau</button>
+          <label class="admin-menu-contextuel-formule">
+            Expression LaTeX
+            <input id="menu-latex-formule" type="text" placeholder="x^2 + 1" autocomplete="off">
+          </label>
+          <button type="button" role="menuitem" data-context-formule="formule">Insérer une formule LaTeX</button>
+          <button type="button" role="menuitem" data-context-formule="formule numerotee">Insérer une formule numérotée</button>
+          <button type="button" role="menuitem" data-context-target="#ajouter-annexe">Ajouter une annexe</button>
+          <button type="button" role="menuitem" data-context-target="#ajouter-sources">Ajouter une bibliographie</button>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
 </body>
 </html>
