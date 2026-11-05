@@ -44,7 +44,9 @@ jobs:
 
       - name: Enregistrer les changements
         run: |
-          git add -A articles articles-data articles-data-avenir site-data index.html articles.html sitemap.xml
+          # « git add -A » sans liste de chemins : une liste échoue (erreur 128) dès qu'un dossier
+          # n'existe pas, par exemple articles-data-avenir ou site-data quand ils sont vides ou jamais créés.
+          git add -A
           if git diff --cached --quiet; then
             echo "Rien à enregistrer."
             exit 0
