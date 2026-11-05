@@ -1,0 +1,22 @@
+{
+  "slug": "test1",
+  "titre": "Test",
+  "soustitre": "Test",
+  "date": "2026-11-05",
+  "description": "Test",
+  "temps_lecture": "1 min",
+  "tags": [
+    "Société"
+  ],
+  "disciplines": [
+    "Sociologie"
+  ],
+  "motscles": [
+    "Test"
+  ],
+  "meta_title": "Test",
+  "meta_description": "Test",
+  "publie_le": "2026-11-05T12:01:12.205Z",
+  "corps": "<p>Test</p>",
+  "notes": ""
+}
