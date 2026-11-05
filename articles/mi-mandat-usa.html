@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Les élections de mi-mandat de 2026 sont-elles vraiment une défaite historique ? — La Tortue</title>
+<meta name="description" content="Les médias parlent d'une défaite « historique » pour Trump aux midterms 2026. Analyse critique des résultats au Sénat et à la Chambre des représentants.">
+<meta name="keywords" content="midterms 2026, élections de mi-mandat, Donald Trump, Sénat, Chambre des représentants, split ticket, gerrymandering, régression linéaire">
+<link rel="stylesheet" href="../charte.css">
+<script src="../menu.js" defer></script>
+<link rel="stylesheet" href="../article.css">
+<script src="../schema-descriptions.js" defer></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.css" integrity="sha384-nH0MfJ44wi1dd7w6jinlyBgljjS8EJAh2JBoRad8a3VDw2K69vfaaqm4WnR+gXtA" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/katex.min.js" integrity="sha384-CwjPRVHTvLiMBFjEoij+QZViMV5rhTOIp7CJzl24JEqpRDA1sJFHVXXLURktbYYp" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.47/dist/contrib/auto-render.min.js" integrity="sha384-bjyGPfbij8/NDKJhSGZNP/khQVgtHUE5exjm4Ydllo42FwIgYsdLO2lXGmRBf5Mz" crossorigin="anonymous" onload="renderMathInElement(document.querySelector('.billet-texte'), { throwOnError: false })"></script>
+<link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
+<link rel="shortcut icon" href="../favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png" />
+<link rel="manifest" href="../favicon/site.webmanifest" />
+</head>
+<body>
+  <div class="progression" aria-hidden="true"></div>
+  <div class="page">
+
+    <header>
+      <a class="marque" href="../index.html">
+        <img class="logo" src="../logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="../index.html#articles">Articles</a>
+        <a href="../a-propos.html">À propos</a>
+        <a href="../a-propos.html#contact">Contact</a>
+        <a href="../newsletter.html">Newsletter</a>
+      </nav>
+    </header>
+
+    <article>
+      <div class="billet-entete">
+        <h1>Les élections de mi-mandat de 2026 sont-elles vraiment une défaite historique&nbsp;?</h1>
+        <div class="ornement"></div>
+        <p class="sous-titre">Analyse critique des midterms américaines</p>
+        <p class="billet-meta"><time datetime="2026-11-05">5 novembre 2026</time><span>8 min de lecture</span></p>
+        <div class="billet-actions">
+          <button type="button" onclick="window.print()">
+            Télécharger l’article en PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="billet-texte">
+<h2>Pour les médias, une défaite « historique »</h2>
+<p>« Une défaite historique » : c’est en gros, à quelques mots près, ce qu’ont titré les principaux médias français, du <em>Monde</em> au <em>Figaro</em> en passant par <em>Médiapart</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>, pour qualifier les élections de mi-mandat américaines qui se sont déroulées ce mardi 3 novembre. Mais cette défaite est-elle vraiment historique&nbsp;? Dans quelle mesure&nbsp;?</p>
+<p>Les élections de mi-mandat doivent renouveler un tiers du Sénat (une trentaine de sénateurs) et l’intégralité de la Chambre des représentants, soit 435 sièges. Elles servent traditionnellement (c’est le <em>split ticket</em>) de contre-pouvoir à l’exercice présidentiel.</p>
+<h2>Au Sénat, une défaite historique surtout en apparence</h2>
+<figure><img src="../images/election-mi-mandat1.png" alt="Graphique du nombre de sièges perdus par les républicains au Sénat lors des élections de mi-mandat où ils étaient au pouvoir, avec la moyenne à -3,3 sièges et la situation de 2026 mise en évidence." loading="lazy"><figcaption>Nombre de sièges perdus au Sénat par les républicains au pouvoir, lors des élections de mi-mandat</figcaption></figure>
+<p>Le graphique ci-dessus représente le nombre de sièges perdus par les républicains lorsqu’ils étaient au pouvoir au Sénat aux élections de mi-mandat. Avec une moyenne à −3,3 sièges perdus et un écart-type d’environ 4, la défaite de Trump semble bien se situer parmi les pires du camp républicain, avec 1958 et 1986. Toutefois, allons plus loin que ces simples chiffres absolus. En effet, plus le nombre de sièges défendus est important, plus les pertes le sont (coefficient de corrélation de −0,61). La situation de Donald Trump, le point vert dans le graphique ci-dessous, est très proche de la courbe générale de tendance observée, et en cela, la défaite de Trump n’a rien d’historique au sens strict du terme puisqu’elle s’inscrit dans un schéma classique où le nombre de sièges à défendre au Congrès a plus d’impact que sa popularité à un instant <em>t</em>.</p>
+<figure><img src="../images/election-mi-mandat2.png" alt="Nuage de points reliant le nombre de sièges défendus et le bilan net au Sénat, avec courbe de tendance ; le point vert représente la situation de Donald Trump en 2026, proche de la courbe." loading="lazy"><figcaption>Relation entre sièges défendus et bilan net au Sénat : la situation de Trump (point vert) s’inscrit dans la tendance générale</figcaption></figure>
+<h2>À la Chambre des représentants, une victoire démocrate évidente, mais en demi-teinte</h2>
+<p>Les démocrates ont gagné la Chambre des représentants, 228 au moment où cet article s’écrit, et jusqu’à 251 à 268 sièges selon les projections<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>, tandis que les républicains perdent entre 36 et 53 sièges. C’est, pour les démocrates, leur plus grande majorité depuis le début des années 1990. Pourtant, cette victoire est moins spectaculaire que ne le laisserait attendre l’ampleur du basculement des voix. D’après une première analyse reprise par Axios, les démocrates devraient, à terme, remporter ces élections avec 13 points d’avance<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, or leur gain net en sièges est comparable à celui de 2018 (environ 41 sièges), obtenu avec un écart de 8,6 points, soit 5 de moins. La chose s’explique notamment par le <em>gerrymandering</em>, une stratégie électorale qui consiste à découper les circonscriptions de façon à concentrer les électeurs adverses dans un petit nombre de districts ou à les disperser entre plusieurs districts où ils restent minoritaires.</p>
+<h2>Pourquoi tant parler d’une défaite historique&nbsp;?</h2>
+<p>Alors pourquoi parle-t-on tant d’une défaite historique si ces résultats s’inscrivent dans une tradition politique naturelle aux États-Unis&nbsp;? En fait, celle-ci s’explique d’abord par la nature très personnelle de ces élections&nbsp;: Trump avait demandé à ses sympathisants de « faire comme si [il était] sur le bulletin »<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>, mais il avait également imposé certains candidats, notamment en Caroline du Sud, en Caroline du Nord, au Michigan et au Texas&nbsp;; le qualificatif « historique » s’applique non pas à la défaite du camp présidentiel aux élections de mi-mandat, qui est une tradition aux États-Unis (c’est ce qu’on appelle le <em>split ticket</em> ou ticket partagé), mais au premier désaveu de sa carrière exprimé par les urnes. Environ 43&nbsp;%<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> des électeurs disent avoir voté pour lui exprimer leur opposition, plus qu’en 2018. La perte combinée de la Chambre des représentants et du Sénat est elle aussi rarissime, puisque la dernière occurrence date de 2006<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>, avec des bastions républicains (le Texas et le Kansas) où aucun démocrate n’avait gagné depuis 1988 et 1932.</p>
+<h2>Ce résultat au Congrès était-il prévisible&nbsp;?</h2>
+<p>Notons que ce résultat au Sénat était prévisible. Si nous avions précisé que la popularité de Donald Trump avait un impact davantage négligeable que son nombre de places à défendre au Sénat, l’analyse des données (voir tableaux en annexe) permet toutefois d’établir un modèle de régression linéaire multiple reliant le solde des sièges au Sénat à deux variables&nbsp;: 1) la popularité du président (mesurée par l’institut Gallup) et 2) l’exposition de son parti, via la formule suivante&nbsp;:</p>
+<p>\[\text{Bilan au Sénat} \approx 0{,}14 \times \text{Approbation} - 0{,}66 \times \text{Sièges défendus}\]</p>
+<p>Dans cette équation, chaque point de popularité supplémentaire rapporte environ un siège, tandis que chaque siège mis en jeu coûte un siège au total. Appliqué à Donald Trump avec une cote d’approbation d’environ 33&nbsp;% et 22 sièges à défendre, le modèle prévoyait une perte de 9 à 10 sièges, un résultat assez proche de la réalité observée. Idem à la Chambre des représentants avec cette équation&nbsp;:</p>
+<p>\[\text{Bilan} \approx 10 + 0{,}49 \times \text{Approbation} - 0{,}27 \times \text{Sièges défendus}\]</p>
+<p>Le modèle prévoit entre 31 et 35 sièges perdus, contre 36 à 53 sièges perdus pour les élections réelles.</p>
+<h2>Conclusion</h2>
+<p>En somme, ces résultats aux élections, notamment au Congrès, sont relativement classiques&nbsp;; la nature historique réside davantage dans la perte simultanée de la Chambre des représentants et du Sénat (depuis 1934, les seules fois où de tels événements sont arrivés se sont passées en 1946, en 1954, en 1994 et en 2006) et l’ampleur du rejet populaire national.</p>
+<h2 id="annexe">Annexe</h2>
+<h3>Tableau 1&nbsp;: Nombre de sièges perdus au Sénat par les républicains depuis 1930</h3>
+<table>
+<thead>
+<tr><th>Année</th><th>Président en exercice</th><th>Parti présidentiel</th><th>Chambre&nbsp;: bilan net</th><th>Sénat&nbsp;: bilan net</th><th>Contrôle après scrutin</th></tr>
+</thead>
+<tbody>
+<tr><td>1930</td><td>Herbert Hoover</td><td>Républicain</td><td>−52</td><td>−6</td><td>Démocrates&nbsp;: Chambre&nbsp;; Républicains&nbsp;: Sénat</td></tr>
+<tr><td>1934</td><td>Franklin D. Roosevelt</td><td>Démocrate</td><td>9</td><td>9</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1938</td><td>Franklin D. Roosevelt</td><td>Démocrate</td><td>−72</td><td>−7</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1942</td><td>Franklin D. Roosevelt</td><td>Démocrate</td><td>−45</td><td>−8</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1946</td><td>Harry S. Truman</td><td>Démocrate</td><td>−54</td><td>−10</td><td>Républicains&nbsp;: les deux chambres</td></tr>
+<tr><td>1950</td><td>Harry S. Truman</td><td>Démocrate</td><td>−28</td><td>−5</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1954</td><td>Dwight D. Eisenhower</td><td>Républicain</td><td>−18</td><td>−2</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1958</td><td>Dwight D. Eisenhower</td><td>Républicain</td><td>−48</td><td>−12</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1962</td><td>John F. Kennedy</td><td>Démocrate</td><td>−4</td><td>4</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1966</td><td>Lyndon B. Johnson</td><td>Démocrate</td><td>−47</td><td>−3</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1970</td><td>Richard Nixon</td><td>Républicain</td><td>−12</td><td>2</td><td>Démocrates&nbsp;: Chambre&nbsp;; Républicains&nbsp;: Sénat</td></tr>
+<tr><td>1974</td><td>Gerald Ford</td><td>Républicain</td><td>−48</td><td>−4</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1978</td><td>Jimmy Carter</td><td>Démocrate</td><td>−15</td><td>−2</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1982</td><td>Ronald Reagan</td><td>Républicain</td><td>−26</td><td>0</td><td>Démocrates&nbsp;: Chambre&nbsp;; Républicains&nbsp;: Sénat</td></tr>
+<tr><td>1986</td><td>Ronald Reagan</td><td>Républicain</td><td>−5</td><td>−8</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1990</td><td>George H. W. Bush</td><td>Républicain</td><td>−8</td><td>−1</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>1994</td><td>Bill Clinton</td><td>Démocrate</td><td>−54</td><td>−9</td><td>Républicains&nbsp;: les deux chambres</td></tr>
+<tr><td>1998</td><td>Bill Clinton</td><td>Démocrate</td><td>4</td><td>0</td><td>Républicains&nbsp;: les deux chambres</td></tr>
+<tr><td>2002</td><td>George W. Bush</td><td>Républicain</td><td>8</td><td>2</td><td>Républicains&nbsp;: les deux chambres</td></tr>
+<tr><td>2006</td><td>George W. Bush</td><td>Républicain</td><td>−32</td><td>−6</td><td>Démocrates&nbsp;: les deux chambres</td></tr>
+<tr><td>2010</td><td>Barack Obama</td><td>Démocrate</td><td>−63</td><td>−6</td><td>Républicains&nbsp;: Chambre&nbsp;; Démocrates&nbsp;: Sénat</td></tr>
+<tr><td>2014</td><td>Barack Obama</td><td>Démocrate</td><td>−13</td><td>−9</td><td>Républicains&nbsp;: les deux chambres</td></tr>
+<tr><td>2018</td><td>Donald Trump</td><td>Républicain</td><td>−41</td><td>2</td><td>Démocrates&nbsp;: Chambre&nbsp;; Républicains&nbsp;: Sénat</td></tr>
+<tr><td>2022</td><td>Joe Biden</td><td>Démocrate</td><td>−9</td><td>1</td><td>Républicains&nbsp;: Chambre&nbsp;; Démocrates&nbsp;: Sénat</td></tr>
+</tbody>
+</table>
+<h3>Tableau 2&nbsp;: Impact du nombre de sièges à défendre sur le bilan électoral au Sénat (1934–2022)</h3>
+<table>
+<thead>
+<tr><th>Année</th><th>Parti Prés.</th><th>Chambre&nbsp;: Sièges défendus</th><th>Chambre&nbsp;: Bilan</th><th>Chambre&nbsp;: Loss %</th><th>Sénat&nbsp;: Sièges défendus</th><th>Sénat&nbsp;: Bilan</th><th>Sénat&nbsp;: Loss %</th></tr>
+</thead>
+<tbody>
+<tr><td>1934</td><td>D</td><td>313</td><td>9</td><td>2,9&nbsp;%</td><td>14</td><td>9</td><td>64,3&nbsp;%</td></tr>
+<tr><td>1938</td><td>D</td><td>334</td><td>−72</td><td>−21,6&nbsp;%</td><td>27</td><td>−7</td><td>−25,9&nbsp;%</td></tr>
+<tr><td>1942</td><td>D</td><td>267</td><td>−45</td><td>−16,9&nbsp;%</td><td>25</td><td>−9</td><td>−36,0&nbsp;%</td></tr>
+<tr><td>1946</td><td>D</td><td>244</td><td>−56</td><td>−23,0&nbsp;%</td><td>21</td><td>−12</td><td>−57,1&nbsp;%</td></tr>
+<tr><td>1950</td><td>D</td><td>263</td><td>−28</td><td>−10,6&nbsp;%</td><td>21</td><td>−6</td><td>−28,6&nbsp;%</td></tr>
+<tr><td>1954</td><td>R</td><td>221</td><td>−18</td><td>−8,1&nbsp;%</td><td>11</td><td>−1</td><td>−9,1&nbsp;%</td></tr>
+<tr><td>1958</td><td>R</td><td>203</td><td>−48</td><td>−23,6&nbsp;%</td><td>20</td><td>−13</td><td>−65,0&nbsp;%</td></tr>
+<tr><td>1962</td><td>D</td><td>264</td><td>−4</td><td>−1,5&nbsp;%</td><td>18</td><td>3</td><td>16,7&nbsp;%</td></tr>
+<tr><td>1966</td><td>D</td><td>295</td><td>−47</td><td>−15,9&nbsp;%</td><td>21</td><td>−4</td><td>−19,0&nbsp;%</td></tr>
+<tr><td>1970</td><td>R</td><td>192</td><td>−12</td><td>−6,3&nbsp;%</td><td>7</td><td>2</td><td>28,6&nbsp;%</td></tr>
+<tr><td>1974</td><td>R</td><td>192</td><td>−48</td><td>−25,0&nbsp;%</td><td>15</td><td>−5</td><td>−33,3&nbsp;%</td></tr>
+<tr><td>1978</td><td>D</td><td>292</td><td>−15</td><td>−5,1&nbsp;%</td><td>14</td><td>−3</td><td>−21,4&nbsp;%</td></tr>
+<tr><td>1982</td><td>R</td><td>192</td><td>−26</td><td>−13,5&nbsp;%</td><td>12</td><td>1</td><td>8,3&nbsp;%</td></tr>
+<tr><td>1986</td><td>R</td><td>181</td><td>−5</td><td>−2,8&nbsp;%</td><td>22</td><td>−8</td><td>−36,4&nbsp;%</td></tr>
+<tr><td>1990</td><td>R</td><td>175</td><td>−8</td><td>−4,6&nbsp;%</td><td>17</td><td>−1</td><td>−5,9&nbsp;%</td></tr>
+<tr><td>1994</td><td>D</td><td>258</td><td>−54</td><td>−20,9&nbsp;%</td><td>17</td><td>−8</td><td>−47,1&nbsp;%</td></tr>
+<tr><td>1998</td><td>D</td><td>207</td><td>4</td><td>1,9&nbsp;%</td><td>18</td><td>0</td><td>0,0&nbsp;%</td></tr>
+<tr><td>2002</td><td>R</td><td>220</td><td>8</td><td>3,6&nbsp;%</td><td>20</td><td>2</td><td>10,0&nbsp;%</td></tr>
+<tr><td>2006</td><td>R</td><td>233</td><td>−30</td><td>−12,9&nbsp;%</td><td>15</td><td>−6</td><td>−40,0&nbsp;%</td></tr>
+<tr><td>2010</td><td>D</td><td>257</td><td>−63</td><td>−24,5&nbsp;%</td><td>15</td><td>−6</td><td>−40,0&nbsp;%</td></tr>
+<tr><td>2014</td><td>D</td><td>201</td><td>−13</td><td>−6,5&nbsp;%</td><td>20</td><td>−9</td><td>−45,0&nbsp;%</td></tr>
+<tr><td>2018</td><td>R</td><td>241</td><td>−41</td><td>−17,0&nbsp;%</td><td>9</td><td>2</td><td>22,2&nbsp;%</td></tr>
+<tr><td>2022</td><td>D</td><td>222</td><td>−9</td><td>−4,1&nbsp;%</td><td>14</td><td>1</td><td>7,1&nbsp;%</td></tr>
+</tbody>
+</table>
+      </div>
+
+      <section class="notes" aria-label="Notes">
+<ol>
+<li id="fn1"><p>Midterms 2026&nbsp;: Donald Trump subit une défaite historique, du Texas au Michigan&nbsp;; Raz-de-marée démocrate et déroute historique pour Trump aux élections de mi-mandat | Mediapart&nbsp;; Une défaite historique pour Donald Trump aux midterms… Les informés de franceinfo du mercredi 4 novembre 2026 – franceinfo&nbsp;; Inflation, guerre en Iran, corruption&nbsp;: L’Amérique a répudié le trumpisme&nbsp;; La fin de l’« effet Trump » est une victoire de la démocratie | France Inter<a href="#fnref1" class="footnote-back" role="doc-backlink">↩</a></p></li>
+<li id="fn2"><p><a href="https://www.nbcnews.com/politics/2026-election/live-blog/midterm-election-results-2026-news-trump-live-updates-rcna605763">NBC News – Midterm election results 2026</a>&nbsp;; <a href="https://www.cbsnews.com/live-updates/election-day-2026-midterms/">CBS News – Election Day 2026 midterms</a><a href="#fnref2" class="footnote-back" role="doc-backlink">↩</a></p></li>
+<li id="fn3"><p><a href="https://www.cbsnews.com/live-updates/election-day-2026-midterms/">CBS News – Election Day 2026 midterms</a><a href="#fnref3" class="footnote-back" role="doc-backlink">↩</a></p></li>
+<li id="fn4"><p>Donald Trump made the midterms a referendum on himself, and the voters obliged – <em>The Week</em><a href="#fnref4" class="footnote-back" role="doc-backlink">↩</a></p></li>
+<li id="fn5"><p><a href="https://www.nbcnews.com/politics/2026-election/exit-poll-trump-midterms-voters-economy-disapproval-rcna607045">NBC News – Exit poll: Trump midterms</a><a href="#fnref5" class="footnote-back" role="doc-backlink">↩</a></p></li>
+<li id="fn6"><p><a href="https://www.aljazeera.com/news/2026/11/4/democrats-win-control-of-house-and-senate-key-us-midterms-takeaways">Al Jazeera – Democrats win control of House and Senate: key US midterms takeaways</a><a href="#fnref6" class="footnote-back" role="doc-backlink">↩</a></p></li>
+</ol>
+      </section>
+    </article>
+
+    <div class="billet-fin">
+      <div class="ornement"></div>
+      <a class="lien" href="../index.html">Retour à l’accueil</a>
+    </div>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="../index.html">Accueil</a></li>
+            <li><a href="../articles.html">Articles</a></li>
+            <li><a href="../a-propos.html">À propos</a></li>
+            <li><a href="../contacts.html">Contacts</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="../confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="../accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="../mentions-legales.html">Mentions légales</a></li>
+            <li><a href="../report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="../newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+
+  </div>
+</body>
+</html>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Les élections de mi-mandat de 2026 sont-elles vraiment une défaite historique ?",
+  "datePublished": "2026-11-05T08:00:00+01:00",
+  "dateModified": "2026-11-05T08:00:00+01:00"
+}
+</script>
