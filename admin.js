@@ -143,7 +143,52 @@
     connectionBadge.dataset.etat = state;
     connectionBadge.textContent = CONNECTION_LABELS[state];
   };
-  tokenInput.addEventListener("input", () => setConnection(tokenInput.value.trim() ? "saisi" : "absent"));
+  /* ---------- Jeton : mémorisation facultative sur cet appareil ---------- */
+  const TOKEN_KEY = "tortue-admin-jeton";
+  const rememberBox = $("memoriser");
+  const forgetButton = $("oublier");
+  const connectionPanel = document.querySelector(".adm-connexion");
+
+  const readStoredToken = () => {
+    try { return window.localStorage.getItem(TOKEN_KEY) || ""; } catch (error) { return ""; }
+  };
+  const storeToken = (value) => {
+    try { window.localStorage.setItem(TOKEN_KEY, value); } catch (error) { /* stockage indisponible */ }
+  };
+  const clearStoredToken = () => {
+    try { window.localStorage.removeItem(TOKEN_KEY); } catch (error) { /* stockage indisponible */ }
+  };
+  const syncStoredToken = () => {
+    const value = tokenInput.value.trim();
+    if (rememberBox.checked && value) storeToken(value);
+    else clearStoredToken();
+    forgetButton.hidden = !readStoredToken();
+  };
+
+  tokenInput.addEventListener("input", () => {
+    setConnection(tokenInput.value.trim() ? "saisi" : "absent");
+    if (rememberBox.checked) syncStoredToken();
+  });
+  rememberBox.addEventListener("change", syncStoredToken);
+  forgetButton.addEventListener("click", () => {
+    clearStoredToken();
+    tokenInput.value = "";
+    rememberBox.checked = false;
+    forgetButton.hidden = true;
+    setConnection("absent");
+    connectionPanel.open = true;
+    tokenInput.focus();
+  });
+
+  // Au chargement de la page : on reprend le jeton mémorisé, s'il y en a un.
+  const storedToken = readStoredToken();
+  if (storedToken) {
+    tokenInput.value = storedToken;
+    rememberBox.checked = true;
+    forgetButton.hidden = false;
+    setConnection("saisi");
+    connectionPanel.open = false;
+  }
   const requireToken = () => {
     document.querySelector(".adm-connexion").open = true;
     tokenInput.focus();
@@ -2062,7 +2107,7 @@
         resetForm(true);
         await finishList("Article mis à jour ; GitHub Actions va régénérer sa page et les listes (1 à 2 minutes).");
       } else {
-        resetForm(false);
+        resetForm(true);
         setStatus(
           mode === "avenir"
             ? `Article programmé dans ${AVENIR_FOLDER}/. Il sera publié automatiquement à partir de sa date (génération quotidienne à 6 h UTC).`
