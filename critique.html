@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Critiques — La Tortue</title>
-<meta name="description" content="Critiques de livres, films et séries par La Tortue. Filtrez par type ou par tag.">
+<meta name="description" content="Critiques de livres, films et séries par La Tortue. Filtrez par type, genre, discipline ou tag.">
 <link rel="stylesheet" href="charte.css">
 <link rel="stylesheet" href="critique.css">
 <script src="menu.js" defer></script>
@@ -61,10 +61,6 @@
               <span class="menu-tags-nombre" hidden></span>
             </button>
             <div class="menu-tags-panneau" id="tags-panneau" role="group" aria-label="Filtrer par tag" hidden>
-              <label class="menu-tags-option"><input type="checkbox" value="Science-fiction"><span>Science-fiction</span></label>
-              <label class="menu-tags-option"><input type="checkbox" value="Fantasy"><span>Fantasy</span></label>
-              <label class="menu-tags-option"><input type="checkbox" value="Polar"><span>Polar</span></label>
-              <label class="menu-tags-option"><input type="checkbox" value="Essai"><span>Essai</span></label>
               <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
             </div>
           </div>
@@ -78,6 +74,26 @@
               <label class="menu-tags-option"><input type="checkbox" value="Livre"><span>Livre</span></label>
               <label class="menu-tags-option"><input type="checkbox" value="Film"><span>Film</span></label>
               <label class="menu-tags-option"><input type="checkbox" value="Série"><span>Série</span></label>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
+          <div class="menu-tags" data-cle="categories" data-param="genre">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="genres-panneau">
+              <span>Genres et catégories</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="genres-panneau" role="group" aria-label="Filtrer par genre ou catégorie" hidden>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
+          <div class="menu-tags" data-cle="disciplines" data-param="discipline">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="disciplines-panneau">
+              <span>Disciplines</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="disciplines-panneau" role="group" aria-label="Filtrer par discipline" hidden>
               <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
             </div>
           </div>
@@ -97,7 +113,7 @@
       <section class="critique-section" id="section-critiques" aria-label="Liste des critiques">
         <div id="liste-critiques" class="critique-liste">
           <!-- ARTICLES_GENERES_DEBUT -->
-<article class="critique-article" data-type="Livre" data-tags="Philosophie" data-disciplines="Philosophie" data-categories="Livre, Essai">
+<article class="critique-article" data-type="Livre" data-tags="Deuil, Mort" data-disciplines="Philosophie" data-categories="Essai">
   <h2 class="critique-titre">Au bonheur des morts — Viniane Despret</h2>
   <p class="critique-sous-titre">Un essai intéressant et inhabituel, dans un champ très peu exploré</p>
   <div class="critique-corps">
@@ -109,7 +125,7 @@
   </div>
   <div class="critique-meta"><span>8 novembre 2026</span></div>
 </article>
-<article class="critique-article" data-type="Livre" data-tags="Littérature blanche" data-disciplines="Littérature" data-categories="Livre, Recueil de nouvelles">
+<article class="critique-article" data-type="Livre" data-tags="Écriture, Mémoire" data-disciplines="Littérature" data-categories="Recueil de nouvelles, Littérature blanche">
   <h2 class="critique-titre">Écrire — Marguerite Duras</h2>
   <p class="critique-sous-titre">Étrange, long et bien à la fois</p>
   <div class="critique-corps">
@@ -119,7 +135,7 @@
   </div>
   <div class="critique-meta"><span>8 novembre 2026</span></div>
 </article>
-<article class="critique-article" data-type="Livre" data-tags="Littérature blanche" data-disciplines="Littérature" data-categories="Livre">
+<article class="critique-article" data-type="Livre" data-tags="Guerre, Mémoire, Révolution" data-disciplines="Littérature" data-categories="Roman, Littérature blanche">
   <h2 class="critique-titre">Pas pleurer — Lydie Salvayre</h2>
   <p class="critique-sous-titre">Un véritable coup de coeur</p>
   <div class="critique-corps">

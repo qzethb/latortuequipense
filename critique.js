@@ -245,10 +245,22 @@
   const params = new URLSearchParams(window.location.search);
   searchInput.value = params.get("q") || "";
   quickSearchInput.value = searchInput.value;
+  const legacyTags = (params.get("tag") || "").split(",").map((value) => value.trim()).filter(Boolean);
   menus.forEach((menu) => {
     const legacyParam = menu.param === "type" ? params.get("categorie") : null;
     const selected = (params.get(menu.param) || legacyParam || "").split(",").map((value) => value.trim()).filter(Boolean);
     menu.checkboxes.forEach((checkbox) => { checkbox.checked = selected.includes(checkbox.value); });
+  });
+  const tagMenu = menus.find((menu) => menu.key === "tags");
+  const legacyTargets = [
+    menus.find((menu) => menu.key === "categories"),
+    menus.find((menu) => menu.key === "disciplines"),
+  ].filter(Boolean);
+  legacyTags.forEach((value) => {
+    if (tagMenu.checkboxes.some((checkbox) => checkbox.value === value)) return;
+    const destination = legacyTargets.find((menu) => menu.checkboxes.some((checkbox) => checkbox.value === value));
+    const checkbox = destination?.checkboxes.find((option) => option.value === value);
+    if (checkbox) checkbox.checked = true;
   });
   appliedFilters = menus.map(checkedValues);
   filterCards();

@@ -825,10 +825,7 @@ def generer_apercu_critique(critique: dict[str, Any]) -> str:
     image = echapper(critique["image"])
     tags = echapper(", ".join(critique["tags"]))
     disciplines = echapper(", ".join(critique["disciplines"]))
-    categories = list(critique["categories"])
-    if critique["type"] not in categories:
-        categories.insert(0, critique["type"])
-    categories_attr = echapper(", ".join(categories))
+    categories_attr = echapper(", ".join(critique["categories"]))
     texte_html = nettoyer_texte_critique(critique["critique"])
     extrait = tronquer_texte_critique(texte_html)
     soustitre_html = (

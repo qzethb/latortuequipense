@@ -176,19 +176,33 @@
               <section class="adm-bloc">
                 <h2 class="adm-intertitre">Classement</h2>
                 <div class="admin-grille">
-                  <label class="admin-champ" for="critique-tags">
-                    <span>Tags</span>
-                    <input id="critique-tags" type="text" placeholder="Science-fiction, Polar">
-                  </label>
-                  <label class="admin-champ" for="critique-disciplines">
-                    <span>Disciplines</span>
-                    <input id="critique-disciplines" type="text" placeholder="Littérature, Cinéma">
-                  </label>
-                  <label class="admin-champ admin-champ--large" for="critique-categories">
-                    <span>Catégories</span>
-                    <input id="critique-categories" type="text" placeholder="Roman, Livre">
-                    <small>La catégorie du type choisi (Livre, Film ou Série) est ajoutée automatiquement aux filtres.</small>
-                  </label>
+                  <fieldset class="admin-champ admin-classement admin-champ--large">
+                    <legend>Genres et catégories</legend>
+                    <small>Choisissez une ou plusieurs formes ou genres. Les suggestions changent selon le type de critique.</small>
+                    <div id="critique-categories-choix" class="admin-choix"></div>
+                    <label class="admin-champ" for="critique-categories-autres">
+                      <span>Autres catégories</span>
+                      <input id="critique-categories-autres" type="text" placeholder="Séparez les valeurs par des virgules">
+                    </label>
+                  </fieldset>
+                  <fieldset class="admin-champ admin-classement admin-champ--large">
+                    <legend>Disciplines</legend>
+                    <small>À renseigner pour un essai. Vous pouvez sélectionner plusieurs disciplines.</small>
+                    <div id="critique-disciplines-choix" class="admin-choix"></div>
+                    <label class="admin-champ" for="critique-disciplines-autres">
+                      <span>Autres disciplines</span>
+                      <input id="critique-disciplines-autres" type="text" placeholder="Séparez les valeurs par des virgules">
+                    </label>
+                  </fieldset>
+                  <fieldset class="admin-champ admin-classement admin-champ--large">
+                    <legend>Tags thématiques</legend>
+                    <small>Ajoutez des thèmes transversaux ; les genres et disciplines ont leurs champs dédiés.</small>
+                    <div id="critique-tags-choix" class="admin-choix"></div>
+                    <label class="admin-champ" for="critique-tags-autres">
+                      <span>Autres tags</span>
+                      <input id="critique-tags-autres" type="text" placeholder="Séparez les valeurs par des virgules">
+                    </label>
+                  </fieldset>
                 </div>
               </section>
               <div class="admin-critique-apercu-image">

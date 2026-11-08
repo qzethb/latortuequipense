@@ -377,6 +377,62 @@ body.adm { background: var(--fond); }
   font-family: var(--police-ui); font-weight: 600;
   color: var(--violet-profond); font-size: 16px;
 }
+.admin-classement {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.admin-classement > legend {
+  padding: 0;
+  font-family: var(--police-ui);
+  font-weight: 600;
+  color: var(--violet-profond);
+  font-size: 16px;
+}
+.admin-choix {
+  max-height: 260px;
+  overflow: auto;
+  padding: 8px 12px;
+  border: 1px solid var(--lilas);
+}
+.admin-choix-groupe {
+  min-width: 0;
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+}
+.admin-choix-groupe + .admin-choix-groupe { border-top: 1px solid var(--lilas); }
+.admin-choix-groupe > legend {
+  padding: 0 0 5px;
+  color: var(--texte-doux);
+  font-family: var(--police-ui);
+  font-size: 14px;
+  font-weight: 600;
+}
+.admin-choix-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 5px 12px;
+}
+.admin-choix-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  color: var(--texte);
+  font-size: 14px;
+}
+.admin-choix-option input {
+  width: auto;
+  min-height: 0;
+  margin: 4px 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  accent-color: var(--violet);
+}
+.admin-classement > .admin-champ { margin-top: 4px; }
+.admin-classement[hidden] { display: none; }
 .admin-champ input,
 .admin-champ textarea,
 .admin-champ select {

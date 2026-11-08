@@ -24,9 +24,13 @@
   const subtitleInput = $("critique-soustitre");
   const dateInput = $("critique-date");
   const slugInput = $("critique-slug");
-  const tagsInput = $("critique-tags");
-  const disciplinesInput = $("critique-disciplines");
-  const categoriesInput = $("critique-categories");
+  const tagsChoices = $("critique-tags-choix");
+  const tagsOtherInput = $("critique-tags-autres");
+  const disciplinesChoices = $("critique-disciplines-choix");
+  const disciplinesOtherInput = $("critique-disciplines-autres");
+  const disciplinesFieldset = disciplinesChoices.closest("fieldset");
+  const categoriesChoices = $("critique-categories-choix");
+  const categoriesOtherInput = $("critique-categories-autres");
   const reviewInput = $("critique-texte");
   const reviewPreview = $("apercu-texte-critique");
   const previewTitle = $("apercu-titre-critique");
@@ -124,12 +128,96 @@
     });
   });
   const todayString = () => new Date().toISOString().slice(0, 10);
+  const CATEGORY_GROUPS = {
+    Livre: [
+      { label: "Formes", values: ["Roman", "Recueil de nouvelles", "Nouvelle", "Essai", "Poésie", "Théâtre", "Bande dessinée", "Biographie", "Autobiographie", "Témoignage"] },
+      { label: "Science-fiction", values: ["Science-fiction", "Hard SF", "Space opera", "Planet opera", "Cyberpunk", "Uchronie", "Dystopie", "Post-apocalyptique"] },
+      { label: "Fantasy", values: ["Fantasy", "Fantasy épique", "Fantasy urbaine", "Dark fantasy", "Fantasy mythologique", "Romantasy"] },
+      { label: "Autres genres", values: ["Littérature blanche", "Polar", "Thriller", "Roman historique", "Horreur", "Aventure", "Romance"] },
+    ],
+    Film: [
+      { label: "Genres", values: ["Drame", "Comédie", "Action", "Aventure", "Animation", "Documentaire", "Horreur", "Policier", "Thriller", "Romance"] },
+      { label: "Science-fiction", values: ["Science-fiction", "Hard SF", "Space opera", "Planet opera", "Cyberpunk", "Uchronie", "Dystopie", "Post-apocalyptique"] },
+      { label: "Fantasy et fantastique", values: ["Fantasy", "Fantasy épique", "Fantasy urbaine", "Dark fantasy", "Fantasy mythologique", "Romantasy", "Fantastique"] },
+    ],
+    "Série": [
+      { label: "Genres", values: ["Drame", "Comédie", "Action", "Aventure", "Animation", "Documentaire", "Horreur", "Policier", "Thriller", "Romance"] },
+      { label: "Science-fiction", values: ["Science-fiction", "Hard SF", "Space opera", "Planet opera", "Cyberpunk", "Uchronie", "Dystopie", "Post-apocalyptique"] },
+      { label: "Fantasy et fantastique", values: ["Fantasy", "Fantasy épique", "Fantasy urbaine", "Dark fantasy", "Fantasy mythologique", "Romantasy", "Fantastique"] },
+    ],
+  };
+  const DISCIPLINE_GROUPS = [
+    { label: "Sciences humaines et sociales", values: ["Anthropologie", "Géographie", "Histoire", "Psychologie", "Science politique", "Sociologie"] },
+    { label: "Sciences et techniques", values: ["Biologie", "Écologie", "Mathématiques", "Médecine", "Physique", "Sciences"] },
+    { label: "Arts et lettres", values: ["Cinéma", "Littérature", "Philosophie", "Arts", "Musique"] },
+    { label: "Autres disciplines", values: ["Droit", "Économie", "Éducation", "Médias", "Religion"] },
+  ];
+  const TAG_GROUPS = [
+    { label: "Thèmes", values: ["Amour", "Deuil", "Écriture", "Famille", "Guerre", "Identité", "Mémoire", "Mort", "Politique", "Révolution"] },
+  ];
   const listFromInput = (input) => Array.from(new Set(
     input.value.split(",").map((value) => value.trim()).filter(Boolean),
   ));
   const inputFromList = (value) => Array.isArray(value)
     ? value.filter((item) => typeof item === "string").join(", ")
     : "";
+  const valuesFromChoices = (container, otherInput) => Array.from(new Set([
+    ...Array.from(container.querySelectorAll('input[type="checkbox"]:checked'), (input) => input.value),
+    ...listFromInput(otherInput),
+  ]));
+  const setChoiceValues = (container, otherInput, value) => {
+    const values = Array.isArray(value) ? value.filter((item) => typeof item === "string") : [];
+    const known = new Set(Array.from(container.querySelectorAll('input[type="checkbox"]'), (input) => input.value));
+    container.querySelectorAll('input[type="checkbox"]').forEach((input) => {
+      input.checked = values.includes(input.value);
+    });
+    otherInput.value = Array.from(new Set(values.filter((item) => !known.has(item)))).join(", ");
+  };
+  const renderChoices = (container, groups, name) => {
+    container.replaceChildren();
+    groups.forEach((group) => {
+      const section = document.createElement("fieldset");
+      section.className = "admin-choix-groupe";
+      const legend = document.createElement("legend");
+      legend.textContent = group.label;
+      const options = document.createElement("div");
+      options.className = "admin-choix-options";
+      group.values.forEach((value) => {
+        const label = document.createElement("label");
+        label.className = "admin-choix-option";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = name;
+        checkbox.value = value;
+        const text = document.createElement("span");
+        text.textContent = value;
+        label.append(checkbox, text);
+        options.append(label);
+      });
+      section.append(legend, options);
+      container.append(section);
+    });
+  };
+  const refreshCategoryChoices = () => {
+    const current = valuesFromChoices(categoriesChoices, categoriesOtherInput);
+    renderChoices(categoriesChoices, CATEGORY_GROUPS[typeInput.value] || CATEGORY_GROUPS.Livre, "critique-categorie");
+    setChoiceValues(categoriesChoices, categoriesOtherInput, current);
+  };
+  const updateDisciplineVisibility = () => {
+    disciplinesFieldset.hidden = typeInput.value !== "Livre" || !valuesFromChoices(categoriesChoices, categoriesOtherInput).includes("Essai");
+  };
+
+  renderChoices(disciplinesChoices, DISCIPLINE_GROUPS, "critique-discipline");
+  renderChoices(tagsChoices, TAG_GROUPS, "critique-tag");
+  refreshCategoryChoices();
+  updateDisciplineVisibility();
+  typeInput.addEventListener("change", () => {
+    refreshCategoryChoices();
+    updateDisciplineVisibility();
+  });
+  categoriesChoices.addEventListener("change", updateDisciplineVisibility);
+  categoriesOtherInput.addEventListener("input", updateDisciplineVisibility);
+  categoriesOtherInput.addEventListener("change", updateDisciplineVisibility);
   const ALLOWED_RICH_TAGS = new Set([
     "A", "B", "BLOCKQUOTE", "BR", "DIV", "EM", "H2", "I", "LI", "OL", "P", "STRONG", "SUB", "SUP", "UL",
   ]);
@@ -488,6 +576,8 @@
     slugEdited = false;
     dirty = false;
     form.reset();
+    refreshCategoryChoices();
+    updateDisciplineVisibility();
     reviewInput.replaceChildren();
     showStep("redaction");
     slugInput.disabled = false;
@@ -602,14 +692,16 @@
       };
       titleInput.value = String(data.titre || "");
       typeInput.value = String(data.type || "Livre");
+      refreshCategoryChoices();
       authorInput.value = String(data.auteur || "");
       subtitleInput.value = String(data.soustitre || "");
       dateInput.value = String(data.date || todayString());
       slugInput.value = String(data.slug || filename.replace(/\.json$/, ""));
       slugInput.disabled = true;
-      tagsInput.value = inputFromList(data.tags);
-      disciplinesInput.value = inputFromList(data.disciplines);
-      categoriesInput.value = inputFromList(data.categories);
+      setChoiceValues(tagsChoices, tagsOtherInput, data.tags);
+      setChoiceValues(disciplinesChoices, disciplinesOtherInput, data.disciplines);
+      setChoiceValues(categoriesChoices, categoriesOtherInput, data.categories);
+      updateDisciplineVisibility();
       const storedReview = String(data.critique || "");
       reviewInput.innerHTML = /<\s*\/?\s*(?:a|blockquote|br|div|em|h2|h3|i|li|ol|p|strong|sub|sup|ul)\b/i.test(storedReview)
         ? sanitizeRichText(storedReview)
@@ -705,9 +797,9 @@
         type: typeInput.value,
         auteur: authorInput.value.trim(),
         soustitre: subtitleInput.value.trim(),
-        tags: listFromInput(tagsInput),
-        disciplines: listFromInput(disciplinesInput),
-        categories: listFromInput(categoriesInput),
+        tags: valuesFromChoices(tagsChoices, tagsOtherInput),
+        disciplines: disciplinesFieldset.hidden ? [] : valuesFromChoices(disciplinesChoices, disciplinesOtherInput),
+        categories: valuesFromChoices(categoriesChoices, categoriesOtherInput),
         critique: sanitizeRichText(reviewInput.innerHTML),
         image,
         date: dateInput.value,
