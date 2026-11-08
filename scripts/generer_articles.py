@@ -55,7 +55,7 @@ CRITIQUE_TYPES = {"Livre", "Film", "Série"}
 CRITIQUE_IMAGE_PATTERN = re.compile(r"images-critiques/[a-z0-9][a-z0-9._-]*\.(?:png|jpg|gif|webp)")
 CRITIQUE_LIST_FIELDS = ("tags", "disciplines", "categories")
 CRITIQUE_TEXT_FIELDS = ("auteur", "soustitre")
-LONGUEUR_EXTRAIT_CRITIQUE = 280
+LONGUEUR_EXTRAIT_CRITIQUE = 700
 OPTIONAL_LIST_FIELDS = ("tags", "disciplines", "categories", "motscles")
 OPTIONAL_TEXT_FIELDS = ("meta_title", "meta_description", "notes")
 MOIS_FR = (
@@ -560,7 +560,6 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
     paragraphes = "\n".join(f"        {ligne}" for ligne in texte_html.splitlines()) if "\n" in texte_html else f"        {texte_html}"
     titre_affiche = f"{titre} — {auteur}" if auteur else titre
     titre_affiche_brut = f"{titre_brut} — {auteur_brut}" if auteur_brut else titre_brut
-    sous_titre_html = f'<p class="critique-sous-titre">{soustitre}</p>' if soustitre else ""
     structured_data = json.dumps(
         {
             "@context": "https://schema.org",
@@ -587,6 +586,7 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
 <meta name="description" content="{resume}">
 <link rel="stylesheet" href="../charte.css">
 <link rel="stylesheet" href="../critique.css">
+<link rel="stylesheet" href="../article.css">
 <script src="../menu.js" defer></script>
 <link rel="canonical" href="{DOMAINE_SITE}/critiques/{slug}.html">
 <meta property="og:type" content="article">
@@ -602,13 +602,16 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
 {ENTETE_NAVIGATION}
     <main class="critique-section critique-detail">
       <article class="critique-article" data-type="{type_media}">
-        <h1 class="critique-titre">{titre_affiche}</h1>
-        {sous_titre_html}
-        <div class="critique-corps">
+        <header class="billet-entete">
+          <h1 class="critique-titre">{titre_affiche}</h1>
+          <div class="ornement"></div>
+          {f'<p class="sous-titre">{soustitre}</p>' if soustitre else ""}
+          <p class="billet-meta"><time datetime="{date_iso}">{date_affichee}</time></p>
+        </header>
+        <div class="critique-corps billet-texte">
           <img src="{image}" alt="{echapper('Couverture' if critique['type'] == 'Livre' else 'Affiche')} de {titre}" class="critique-couverture">
 {paragraphes}
         </div>
-        <div class="critique-meta"><span>{date_affichee}</span></div>
       </article>
       <a class="critique-lire" href="../critique.html">← Retour à toutes les critiques</a>
     </main>
