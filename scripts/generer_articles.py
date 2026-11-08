@@ -55,7 +55,7 @@ CRITIQUE_TYPES = {"Livre", "Film", "Série"}
 CRITIQUE_IMAGE_PATTERN = re.compile(r"images-critiques/[a-z0-9][a-z0-9._-]*\.(?:png|jpg|gif|webp)")
 CRITIQUE_LIST_FIELDS = ("tags", "disciplines", "categories")
 CRITIQUE_TEXT_FIELDS = ("auteur", "soustitre")
-LONGUEUR_EXTRAIT_CRITIQUE = 700
+LONGUEUR_EXTRAIT_CRITIQUE = 1400
 OPTIONAL_LIST_FIELDS = ("tags", "disciplines", "categories", "motscles")
 OPTIONAL_TEXT_FIELDS = ("meta_title", "meta_description", "notes")
 MOIS_FR = (
@@ -284,6 +284,54 @@ def tronquer_texte_critique(source: str, limite: int = LONGUEUR_EXTRAIT_CRITIQUE
     while tronqueur.pile:
         tronqueur.sortie.append(f"</{tronqueur.pile.pop()}>")
     return "".join(tronqueur.sortie).strip()
+
+
+class InserteurAncreSuiteCritique(HTMLParser):
+    def __init__(self, limite: int) -> None:
+        super().__init__(convert_charrefs=True)
+        self.limite = limite
+        self.longueur = 0
+        self.sortie: list[str] = []
+        self.inseree = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, Optional[str]]]) -> None:
+        self.sortie.append(self.get_starttag_text())
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, Optional[str]]]) -> None:
+        self.sortie.append(self.get_starttag_text())
+
+    def handle_endtag(self, tag: str) -> None:
+        self.sortie.append(f"</{tag}>")
+
+    def handle_data(self, data: str) -> None:
+        if self.inseree:
+            self.sortie.append(echapper(data))
+            return
+
+        restant = self.limite - self.longueur
+        if len(data) <= restant:
+            self.sortie.append(echapper(data))
+            self.longueur += len(data)
+            return
+
+        portion = data[:restant]
+        coupure = portion.rfind(" ")
+        if restant > 0 and coupure >= restant * 0.7:
+            portion = portion[:coupure]
+        self.sortie.append(echapper(portion.rstrip()))
+        self.sortie.append('<span id="suite-critique"></span>')
+        self.sortie.append(echapper(data[len(portion):]))
+        self.inseree = True
+
+
+def inserer_ancre_suite_critique(source: str, limite: int = LONGUEUR_EXTRAIT_CRITIQUE) -> str:
+    """Place une ancre au point où l’extrait généré s’interrompt."""
+    inserteur = InserteurAncreSuiteCritique(limite)
+    inserteur.feed(source)
+    inserteur.close()
+    if not inserteur.inseree:
+        inserteur.sortie.append('<span id="suite-critique"></span>')
+    return "".join(inserteur.sortie)
 
 
 def lire(chemin: Path) -> str:
@@ -548,6 +596,7 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
     auteur_brut = critique["auteur"]
     titre = echapper(critique["titre"])
     texte_html = nettoyer_texte_critique(critique["critique"])
+    texte_html = inserer_ancre_suite_critique(texte_html)
     texte_brut = texte_critique_sans_html(texte_html)
     resume = echapper(texte_brut[:180])
     type_media = echapper(critique["type"])
@@ -792,7 +841,7 @@ def generer_apercu_critique(critique: dict[str, Any]) -> str:
 {soustitre_html}  <div class="critique-corps">
     <img src="{image}" alt="{alt} de {titre}" class="critique-couverture" loading="lazy">
     {extrait}
-    <a href="critiques/{slug}.html" class="critique-lire">Continuer à lire</a>
+    <a href="critiques/{slug}.html#suite-critique" class="critique-lire">Continuer à lire</a>
   </div>
   <div class="critique-meta"><span>{echapper(critique["date_affichee"])}</span></div>
 </article>"""

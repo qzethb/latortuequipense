@@ -354,7 +354,7 @@
     infoPreviewImage.removeAttribute("src");
     infoPreviewImage.alt = `${typeInput.value === "Livre" ? "Couverture" : "Affiche"} de ${title || "l’œuvre"}`;
     if (!infoPreviewImage.hidden) infoPreviewImage.src = imagePreview.getAttribute("src");
-    const excerpt = truncateRichText(reviewPreview.innerHTML, 700);
+    const excerpt = truncateRichText(reviewPreview.innerHTML, 1400);
     infoPreviewText.innerHTML = excerpt || "Le début de la critique s’affichera ici.";
     infoPreviewText.classList.toggle("is-vide", !excerpt);
     infoPreviewLink.href = `critiques/${encodeURIComponent(slug)}.html`;

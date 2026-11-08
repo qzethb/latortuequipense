@@ -99,6 +99,25 @@
   transition: border-color var(--transition), color var(--transition);
 }
 
+.accueil-critiques .critique-article,
+#section-critiques .critique-article {
+  position: relative;
+}
+
+.accueil-critiques .critique-lire::after,
+#section-critiques .critique-lire::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  content: "";
+}
+
+.accueil-critiques .critique-corps a:not(.critique-lire),
+#section-critiques .critique-corps a:not(.critique-lire) {
+  position: relative;
+  z-index: 2;
+}
+
 .critique-lire:hover {
   color: var(--violet-profond);
   border-color: var(--violet-profond);
@@ -126,6 +145,11 @@
 
 .critique-detail .billet-entete {
   display: block;
+}
+
+.critique-detail .billet-entete .sous-titre {
+  font-style: italic;
+  font-size: 24px;
 }
 
 .critique-detail .critique-article {
