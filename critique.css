@@ -99,6 +99,10 @@
   margin-top: 40px;
 }
 
+.critique-detail .billet-entete {
+  display: block;
+}
+
 .critique-detail .critique-article {
   padding-bottom: 32px;
 }

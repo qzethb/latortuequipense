@@ -555,7 +555,6 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
     auteur = echapper(critique["auteur"])
     soustitre = echapper(critique["soustitre"])
     date_iso = critique["date_obj"].isoformat()
-    date_affichee = echapper(critique["date_affichee"])
     image = "../" + echapper(critique["image"])
     paragraphes = "\n".join(f"        {ligne}" for ligne in texte_html.splitlines()) if "\n" in texte_html else f"        {texte_html}"
     titre_affiche = f"{titre} — {auteur}" if auteur else titre
@@ -606,7 +605,6 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
           <h1 class="critique-titre">{titre_affiche}</h1>
           <div class="ornement"></div>
           {f'<p class="sous-titre">{soustitre}</p>' if soustitre else ""}
-          <p class="billet-meta"><time datetime="{date_iso}">{date_affichee}</time></p>
         </header>
         <div class="critique-corps billet-texte">
           <img src="{image}" alt="{echapper('Couverture' if critique['type'] == 'Livre' else 'Affiche')} de {titre}" class="critique-couverture">
