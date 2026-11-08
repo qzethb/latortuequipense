@@ -91,6 +91,18 @@
             </div>
           </div>
 
+          <div class="menu-tags" data-cle="categories" data-param="categorie">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="categories-panneau">
+              <span>Catégorie</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="categories-panneau" role="group" aria-label="Filtrer par catégorie" hidden>
+              <label class="menu-tags-option"><input type="checkbox" value="Critique de cinéma"><span>Critique de cinéma</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Critique de film"><span>Critique de film</span></label>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
           <button type="button" class="actualiser-filtres" id="actualiser-filtres" aria-label="Actualiser les résultats avec les filtres sélectionnés" title="Actualiser les résultats avec les filtres sélectionnés" disabled>
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M20 11a8.1 8.1 0 0 0-14.9-4M4 4v4h4M4 13a8.1 8.1 0 0 0 14.9 4M20 20v-4h-4" />
@@ -264,6 +276,30 @@
   var compte   = document.getElementById('resultats');
   var vide     = document.getElementById('vide');
   var articles = document.querySelectorAll('.liste .article');
+
+  /* Les catégories saisies dans l'administration deviennent des options de filtre. */
+  var categoriesMenu = document.querySelector('[data-cle="categories"]');
+  var categoriesPanel = categoriesMenu.querySelector('.menu-tags-panneau');
+  var categoriesConnues = new Set();
+  categoriesPanel.querySelectorAll('input[type="checkbox"]').forEach(function (caseCategorie) {
+    categoriesConnues.add(caseCategorie.value);
+  });
+  articles.forEach(function (a) {
+    (a.dataset.categories || '').split(',').forEach(function (categorie) {
+      categorie = categorie.trim();
+      if (!categorie || categoriesConnues.has(categorie)) return;
+      categoriesConnues.add(categorie);
+      var option = document.createElement('label');
+      option.className = 'menu-tags-option';
+      var checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      checkbox.value = categorie;
+      var libelle = document.createElement('span');
+      libelle.textContent = categorie;
+      option.append(checkbox, libelle);
+      categoriesPanel.insertBefore(option, categoriesPanel.querySelector('.menu-tags-reset'));
+    });
+  });
 
   /* Minuscules et sans accents : « litterature » trouve « Littérature » */
   function normaliser(s) {

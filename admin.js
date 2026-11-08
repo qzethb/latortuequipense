@@ -1574,6 +1574,7 @@
       temps_lecture: $("temps-lecture").value.trim(),
       tags: parseList($("tags").value),
       disciplines: parseList($("disciplines").value),
+      categories: parseList($("categories").value),
       motscles: parseList($("motscles").value),
       meta_title: $("meta-title").value.trim(),
       meta_description: $("meta-description").value.trim(),
@@ -1828,6 +1829,7 @@
     $("meta-description").value = article.meta_description || "";
     $("tags").value = (article.tags || []).join(", ");
     $("disciplines").value = (article.disciplines || []).join(", ");
+    $("categories").value = (article.categories || []).join(", ");
     $("motscles").value = (article.motscles || []).join(", ");
     editor.innerHTML = showImages(article.corps || "");
     notesEditor.innerHTML = article.notes || "";

@@ -41,7 +41,7 @@ MARQUEUR_GENERE = "<!-- Page générée par scripts/generer_articles.py : ne pas
 # Dans « Articles à venir » : True affiche « Prévu le 3 novembre 2026 », False affiche « À venir ».
 AFFICHER_DATE_AVENIR = False
 REQUIRED_FIELDS = ("slug", "titre", "soustitre", "date", "description", "temps_lecture", "corps")
-OPTIONAL_LIST_FIELDS = ("tags", "disciplines", "motscles")
+OPTIONAL_LIST_FIELDS = ("tags", "disciplines", "categories", "motscles")
 OPTIONAL_TEXT_FIELDS = ("meta_title", "meta_description", "notes")
 MOIS_FR = (
     "janvier", "février", "mars", "avril", "mai", "juin",
@@ -301,6 +301,7 @@ def generer_apercu(article: dict[str, Any], liste_complete: bool) -> str:
     description_id = f"description-{slug}-genere"
     tags = ", ".join(article["tags"])
     disciplines = ", ".join(article["disciplines"])
+    categories = ", ".join(article["categories"])
     motscles = ", ".join(article["motscles"])
     tags_html = "".join(
         f'<span class="tag">{echapper(tag)}</span>' for tag in article["tags"]
@@ -310,6 +311,7 @@ def generer_apercu(article: dict[str, Any], liste_complete: bool) -> str:
         metadonnees = (
             f' data-tags="{echapper(tags)}"'
             f' data-disciplines="{echapper(disciplines)}"'
+            f' data-categories="{echapper(categories)}"'
             f' data-motscles="{echapper(motscles)}"'
         )
 
