@@ -33,6 +33,10 @@
   text-wrap: balance;
 }
 
+.critique-article:not(.admin-critique-carte) > .critique-titre {
+  color: var(--violet-profond);
+}
+
 .critique-sous-titre {
   margin: 0 0 32px;
   color: var(--violet-profond);

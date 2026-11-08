@@ -27,6 +27,20 @@
       </nav>
     </header>
 
+    <div class="bandeau-recherche" id="bandeau-recherche" hidden>
+      <form class="bandeau-recherche-formulaire" role="search" aria-label="Recherche rapide dans les critiques">
+        <label class="sr-only" for="recherche-rapide">Rechercher une critique</label>
+        <input type="search" id="recherche-rapide" placeholder="Rechercher une critique" autocomplete="off">
+        <button type="button" id="effacer-rapide" aria-label="Effacer la recherche" hidden>×</button>
+        <button type="submit" class="bandeau-recherche-submit" aria-label="Rechercher">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.2 4.2"></path>
+          </svg>
+        </button>
+      </form>
+    </div>
+
     <main>
       <section class="billet-entete">
         <h1>Critiques</h1>

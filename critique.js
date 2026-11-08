@@ -15,6 +15,11 @@
   const searchForm = document.getElementById("formulaire");
   const searchInput = document.getElementById("recherche");
   const clearButton = document.getElementById("effacer");
+  const quickSearchForm = document.querySelector(".bandeau-recherche-formulaire");
+  const quickSearchInput = document.getElementById("recherche-rapide");
+  const quickClearButton = document.getElementById("effacer-rapide");
+  const searchBanner = document.getElementById("bandeau-recherche");
+  const tools = document.querySelector(".outils");
   const applyButton = document.getElementById("actualiser-filtres");
   const resultCount = document.getElementById("critique-resultats");
   const emptyState = document.getElementById("vide");
@@ -24,6 +29,7 @@
   const reportLink = document.getElementById("critique-signalement");
   const resetAllButton = document.getElementById("tout");
   let appliedFilters = [];
+  let positionBeforeQuickSearch = null;
 
   const normalize = (value) => value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
   const checkedValues = (menu) => menu.checkboxes.filter((checkbox) => checkbox.checked).map((checkbox) => checkbox.value);
@@ -117,7 +123,17 @@
       resetAllButton.hidden = false;
     }
     clearButton.hidden = !searchInput.value;
+    quickClearButton.hidden = !quickSearchInput.value;
     updateMenuState();
+  };
+
+  const restoreQuickSearchPosition = () => {
+    if (positionBeforeQuickSearch === null) return;
+    const position = positionBeforeQuickSearch;
+    positionBeforeQuickSearch = null;
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: position, behavior: "auto" });
+    });
   };
 
   const openMenu = (menu, open) => {
@@ -161,13 +177,16 @@
   });
 
   searchInput.addEventListener("input", () => {
+    quickSearchInput.value = searchInput.value;
     filterCards();
     updateUrl();
   });
   clearButton.addEventListener("click", () => {
     searchInput.value = "";
+    quickSearchInput.value = "";
     filterCards();
     updateUrl();
+    restoreQuickSearchPosition();
     searchInput.focus();
   });
   searchForm.addEventListener("submit", (event) => {
@@ -179,16 +198,53 @@
     filterCards();
     updateUrl();
   });
+  quickSearchForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const value = quickSearchInput.value;
+    const searchChanged = value !== searchInput.value;
+    const clearingSearch = !value && Boolean(searchInput.value);
+
+    if (searchChanged && value && positionBeforeQuickSearch === null) {
+      positionBeforeQuickSearch = window.scrollY;
+    }
+
+    searchInput.value = value;
+    filterCards();
+    updateUrl();
+
+    if (clearingSearch) {
+      restoreQuickSearchPosition();
+    } else if (searchChanged && value) {
+      const target = document.querySelector(
+        emptyState.hidden ? ".critique-article:not([hidden])" : "#vide",
+      );
+      if (target) {
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+      }
+    }
+  });
+  quickSearchInput.addEventListener("input", () => {
+    quickClearButton.hidden = !quickSearchInput.value;
+  });
+  quickClearButton.addEventListener("click", () => {
+    quickSearchInput.value = "";
+    quickClearButton.hidden = true;
+    quickSearchInput.focus();
+  });
   resetAllButton.addEventListener("click", () => {
     searchInput.value = "";
+    quickSearchInput.value = "";
     menus.forEach((menu) => menu.checkboxes.forEach((checkbox) => { checkbox.checked = false; }));
     appliedFilters = menus.map(() => []);
     filterCards();
     updateUrl();
+    restoreQuickSearchPosition();
   });
 
   const params = new URLSearchParams(window.location.search);
   searchInput.value = params.get("q") || "";
+  quickSearchInput.value = searchInput.value;
   menus.forEach((menu) => {
     const legacyParam = menu.param === "type" ? params.get("categorie") : null;
     const selected = (params.get(menu.param) || legacyParam || "").split(",").map((value) => value.trim()).filter(Boolean);
@@ -196,4 +252,18 @@
   });
   appliedFilters = menus.map(checkedValues);
   filterCards();
+
+  window.addEventListener("scroll", () => {
+    searchBanner.hidden = tools.getBoundingClientRect().bottom >= 0
+      && document.activeElement !== quickSearchInput;
+  }, { passive: true });
+
+  quickSearchInput.addEventListener("focus", () => {
+    searchBanner.hidden = false;
+  });
+  quickSearchInput.addEventListener("blur", () => {
+    window.requestAnimationFrame(() => {
+      searchBanner.hidden = tools.getBoundingClientRect().bottom >= 0;
+    });
+  });
 })();
