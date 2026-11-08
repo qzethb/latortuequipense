@@ -66,6 +66,30 @@
   margin: 0 0 1.2em;
 }
 
+.critique-article:not(.admin-critique-carte) .critique-corps h2 {
+  margin: 1.4em 0 .7em;
+  font-family: var(--police-ui);
+  font-size: 1.45em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--violet);
+  text-wrap: balance;
+  break-after: avoid;
+  text-align: left;
+}
+
+.critique-article:not(.admin-critique-carte) .critique-corps h3 {
+  margin: 1.2em 0 .6em;
+  font-family: var(--police-ui);
+  font-size: 1.15em;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--violet);
+  text-wrap: balance;
+  break-after: avoid;
+  text-align: left;
+}
+
 .critique-lire {
   display: inline-block;
   color: var(--violet);
@@ -87,6 +111,7 @@
   gap: 6px;
   margin-top: 32px;
   font-family: var(--police-ui);
+  font-weight: 400;
   font-size: var(--t-petit);
   color: var(--texte-doux);
 }
@@ -123,6 +148,14 @@
 
 /* 8. Responsive */
 @media (max-width: 640px) {
+  .critique-article:not(.admin-critique-carte) .critique-corps h2 {
+    margin-top: 1.2em;
+  }
+
+  .critique-article:not(.admin-critique-carte) .critique-corps h3 {
+    margin-top: 1em;
+  }
+
   .critique-couverture {
     float: none;
     width: min(100%, 280px);
