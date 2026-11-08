@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Critiques — La Tortue</title>
+<meta name="description" content="Critiques de livres, films et séries par La Tortue. Filtrez par type ou par tag.">
+<link rel="stylesheet" href="charte.css">
+<link rel="stylesheet" href="critique.css">
+<script src="menu.js" defer></script>
+<script src="critique.js" defer></script>
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+</head>
+<body>
+  <div class="page">
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="critique.html" aria-current="page">Critiques</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="billet-entete">
+        <h1>Critiques</h1>
+        <div class="ornement"></div>
+      </section>
+
+      <div class="outils" aria-label="Filtrer les critiques">
+        <form class="recherche" role="search" id="formulaire">
+          <label class="sr-only" for="recherche">Rechercher une critique</label>
+          <input type="search" id="recherche" name="q" placeholder="Rechercher un titre, un auteur…" autocomplete="off">
+          <button type="button" id="effacer" hidden>Effacer</button>
+        </form>
+
+        <div class="filtres-menus">
+          <div class="menu-tags" data-cle="tags" data-param="tag">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="tags-panneau">
+              <span>Tags</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="tags-panneau" role="group" aria-label="Filtrer par tag" hidden>
+              <label class="menu-tags-option"><input type="checkbox" value="Science-fiction"><span>Science-fiction</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Fantasy"><span>Fantasy</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Polar"><span>Polar</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Essai"><span>Essai</span></label>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
+          <div class="menu-tags" data-cle="type" data-param="type">
+            <button type="button" class="menu-tags-bouton" aria-expanded="false" aria-controls="type-panneau">
+              <span>Type</span>
+              <span class="menu-tags-nombre" hidden></span>
+            </button>
+            <div class="menu-tags-panneau" id="type-panneau" role="group" aria-label="Filtrer par type" hidden>
+              <label class="menu-tags-option"><input type="checkbox" value="Livre"><span>Livre</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Film"><span>Film</span></label>
+              <label class="menu-tags-option"><input type="checkbox" value="Série"><span>Série</span></label>
+              <button type="button" class="menu-tags-reset" hidden>Tout décocher</button>
+            </div>
+          </div>
+
+          <button type="button" class="actualiser-filtres" id="actualiser-filtres" aria-label="Actualiser les résultats" title="Actualiser les résultats avec les filtres sélectionnés" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20 11a8.1 8.1 0 0 0-14.9-4M4 4v4h4M4 13a8.1 8.1 0 0 0 14.9 4M20 20v-4h-4" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+      <p id="critique-resultats" class="resultats" aria-live="polite"></p>
+
+      <!-- Liste des critiques façon "Le Culte d'Apophis" -->
+      <section class="critique-section" id="section-critiques" aria-label="Liste des critiques">
+        <div id="liste-critiques" class="critique-liste">
+          <!-- ARTICLES_GENERES_DEBUT -->
+
+        <!-- ARTICLES_GENERES_FIN -->
+        </div>
+      </section>
+
+      <div class="vide" id="vide" hidden>
+        <p><span id="critique-message-vide"></span><a id="critique-signalement" href="report.html">formulaire de signalement</a><span id="critique-message-fin"></span></p>
+        <button type="button" class="bouton" id="tout">Tout afficher</button>
+      </div>
+    </main>
+
+    <footer class="pied">
+      <div class="pied-colonnes">
+        <nav class="pied-col" aria-label="Plan du site">
+          <h2>Plan du site</h2>
+          <ul>
+            <li><a href="index.html">Accueil</a></li>
+            <li><a href="articles.html">Articles</a></li>
+            <li><a href="critique.html">Critiques</a></li>
+            <li><a href="a-propos.html">À propos et contact</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Informations">
+          <h2>Informations</h2>
+          <ul>
+            <li><a href="confidentialite.html">Politique de confidentialité</a></li>
+            <li><a href="accessibilite.html">Déclaration d’accessibilité</a></li>
+            <li><a href="mentions-legales.html">Mentions légales</a></li>
+            <li><a href="charte-utilisation-IA.html">Charte d’utilisation de l’IA</a></li>
+            <li><a href="report.html">Signaler un problème</a></li>
+          </ul>
+        </nav>
+        <nav class="pied-col" aria-label="Newsletter">
+          <h2>Newsletter</h2>
+          <ul><li><a href="newsletter.html">S’abonner</a></li></ul>
+        </nav>
+      </div>
+      <p class="pied-copy">© 2026 La Tortue</p>
+    </footer>
+  </div>
+</body>
+</html>

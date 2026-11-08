@@ -6,6 +6,7 @@
 <title>La Tortue</title>
 <meta name="description" content="Des réflexions sur la société, la philosophie, la sociologie, la littérature et l’actualité, nourries par l’analyse et les données.">
 <link rel="stylesheet" href="charte.css">
+<link rel="stylesheet" href="critique.css">
 <script src="menu.js" defer></script>
 <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
@@ -25,9 +26,8 @@
       </button>
       <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
         <a href="articles.html">Articles</a>
+        <a href="critique.html">Critiques</a>
         <a href="a-propos.html">À propos</a>
-        <a href="contacts.html">Contacts</a>
-        <a href="newsletter.html">Newsletter</a>
       </nav>
     </header>
 
@@ -44,7 +44,31 @@
         <!-- EDITO_FIN -->
       </div>
 
-    <main id="articles" style="margin-top: 5rem;">
+    <main>
+      <section id="articles-a-venir" style="margin-top: 5rem;">
+        <p class="etiquette">Articles à venir</p>
+        <div class="liste">
+          <!-- AVENIR_DEBUT -->
+        <!-- AVENIR_FIN -->
+          <a class="article" href="error.html">
+            <span class="date">À venir</span>
+            <h2>Une analyse économique du jeu Wikimasters</h2>
+            <span class="fleche">→</span>
+          </a>
+          <a class="article" href="error.html">
+            <span class="date">À venir</span>
+            <h2>Les sites Internet de classements, objectifs ?</h2>
+            <span class="fleche">→</span>
+          </a>
+          <a class="article" href="error.html">
+            <span class="date">À venir</span>
+            <h2>La non-violence, un privilège ?</h2>
+            <span class="fleche">→</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="articles" style="margin-top: 5rem;">
       <p class="etiquette">Derniers articles</p>
       <div class="liste">
         <article class="article-row">
@@ -139,34 +163,21 @@
         </article>
       </div>
       <p class="suite"><a href="articles.html">Tous les articles</a></p>
+      </section>
+
+      <section id="critiques" style="margin-top: 5rem;">
+        <p class="etiquette">Dernières critiques</p>
+        <div class="critique-section accueil-critiques">
+          <div class="critique-liste">
+            <!-- CRITIQUES_ACCUEIL_DEBUT -->
+
+        <!-- CRITIQUES_ACCUEIL_FIN -->
+          </div>
+        </div>
+        <p class="suite"><a href="critique.html">Toutes les critiques</a></p>
+      </section>
     </main>
 
-    <main id="articles-a-venir" style="margin-top: 5rem;">
-      <p class="etiquette">Articles à venir</p>
-      <div class="liste">
-        <!-- AVENIR_DEBUT -->
-        <!-- AVENIR_FIN -->
-        <a class="article" href="error.html">
-          <span class="date">À venir</span>
-          <h2>Une analyse économique du jeu Wikimasters</h2>
-          <span class="fleche">→</span>
-        </a>
-        <a class="article" href="error.html">
-          <span class="date">À venir</span>
-          <h2>Les sites Internet de classements, objectifs ?</h2>
-          <span class="fleche">→</span>
-        </a>
-        <a class="article" href="error.html">
-          <span class="date">À venir</span>
-          <h2>La non-violence, un privilège ?</h2>
-          <span class="fleche">→</span>
-        </a>
-      </div>
-    </main>
-
-
-
-  
     <footer class="pied">
       <div class="pied-colonnes">
         <nav class="pied-col" aria-label="Plan du site">
@@ -175,7 +186,6 @@
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
             <li><a href="a-propos.html">À propos</a></li>
-            <li><a href="contacts.html">Contacts</a></li>
           </ul>
         </nav>
         <nav class="pied-col" aria-label="Informations">

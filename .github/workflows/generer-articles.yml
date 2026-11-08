@@ -1,6 +1,6 @@
 name: Générer le site
 
-# Se déclenche quand l'administration envoie un article, un « à venir » ou l'édito,
+# Se déclenche quand l'administration envoie un article, une critique, un « à venir » ou l'édito,
 # et chaque jour à 6 h UTC pour publier les articles dont la date est atteinte.
 on:
   push:
@@ -8,6 +8,7 @@ on:
     paths:
       - "articles-data/**"
       - "articles-data-avenir/**"
+      - "critiques-data/**"
       - "site-data/**"
       - "scripts/**"
   schedule:

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Administration des critiques — La Tortue</title>
+<link rel="stylesheet" href="charte.css">
+<link rel="stylesheet" href="critique.css">
+<link rel="stylesheet" href="admin.css">
+<script src="admin-critiques.js" defer></script>
+<link rel="icon" type="image/svg+xml" href="favicon/favicon.svg">
+</head>
+<body class="adm">
+<div class="adm-app">
+  <aside class="adm-lateral" aria-label="Administration">
+    <a class="marque adm-marque" href="index.html"><img class="logo" src="logo.svg" alt="La Tortue"></a>
+    <p class="etiquette">Espace administration</p>
+    <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration des critiques">
+      <button type="button" class="adm-onglet" role="tab" id="onglet-nouvelle-critique" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-critique">
+        <span>Nouvelle critique</span><small>Rédiger et publier</small>
+      </button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-modifier-critique" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier-critiques">
+        <span>Modifier ou supprimer</span><small>Gérer les critiques publiées</small>
+      </button>
+    </div>
+    <details class="adm-connexion" open>
+      <summary>Connexion GitHub <span class="adm-pastille" id="etat-connexion" data-etat="absent">Non connecté</span></summary>
+      <label class="admin-champ" for="jeton">
+        <span>Jeton à granularité fine</span>
+        <input id="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <small>Jeton limité à qzethb/latortuequipense, avec Contents : Read and write.</small>
+      </label>
+      <label class="admin-case">
+        <input id="memoriser" type="checkbox">
+        <span>Se souvenir de ce jeton sur cet appareil</span>
+      </label>
+      <button type="button" class="admin-lien" id="oublier" hidden>Oublier le jeton</button>
+      <p class="admin-aide"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Créer un jeton GitHub</a></p>
+    </details>
+    <div class="adm-liens">
+      <a href="admin.html">Administration des articles</a>
+      <a href="admin-notes.html">Notes privées</a>
+      <a href="index.html">Retour au site</a>
+    </div>
+  </aside>
+
+  <main class="adm-principal admin-critiques">
+    <section class="adm-entete">
+      <h1 id="titre-page-critique">Nouvelle critique</h1>
+      <div class="ornement"></div>
+      <p id="intro-page-critique">Rédigez une critique de livre, de film ou de série. Sa page et ses aperçus seront générés après l’enregistrement.</p>
+    </section>
+
+    <section id="panneau-modifier-critiques" class="adm-panneau admin-critique-bibliotheque" aria-labelledby="titre-bibliotheque" hidden>
+      <div class="adm-bib-outils">
+        <label class="sr-only" for="filtre-critiques">Filtrer les critiques</label>
+        <input type="search" id="filtre-critiques" placeholder="Filtrer les critiques" autocomplete="off">
+        <button type="button" id="charger-critiques">Recharger la liste</button>
+      </div>
+      <h2 id="titre-bibliotheque">Critiques publiées</h2>
+      <p id="statut-liste-critiques" class="admin-aide" role="status" aria-live="polite"></p>
+      <div id="liste-critiques-admin" class="admin-articles-liste"></div>
+      <p class="admin-aide">Choisissez une critique pour la modifier ou la supprimer. L’aperçu apparaît à droite pendant la rédaction.</p>
+    </section>
+
+    <form id="formulaire-critique" class="adm-formulaire" novalidate hidden>
+      <div class="adm-barre-bloc">
+        <div class="adm-barre">
+          <div class="adm-etapes" role="tablist" aria-label="Étapes de la critique">
+            <button type="button" class="adm-etape-bouton" role="tab" id="etape-bouton-redaction-critique" data-critique-etape-bouton="redaction" aria-selected="true" aria-controls="etape-redaction-critique">Rédaction</button>
+            <button type="button" class="adm-etape-bouton" role="tab" id="etape-bouton-infos-critique" data-critique-etape-bouton="infos" aria-selected="false" tabindex="-1" aria-controls="etape-infos-critique">Informations</button>
+          </div>
+          <p class="adm-etat" id="etat-brouillon-critique" data-etat="vide">Aucun contenu</p>
+          <button type="submit" class="admin-publier" id="enregistrer-critique">Publier la critique</button>
+          <button type="button" class="admin-publier admin-critique-supprimer" id="supprimer-critique" hidden>Supprimer cette critique</button>
+        </div>
+        <p id="statut-critique" class="admin-statut" role="status" aria-live="polite"></p>
+      </div>
+      <section class="adm-panneau">
+        <div class="admin-critique-form-entete">
+          <h2 id="titre-formulaire-critique">Nouvelle critique</h2>
+          <button type="button" class="admin-lien" id="nouvelle-critique">Effacer le formulaire</button>
+          <button type="button" class="admin-lien" id="changer-critique" hidden>Changer de critique</button>
+        </div>
+        <div id="etape-redaction-critique" class="adm-etape" role="tabpanel" aria-labelledby="etape-bouton-redaction-critique" data-critique-etape="redaction">
+          <section class="admin-champ admin-champ--large">
+            <span>Critique détaillée</span>
+            <div class="admin-vues">
+              <div class="admin-segment" role="group" aria-label="Disposition de l’éditeur">
+                <button type="button" data-critique-vue="redaction" aria-pressed="false">Rédaction</button>
+                <button type="button" data-critique-vue="cote" aria-pressed="true">Côte à côte</button>
+                <button type="button" data-critique-vue="apercu" aria-pressed="false">Aperçu seul</button>
+              </div>
+            </div>
+            <div class="admin-critique-editor-layout" id="critique-editor-layout" data-vue="cote">
+              <div class="admin-critique-redaction">
+                <div class="admin-outils" role="toolbar" aria-label="Mise en forme de la critique">
+                  <button type="button" data-critique-commande="bold" aria-label="Gras"><strong>G</strong></button>
+                  <button type="button" data-critique-commande="italic" aria-label="Italique"><em>I</em></button>
+                  <button type="button" data-critique-bloc="h2">Intertitre</button>
+                  <button type="button" data-critique-bloc="blockquote">Citation</button>
+                  <button type="button" data-critique-commande="insertUnorderedList">Liste</button>
+                  <button type="button" data-critique-commande="insertOrderedList">Liste numérotée</button>
+                  <button type="button" data-critique-commande="createLink">Lien</button>
+                  <button type="button" data-critique-commande="unlink">Retirer le lien</button>
+                </div>
+                <div id="critique-texte" class="admin-editeur" contenteditable="true" role="textbox" aria-label="Critique détaillée" aria-multiline="true" data-placeholder="Commencez à rédiger votre critique…"></div>
+                <small>Un clic droit dans le texte ouvre le menu de mise en forme. Les paragraphes, intertitres, citations, listes, liens, gras et italiques sont conservés dans l’aperçu et sur la page publiée.</small>
+              </div>
+              <aside class="admin-critique-apercu" aria-label="Aperçu de la critique">
+                <div class="admin-apercu-barre">
+                  <span class="admin-apercu-etiquette">Aperçu en direct</span>
+                  <div class="admin-segment" role="group" aria-label="Largeur de l’aperçu">
+                    <button type="button" data-critique-appareil="ordinateur" aria-pressed="true">Ordinateur</button>
+                    <button type="button" data-critique-appareil="mobile" aria-pressed="false">Mobile</button>
+                  </div>
+                </div>
+                <div class="admin-apercu-defilant">
+                  <article class="admin-critique-apercu-page" id="page-apercu-critique" data-appareil="ordinateur">
+                    <h2 class="critique-titre" id="apercu-titre-critique"></h2>
+                    <p class="critique-sous-titre" id="apercu-soustitre-critique" hidden></p>
+                    <div class="critique-corps">
+                      <img id="apercu-couverture-critique" class="critique-couverture" alt="" hidden>
+                      <div id="apercu-texte-critique"></div>
+                    </div>
+                    <div class="critique-meta"><span id="apercu-date-critique"></span></div>
+                  </article>
+                </div>
+              </aside>
+            </div>
+          </section>
+        </div>
+        <div id="etape-infos-critique" class="adm-etape" role="tabpanel" aria-labelledby="etape-bouton-infos-critique" data-critique-etape="infos" hidden>
+          <div class="adm-infos admin-critique-infos">
+            <div class="adm-infos-champs">
+              <section class="adm-bloc">
+                <h2 class="adm-intertitre">Identification</h2>
+                <div class="admin-grille">
+                  <label class="admin-champ admin-champ--large" for="critique-titre">
+                    <span>Titre de l’œuvre</span>
+                    <input id="critique-titre" type="text" maxlength="180" required>
+                  </label>
+                  <label class="admin-champ" for="critique-type">
+                    <span>Type</span>
+                    <select id="critique-type" required>
+                      <option value="Livre">Livre</option>
+                      <option value="Film">Film</option>
+                      <option value="Série">Série</option>
+                    </select>
+                  </label>
+                  <label class="admin-champ admin-champ--large" for="critique-auteur">
+                    <span>Auteur, réalisateur ou créateur</span>
+                    <input id="critique-auteur" type="text" maxlength="180">
+                  </label>
+                  <label class="admin-champ admin-champ--large" for="critique-soustitre">
+                    <span>Sous-titre</span>
+                    <input id="critique-soustitre" type="text" maxlength="240">
+                  </label>
+                  <label class="admin-champ" for="critique-date">
+                    <span>Date de publication</span>
+                    <input id="critique-date" type="date" required>
+                  </label>
+                  <label class="admin-champ admin-champ--large" for="critique-slug">
+                    <span>Identifiant de la page (slug)</span>
+                    <input id="critique-slug" type="text" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" maxlength="100" required>
+                    <small>Minuscules, chiffres et tirets ; il détermine l’adresse de la critique.</small>
+                  </label>
+                  <label class="admin-champ admin-champ--large" for="critique-image">
+                    <span>Couverture ou affiche</span>
+                    <input id="critique-image" type="file" accept="image/png,image/jpeg,image/gif,image/webp" required>
+                    <small>PNG, JPEG, GIF ou WebP, 10 Mo maximum. Le fichier sera ajouté dans images-critiques/.</small>
+                  </label>
+                </div>
+              </section>
+              <section class="adm-bloc">
+                <h2 class="adm-intertitre">Classement</h2>
+                <div class="admin-grille">
+                  <label class="admin-champ" for="critique-tags">
+                    <span>Tags</span>
+                    <input id="critique-tags" type="text" placeholder="Science-fiction, Polar">
+                  </label>
+                  <label class="admin-champ" for="critique-disciplines">
+                    <span>Disciplines</span>
+                    <input id="critique-disciplines" type="text" placeholder="Littérature, Cinéma">
+                  </label>
+                  <label class="admin-champ admin-champ--large" for="critique-categories">
+                    <span>Catégories</span>
+                    <input id="critique-categories" type="text" placeholder="Roman, Livre">
+                    <small>La catégorie du type choisi (Livre, Film ou Série) est ajoutée automatiquement aux filtres.</small>
+                  </label>
+                </div>
+              </section>
+              <div class="admin-critique-apercu-image">
+                <img id="apercu-image-critique" alt="" hidden>
+                <p id="image-critique-aide" class="admin-aide">Aucune image sélectionnée.</p>
+              </div>
+            </div>
+            <aside class="adm-infos-apercus" aria-label="Aperçus de la critique">
+              <div class="admin-apercu-bloc">
+                <h2 class="admin-apercu-titre">Dans la liste des critiques</h2>
+                <article class="critique-article admin-critique-carte" aria-label="Aperçu de la carte de critique">
+                  <h2 class="critique-titre" id="infos-apercu-titre"></h2>
+                  <p class="critique-sous-titre" id="infos-apercu-soustitre" hidden></p>
+                  <div class="critique-corps">
+                    <img id="infos-apercu-image" class="critique-couverture" alt="" hidden>
+                    <div id="infos-apercu-texte"></div>
+                    <a class="critique-lire" id="infos-apercu-lien" href="#" tabindex="-1">Continuer à lire</a>
+                  </div>
+                  <div class="critique-meta"><span id="infos-apercu-date"></span></div>
+                </article>
+              </div>
+              <div class="admin-apercu-bloc">
+                <h2 class="admin-apercu-titre">Adresse de la page et aperçu de recherche</h2>
+                <div class="admin-serp" aria-label="Aperçu du résultat de recherche">
+                  <p class="admin-serp-url" id="infos-serp-url"></p>
+                  <p class="admin-serp-titre" id="infos-serp-titre"></p>
+                  <p class="admin-serp-desc" id="infos-serp-description"></p>
+                </div>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </section>
+    </form>
+  </main>
+</div>
+<div id="menu-contextuel-critique" class="admin-menu-contextuel" role="menu" aria-label="Options de mise en forme" hidden>
+  <button type="button" role="menuitem" data-critique-commande="bold">Gras</button>
+  <button type="button" role="menuitem" data-critique-commande="italic">Italique</button>
+  <button type="button" role="menuitem" data-critique-bloc="h2">Intertitre</button>
+  <button type="button" role="menuitem" data-critique-bloc="blockquote">Citation</button>
+  <button type="button" role="menuitem" data-critique-commande="insertUnorderedList">Liste</button>
+  <button type="button" role="menuitem" data-critique-commande="insertOrderedList">Liste numérotée</button>
+  <button type="button" role="menuitem" data-critique-commande="createLink">Créer un lien</button>
+  <button type="button" role="menuitem" data-critique-commande="unlink">Retirer le lien</button>
+</div>
+</body>
+</html>

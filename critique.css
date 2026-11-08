@@ -1,0 +1,142 @@
+/* ==========================================================================
+   CRITIQUES — Style éditorial (inspiré du Culte d'Apophis)
+   ========================================================================== */
+
+/* 3. Liste des critiques */
+.critique-section {
+  max-width: 880px;
+  margin: 0 auto 100px;
+  padding: 0 24px;
+}
+
+.critique-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 80px; /* Grand espace entre chaque critique */
+}
+
+.critique-article {
+  display: block;
+  border-bottom: 1px solid var(--lilas);
+  padding-bottom: 48px;
+}
+
+.critique-article[hidden] {
+  display: none;
+}
+
+/* 4. Typographie des critiques */
+.critique-titre {
+  margin: 0 0 10px;
+  color: var(--texte); /* Le culte d'Apophis utilise une couleur très sombre */
+  font: 700 clamp(32px, 5vw, 42px)/1.2 var(--police-titre);
+  text-wrap: balance;
+}
+
+.critique-sous-titre {
+  margin: 0 0 32px;
+  color: var(--violet-profond);
+  font: italic 400 24px/1.4 var(--police);
+  text-wrap: balance;
+}
+
+/* 5. Corps de la critique avec image flottante */
+.critique-corps {
+  font-family: var(--police);
+  font-size: var(--t-base);
+  line-height: 1.7;
+  color: var(--texte);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.critique-couverture {
+  float: left;
+  width: 220px;
+  max-width: 40%;
+  height: auto;
+  margin: 6px 28px 16px 0;
+  border: 1px solid var(--lilas);
+  box-shadow: 0 10px 24px -10px rgba(20, 43, 69, 0.25);
+  object-fit: cover;
+  aspect-ratio: 2 / 3;
+}
+
+.critique-corps p {
+  margin: 0 0 1.2em;
+}
+
+.critique-lire {
+  display: inline-block;
+  color: var(--violet);
+  font-weight: 600;
+  border-bottom: 1px solid var(--lilas);
+  padding-bottom: 2px;
+  transition: border-color var(--transition), color var(--transition);
+}
+
+.critique-lire:hover {
+  color: var(--violet-profond);
+  border-color: var(--violet-profond);
+}
+
+/* 6. Métadonnées (en bas de l'article) */
+.critique-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 32px;
+  font-family: var(--police-ui);
+  font-size: var(--t-petit);
+  color: var(--texte-doux);
+}
+
+.critique-meta span {
+  display: block;
+}
+
+.critique-detail {
+  margin-top: 40px;
+}
+
+.critique-detail .critique-article {
+  padding-bottom: 32px;
+}
+
+.critique-detail .critique-corps {
+  min-height: 1px;
+}
+
+.critique-detail .critique-corps::after {
+  display: block;
+  clear: both;
+  content: "";
+}
+
+.critique-detail > .critique-lire {
+  margin-top: 28px;
+}
+
+/* 8. Responsive */
+@media (max-width: 640px) {
+  .critique-couverture {
+    float: none;
+    width: min(100%, 280px);
+    max-width: 100%;
+    margin: 0 auto 24px;
+    display: block;
+  }
+  
+  .critique-corps {
+    text-align: left; /* Plus lisible sur mobile */
+  }
+  
+  .critique-liste {
+    gap: 56px;
+  }
+  
+  .critique-meta {
+    margin-top: 24px;
+    font-size: 14px;
+  }
+}

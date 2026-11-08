@@ -378,7 +378,8 @@ body.adm { background: var(--fond); }
   color: var(--violet-profond); font-size: 16px;
 }
 .admin-champ input,
-.admin-champ textarea {
+.admin-champ textarea,
+.admin-champ select {
   width: 100%;
   min-height: 44px;
   padding: 9px 12px;
@@ -392,6 +393,7 @@ body.adm { background: var(--fond); }
 .admin-champ textarea { resize: vertical; }
 .admin-champ input:focus,
 .admin-champ textarea:focus,
+.admin-champ select:focus,
 .admin-editeur:focus {
   border-color: var(--violet);
   outline: 1px solid var(--violet);
@@ -870,6 +872,7 @@ body.adm { background: var(--fond); }
   transition: background var(--transition);
 }
 .admin-article-row:hover { background: var(--brume); }
+.admin-article-row[hidden] { display: none; }
 .admin-article-nom { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-width: 0; overflow-wrap: anywhere; }
 .admin-article-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .admin-article-row button {
@@ -980,9 +983,91 @@ body.adm { background: var(--fond); }
 .notes-edition .admin-outils button.admin-publier { padding: 8px 22px; color: var(--texte-sur-accent); }
 .notes-edition .admin-outils button.admin-publier:hover { color: var(--texte-sur-accent); }
 
+.admin-critique-bibliotheque { margin-bottom: 30px; }
+.admin-critique-bibliotheque h2,
+.admin-critique-form-entete h2 {
+  margin: 0;
+  color: var(--violet-profond);
+  font: 700 22px var(--police-titre);
+}
+.admin-critique-form-entete,
+.admin-critique-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+.admin-critique-actions { justify-content: flex-start; margin: 22px 0 0; }
+.admin-critique-apercu-image { margin-top: 20px; }
+.admin-critique-apercu-image img {
+  display: block;
+  width: min(100%, 240px);
+  max-height: 320px;
+  object-fit: contain;
+  background: var(--brume);
+}
+.admin-critique-infos .adm-infos-champs { gap: 0; }
+.admin-critique-carte { margin: 0; }
+.admin-critique-carte [hidden] { display: none; }
+.admin-critique-carte .critique-corps { min-height: 1px; text-align: left; }
+.admin-critique-carte .critique-corps::after { display: block; clear: both; content: ""; }
+.admin-critique-carte .critique-corps .is-vide { color: var(--texte-doux); font-style: italic; }
+.admin-critique-editor-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+.admin-critique-redaction,
+.admin-critique-apercu { min-width: 0; }
+.admin-critique-apercu .admin-apercu-barre { flex-wrap: wrap; }
+.admin-critique-apercu-page {
+  min-height: 320px;
+  padding: 28px 22px;
+  background: var(--fond);
+}
+.admin-critique-apercu-page [hidden] { display: none; }
+.admin-critique-apercu-page .critique-titre {
+  font-size: clamp(24px, 2.4vw, 36px);
+}
+.admin-critique-apercu-page .critique-sous-titre { font-size: 19px; }
+.admin-critique-apercu-page .critique-couverture {
+  width: min(180px, 40%);
+  margin-right: 20px;
+}
+.admin-critique-apercu-page .critique-corps > div:empty::before {
+  color: var(--texte-doux);
+  content: "Le texte de la critique apparaîtra ici.";
+  font-style: italic;
+}
+.admin-critique-apercu-page[data-appareil="mobile"] {
+  max-width: 390px;
+  margin: 16px auto;
+  padding: 20px 14px;
+  border: 1px solid var(--lilas);
+}
+.admin-critique-apercu-page[data-appareil="mobile"] .critique-couverture {
+  float: none;
+  display: block;
+  width: min(100%, 240px);
+  max-width: 100%;
+  margin: 0 auto 20px;
+}
+.admin-critique-apercu-page[data-appareil="mobile"] .critique-corps { text-align: left; }
+.admin-critique-editor-layout[data-vue="redaction"] .admin-critique-apercu { display: none; }
+.admin-critique-editor-layout[data-vue="apercu"] .admin-critique-redaction { display: none; }
+.admin-critique-editor-layout[data-vue="apercu"] { grid-template-columns: minmax(0, 1fr); }
+.admin-critique-editor-layout[data-vue="redaction"] { grid-template-columns: minmax(0, 1fr); }
+.admin-critique-supprimer { border-color: var(--danger); background: transparent; color: var(--danger); }
+.admin-critique-supprimer:hover { background: var(--danger); color: #fff; }
 
 /* 13. ADAPTATION MOBILE ET IMPRESSION
    -------------------------------------------------------------------------- */
+@media (max-width: 1100px) {
+  .admin-critique-editor-layout { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 999px) {
   .adm-app { grid-template-columns: minmax(0, 1fr); }
   .adm-lateral {

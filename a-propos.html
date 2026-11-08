@@ -6,6 +6,7 @@
 <title>À propos — La Tortue</title>
 <meta name="description" content="Découvrez la démarche de La Tortue : un espace indépendant de réflexion sur la société et ses mécanismes, à travers plusieurs disciplines.">
 <link rel="stylesheet" href="charte.css">
+<link rel="stylesheet" href="report.css">
 <script src="menu.js" defer></script>
 <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
@@ -25,23 +26,72 @@
       </button>
       <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
         <a href="index.html#articles">Articles</a>
+        <a href="critique.html">Critiques</a>
         <a href="a-propos.html" aria-current="page">À propos</a>
-        <a href="contacts.html">Contacts</a>
-        <a href="newsletter.html">Newsletter</a>
       </nav>
     </header>
 
-    <section class="billet-entete">
-      <h1>À propos</h1>
-      <div class="ornement"></div>
-    </section>
-
     <main class="lecture">
-      <div class="lecture-texte">
+      <section aria-labelledby="a-propos-titre">
+        <div class="billet-entete">
+          <h1 id="a-propos-titre">À propos</h1>
+          <div class="ornement"></div>
+        </div>
+        <div class="lecture-texte">
         <p>Ce site doit être approché comme un espace de réflexion. L’objectif est de traiter les thèmes d’actualité sous l'éclairage de la sociologie, de l’économie, des sciences politiques, de la littérature ou de la philosophie. Il s'enrichit parfois de critiques, d'avis plus subjectifs sur des livres et des films de toute sorte.</p>
         <p>Il n’a pas de vocation journalistique ou scientifique : à ce titre, ce qui est écrit ici ne peut être pris comme une vérité générale et doit être considéré avec recul. Pour voir les travaux récents de la recherche, nous vous conseillons de vous renseigner sur les sources placées en bas d'article ou de vous rendre sur des plateformes institutionnelles comme Cairn.</p>
-      </div>
+        </div>
+      </section>
 
+      <section id="contact" aria-labelledby="contact-titre">
+        <div class="billet-entete">
+          <h2 id="contact-titre">Contact</h2>
+          <div class="ornement"></div>
+        </div>
+
+        <div class="lecture-texte">
+          <p>Une remarque, une question ou une réflexion à partager à propos d'un article, voire même un article à proposer ? Vous pouvez nous contacter par courriel.</p>
+        </div>
+
+        <ul class="contacts">
+          <li>
+            <span>Courriel</span>
+            <a href="mailto:latortuequipense@yahoo.com">latortuequipense@yahoo.com</a>
+          </li>
+          <li>
+            <span>Instagram</span>
+            <a href="https://www.instagram.com/latortuequipense/" target="_blank" rel="noopener noreferrer">@latortuequipense</a>
+          </li>
+          <li>
+            <span>Autre</span>
+            <a href="report.html">Signaler un problème</a>
+          </li>
+        </ul>
+
+        <div class="lecture-texte" style="margin-top: 5rem;">
+          <p>Pour vous abonner à notre newsletter, vous pouvez remplir le formulaire ci-dessous (veillez à cocher la case « Envoi manuel »). En cliquant sur envoyer, vous acceptez que <strong>votre adresse e-mail soit utilisée pour recevoir la newsletter</strong>.</p>
+        </div>
+        <form class="report-form report-form--newsletter" action="https://formsubmit.app/f/yrwzty2rxq" method="POST">
+          <input type="hidden" name="_subject" value="Nouvel abonnement à la newsletter — La Tortue">
+          <div class="report-honeypot" aria-hidden="true">
+            <label for="report-website">Ne pas remplir ce champ</label>
+            <input id="report-website" type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="report-fields">
+            <div class="report-field">
+              <label for="newsletter-email">Adresse e-mail</label>
+              <input type="email" id="newsletter-email" name="email" placeholder="votre@email.fr" required>
+            </div>
+            <div class="report-verification">
+              <div class="report-confirmation">
+                <input id="report-confirmation" type="checkbox" name="manual_confirmation" value="confirmed" required>
+                <label for="report-confirmation">Envoi manuel</label>
+              </div>
+              <button class="report-submit" type="submit">Envoyer</button>
+            </div>
+          </div>
+        </form>
+      </section>
     </main>
   
     <footer class="pied">
@@ -51,8 +101,7 @@
           <ul>
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
-            <li><a href="a-propos.html">À propos</a></li>
-            <li><a href="contacts.html">Contacts</a></li>
+            <li><a href="a-propos.html">À propos et contact</a></li>
           </ul>
         </nav>
         <nav class="pied-col" aria-label="Informations">
