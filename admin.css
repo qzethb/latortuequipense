@@ -1,15 +1,16 @@
 /* ==========================================================================
    LA TORTUE — Administration
-   Même charte que le site (charte.css) : fond blanc, violet, Baskerville,
-   filets lilas, angles droits. À charger APRÈS charte.css et article.css.
+   Même charte que le site (charte.css) : bleus, Playfair Display (titres),
+   Montserrat (interface), Times New Roman (contenu), filets bleu clair,
+   angles droits. À charger APRÈS charte.css et article.css.
 
    Sommaire
    1.  Cadre : colonne latérale + zone de travail
    2.  Colonne latérale (modes, connexion, liens)
    3.  En-tête de page et panneaux (liste, édito)
-   4.  Barre d’action et étapes
+   4.  Barre d'action et étapes
    5.  Boutons et champs communs
-   6.  Rédaction : document, barre d’outils, éditeur
+   6.  Rédaction : document, barre d'outils, éditeur
    7.  Aperçu en direct
    8.  Informations : champs et aperçus (carte, recherche)
    9.  Images et notes
@@ -71,9 +72,8 @@ body.adm { background: var(--fond); }
   border-left: 2px solid transparent;
   background: transparent;
   color: var(--texte-doux);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 17px;
-  font-style: italic;
   text-align: left;
   cursor: pointer;
   transition: color var(--transition), background var(--transition), border-color var(--transition);
@@ -82,8 +82,8 @@ body.adm { background: var(--fond); }
   display: block;
   margin-top: 1px;
   color: var(--texte-doux);
+  font-family: var(--police-ui); font-weight: 400;
   font-size: 13px;
-  font-style: normal;
 }
 .adm-onglet:hover { color: var(--violet); background: var(--brume); }
 .adm-onglet[aria-selected="true"],
@@ -96,6 +96,7 @@ body.adm { background: var(--fond); }
 .adm-connexion {
   padding-top: 18px;
   border-top: 1px solid var(--lilas);
+  font-family: var(--police);
   font-size: 15px;
 }
 .adm-connexion > summary {
@@ -104,6 +105,7 @@ body.adm { background: var(--fond); }
   align-items: center;
   justify-content: space-between;
   gap: 6px 10px;
+  font-family: var(--police-ui); font-weight: 600;
   color: var(--violet-profond);
   cursor: pointer;
   list-style: none;
@@ -120,8 +122,8 @@ body.adm { background: var(--fond); }
   padding: 1px 9px;
   border: 1px solid var(--lilas);
   color: var(--texte-doux);
+  font-family: var(--police-ui); font-weight: 400;
   font-size: 12px;
-  font-style: normal;
   line-height: 1.6;
   text-align: center;
 }
@@ -135,8 +137,8 @@ body.adm { background: var(--fond); }
   margin-top: auto;
   padding-top: 18px;
   border-top: 1px solid var(--lilas);
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 15px;
-  font-style: italic;
 }
 .adm-liens a {
   width: fit-content;
@@ -152,12 +154,17 @@ body.adm { background: var(--fond); }
    -------------------------------------------------------------------------- */
 .adm-entete { padding: 38px 0 22px; }
 .adm-entete h1 {
+  font-family: var(--police-titre); font-weight: 700;
   font-size: clamp(30px, 3.6vw, 44px);
   line-height: 1.1;
   letter-spacing: -.01em;
 }
 .adm-entete .ornement { margin: 20px 0 16px; }
-.adm-entete p { max-width: 62ch; margin: 0; color: var(--texte-doux); }
+.adm-entete p {
+  max-width: 62ch; margin: 0;
+  font-family: var(--police);
+  color: var(--texte-doux);
+}
 
 .adm-panneau { margin: 0 0 28px; }
 .adm-panneau[hidden] { display: none; }
@@ -172,10 +179,11 @@ body.adm { background: var(--fond); }
   padding: 14px 18px;
   border-left: 3px solid var(--violet);
   background: var(--brume);
+  font-family: var(--police);
 }
 .adm-bandeau[hidden], #bibliotheque[hidden] { display: none; }
 .adm-bandeau p { margin: 0; }
-.adm-bandeau strong { font-weight: 400; color: var(--violet-profond); }
+.adm-bandeau strong { font-weight: 700; color: var(--violet-profond); }
 
 .adm-bib-outils {
   display: flex;
@@ -192,7 +200,7 @@ body.adm { background: var(--fond); }
   border-radius: 0;
   background: transparent;
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
   font-size: var(--t-base);
 }
 .adm-bib-outils input[type="search"]::placeholder { color: var(--texte-doux); font-style: italic; opacity: 1; }
@@ -207,16 +215,15 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--violet);
   background: transparent;
   color: var(--violet);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 15px;
-  font-style: italic;
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
 }
 .adm-bib-outils > button:not(.admin-lien):hover { background: var(--violet); color: var(--texte-sur-accent); }
 
 
-/* 4. BARRE D’ACTION ET ÉTAPES
+/* 4. BARRE D'ACTION ET ÉTAPES
    -------------------------------------------------------------------------- */
 .adm-formulaire[hidden] { display: none; }
 
@@ -242,9 +249,8 @@ body.adm { background: var(--fond); }
   border-bottom: 2px solid transparent;
   background: transparent;
   color: var(--texte-doux);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 17px;
-  font-style: italic;
   cursor: pointer;
   transition: color var(--transition), border-color var(--transition);
 }
@@ -262,8 +268,8 @@ body.adm { background: var(--fond); }
   gap: 9px;
   margin: 0;
   color: var(--texte-doux);
+  font-family: var(--police-ui); font-weight: 400;
   font-size: 14px;
-  font-style: italic;
 }
 .adm-etat::before {
   content: "";
@@ -278,6 +284,7 @@ body.adm { background: var(--fond); }
 .admin-statut {
   margin: 0;
   padding: 0 0 10px;
+  font-family: var(--police-ui); font-weight: 400;
   font-size: 15px;
   overflow-wrap: anywhere;
 }
@@ -297,7 +304,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--violet);
   background: var(--violet);
   color: var(--texte-sur-accent);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 16px;
   cursor: pointer;
   transition: filter var(--transition);
@@ -316,7 +323,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--violet-profond);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 15px;
   cursor: pointer;
   transition: border-color var(--transition), color var(--transition);
@@ -331,7 +338,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--texte-doux);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 14px;
   cursor: pointer;
   transition: background var(--transition), color var(--transition), border-color var(--transition);
@@ -352,7 +359,7 @@ body.adm { background: var(--fond); }
   border: 0;
   background: none;
   color: var(--violet);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
@@ -366,7 +373,10 @@ body.adm { background: var(--fond); }
 }
 .admin-champ { display: flex; min-width: 0; flex-direction: column; gap: 7px; }
 .admin-champ--large { grid-column: 1 / -1; }
-.admin-champ > span { color: var(--violet-profond); font-size: 16px; }
+.admin-champ > span {
+  font-family: var(--police-ui); font-weight: 600;
+  color: var(--violet-profond); font-size: 16px;
+}
 .admin-champ input,
 .admin-champ textarea {
   width: 100%;
@@ -376,7 +386,8 @@ body.adm { background: var(--fond); }
   border-radius: 0;
   background: var(--surface);
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
+  font-size: var(--t-base);
 }
 .admin-champ textarea { resize: vertical; }
 .admin-champ input:focus,
@@ -387,7 +398,10 @@ body.adm { background: var(--fond); }
   outline-offset: 1px;
 }
 .admin-champ small,
-.admin-aide { color: var(--texte-doux); font-size: 14px; line-height: 1.45; }
+.admin-aide {
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); font-size: 14px; line-height: 1.45;
+}
 .admin-aide { margin: 10px 0; }
 
 .admin-case {
@@ -396,6 +410,7 @@ body.adm { background: var(--fond); }
   gap: 10px;
   margin: 12px 0;
   color: var(--texte-doux);
+  font-family: var(--police);
   font-size: 15px;
 }
 .admin-case input { accent-color: var(--violet); }
@@ -405,9 +420,10 @@ body.adm { background: var(--fond); }
   padding: 16px 20px;
   border-left: 3px solid var(--violet);
   background: var(--brume);
+  font-family: var(--police);
   font-size: 15px;
 }
-.admin-avertissement strong { display: block; margin-bottom: 4px; color: var(--violet-profond); font-weight: 400; }
+.admin-avertissement strong { display: block; margin-bottom: 4px; color: var(--violet-profond); font-weight: 700; }
 .admin-avertissement code { overflow-wrap: anywhere; }
 .admin-avertissement a { color: var(--violet); border-bottom: 1px solid var(--lilas); }
 
@@ -424,7 +440,7 @@ body.adm { background: var(--fond); }
 .notes-edition button.admin-danger:hover { background: var(--danger); color: #fff; }
 
 
-/* 6. RÉDACTION : DOCUMENT, BARRE D’OUTILS, ÉDITEUR
+/* 6. RÉDACTION : DOCUMENT, BARRE D'OUTILS, ÉDITEUR
    -------------------------------------------------------------------------- */
 .adm-document { margin: 0 0 22px; }
 .adm-saisie-titre input,
@@ -440,8 +456,14 @@ body.adm { background: var(--fond); }
   font: inherit;
   transition: border-color var(--transition), box-shadow var(--transition);
 }
-.adm-saisie-titre input { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.2; }
-.adm-saisie-soustitre input { margin-top: 6px; color: var(--texte); font-size: 19px; }
+.adm-saisie-titre input {
+  font-family: var(--police-titre); font-weight: 700;
+  font-size: clamp(28px, 3.4vw, 40px); line-height: 1.2;
+}
+.adm-saisie-soustitre input {
+  font-family: var(--police); font-weight: 400;
+  margin-top: 6px; color: var(--texte); font-size: 19px;
+}
 .adm-saisie-titre input::placeholder,
 .adm-saisie-soustitre input::placeholder { color: var(--texte-doux); font-style: italic; opacity: 1; }
 .adm-saisie-titre input:focus,
@@ -453,10 +475,10 @@ body.adm { background: var(--fond); }
 
 .adm-intertitre {
   margin: 0;
-  color: var(--violet);
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 20px;
-  font-style: italic;
   line-height: 1.3;
+  color: var(--violet);
 }
 
 .admin-vues {
@@ -469,9 +491,12 @@ body.adm { background: var(--fond); }
   border-top: 1px solid var(--lilas);
 }
 .admin-vues .adm-intertitre { margin-right: auto; }
-.admin-compteur { margin: 0; color: var(--texte-doux); font-size: 14px; font-style: italic; }
+.admin-compteur {
+  margin: 0;
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); font-size: 14px;
+}
 
-/* Disposition : éditeur et aperçu */
 .admin-espace { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; }
 .admin-colonne-editeur,
 .admin-colonne-apercu { min-width: 0; }
@@ -480,7 +505,6 @@ body.adm { background: var(--fond); }
 #fieldset-corps[data-vue="apercu"] .admin-colonne-editeur { display: none; }
 #fieldset-corps[data-vue="ecrire"] .admin-colonne-editeur { max-width: 860px; }
 
-/* Barre d’outils collée sous la barre d’action */
 .adm-outils-editeur {
   position: sticky;
   top: var(--adm-barre-h);
@@ -491,6 +515,7 @@ body.adm { background: var(--fond); }
 .admin-options-avancees { margin-top: 8px; }
 .admin-options-avancees > summary {
   width: fit-content;
+  font-family: var(--police-ui); font-weight: 600;
   color: var(--violet);
   font-size: 15px;
   cursor: pointer;
@@ -502,6 +527,7 @@ body.adm { background: var(--fond); }
   align-items: center;
   flex-wrap: wrap;
   gap: 8px;
+  font-family: var(--police-ui); font-weight: 400;
   color: var(--texte-doux);
   font-size: 15px;
 }
@@ -512,11 +538,16 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
+  font-size: var(--t-base);
 }
 
 .adm-aide-details { margin: 2px 0 12px; font-size: 14px; }
-.adm-aide-details > summary { width: fit-content; color: var(--texte-doux); font-style: italic; cursor: pointer; }
+.adm-aide-details > summary {
+  width: fit-content;
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); cursor: pointer;
+}
 .adm-aide-details > summary:hover { color: var(--violet); }
 
 .admin-editeur {
@@ -525,6 +556,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--texte);
+  font-family: var(--police);
   font-size: 19px;
   line-height: 1.75;
   overflow-wrap: anywhere;
@@ -535,11 +567,18 @@ body.adm { background: var(--fond); }
   font-style: italic;
   pointer-events: none;
 }
-.admin-editeur h2 { margin: 1.4em 0 .6em; color: var(--violet); font-size: 1.4em; font-style: italic; }
-.admin-editeur blockquote { margin: 1em 0; }
+.admin-editeur h2 {
+  margin: 1.4em 0 .6em;
+  font-family: var(--police-ui); font-weight: 600;
+  color: var(--violet); font-size: 1.4em;
+}
+.admin-editeur blockquote { margin: 1em 0; font-family: var(--police); }
 .admin-editeur figure { margin: 1.5em 0; user-select: none; }
 .admin-editeur figure img { max-height: 560px; margin: auto; object-fit: contain; }
-.admin-editeur figcaption { color: var(--texte-doux); font-size: 14px; text-align: center; }
+.admin-editeur figcaption {
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); font-size: 14px; text-align: center;
+}
 .admin-editeur figcaption:empty { display: none; }
 .admin-editeur li { margin: .3em 0; }
 .admin-editeur .tableau-defile { overflow-x: auto; }
@@ -569,7 +608,11 @@ body.adm { background: var(--fond); }
   margin: 0 0 10px;
   padding-top: 8px;
 }
-.admin-apercu-etiquette { margin-right: auto; color: var(--violet-profond); font-size: 17px; font-style: italic; }
+.admin-apercu-etiquette {
+  margin-right: auto;
+  font-family: var(--police-ui); font-weight: 600;
+  color: var(--violet-profond); font-size: 17px;
+}
 #fieldset-corps:not([data-vue="cote"]) #suivre-curseur { display: none; }
 
 .admin-apercu-defilant { border: 1px solid var(--lilas); background: var(--fond); overflow-x: hidden; }
@@ -581,7 +624,7 @@ body.adm { background: var(--fond); }
   margin: 18px auto;
   padding: 0 16px 20px;
   border: 1px solid var(--lilas);
-  box-shadow: 0 8px 22px -14px rgb(34 20 55 / 30%);
+  box-shadow: 0 8px 22px -14px rgb(20 43 69 / 30%);
   --t-lecture: 18.5px;
   --interligne: 1.7;
 }
@@ -592,6 +635,7 @@ body.adm { background: var(--fond); }
 .admin-apercu-page .billet-entete { padding: 28px 0 22px; }
 .admin-apercu-page .billet-entete h1 {
   max-width: none;
+  font-family: var(--police-titre); font-weight: 700;
   font-size: clamp(28px, 3.2vw, 40px);
   overflow-wrap: anywhere;
 }
@@ -606,7 +650,7 @@ body.adm { background: var(--fond); }
 }
 .admin-apercu-page .admin-apercu-corps { padding-top: 0; }
 .admin-apercu-page .billet-texte:empty::before {
-  content: "Le texte de l’article apparaîtra ici.";
+  content: "Le texte de l'article apparaîtra ici.";
   color: var(--texte-doux);
   font-style: italic;
 }
@@ -644,15 +688,19 @@ body.adm { background: var(--fond); }
   display: flex;
   align-items: center;
   gap: 12px;
+  font-family: var(--police-ui); font-weight: 600;
   color: var(--violet);
   font-size: 20px;
-  font-style: italic;
   cursor: pointer;
 }
 .adm-bloc[open] > summary { margin-bottom: 12px; }
 
 .adm-infos-apercus { display: grid; align-content: start; gap: 30px; min-width: 0; }
-.admin-apercu-titre { margin: 0 0 10px; color: var(--texte-doux); font-size: 15px; font-style: italic; }
+.admin-apercu-titre {
+  margin: 0 0 10px;
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); font-size: 15px;
+}
 
 .admin-carte { animation: none; }
 .admin-carte .article { cursor: default; }
@@ -699,7 +747,8 @@ body.adm { background: var(--fond); }
   gap: 12px;
   padding: 10px 12px;
   background: var(--brume);
-  font: 14px/1.4 sans-serif;
+  font-family: var(--police-ui); font-weight: 400;
+  font-size: 14px; line-height: 1.4;
 }
 .admin-image-vignette {
   flex: 0 0 auto;
@@ -719,7 +768,8 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
+  font-size: var(--t-base);
 }
 .admin-image > button {
   flex: 0 0 auto;
@@ -728,14 +778,15 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
+  font-size: 14px;
   cursor: pointer;
 }
 .admin-image > button:hover { border-color: var(--violet); color: var(--violet); }
 .admin-image-etat { color: var(--danger); }
 
 
-/* 10. MENU CONTEXTUEL (clic droit) — inchangé
+/* 10. MENU CONTEXTUEL (clic droit)
    -------------------------------------------------------------------------- */
 .admin-menu-contextuel {
   position: fixed;
@@ -747,7 +798,8 @@ body.adm { background: var(--fond); }
   padding: 4px;
   border: 1px solid var(--lilas);
   background: var(--surface);
-  box-shadow: 0 6px 20px rgb(34 20 55 / 15%);
+  box-shadow: 0 6px 20px rgb(20 43 69 / 15%);
+  font-family: var(--police-ui); font-weight: 400;
   font-size: 13px;
 }
 .admin-menu-contextuel[hidden],
@@ -758,7 +810,8 @@ body.adm { background: var(--fond); }
   border: 0;
   background: transparent;
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 400;
+  font-size: 13px;
   text-align: left;
   cursor: pointer;
   border-radius: 2px;
@@ -781,10 +834,14 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   border-left: 2px solid var(--violet);
   background: var(--surface);
-  box-shadow: 0 6px 20px rgb(34 20 55 / 15%);
+  box-shadow: 0 6px 20px rgb(20 43 69 / 15%);
 }
 .admin-menu-contextuel-avance--gauche { right: 100%; left: auto; margin-right: 4px; margin-left: 0; }
-.admin-menu-contextuel-formule { display: grid; gap: 3px; padding: 4px 8px; color: var(--texte-doux); font-size: 12px; }
+.admin-menu-contextuel-formule {
+  display: grid; gap: 3px; padding: 4px 8px;
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); font-size: 12px;
+}
 .admin-menu-contextuel-formule input {
   width: 100%;
   min-height: 28px;
@@ -792,7 +849,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   background: var(--surface);
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
   font-size: 12px;
 }
 
@@ -808,6 +865,7 @@ body.adm { background: var(--fond); }
   gap: 10px 16px;
   padding: 14px 4px;
   border-bottom: 1px solid var(--lilas);
+  font-family: var(--police);
   font-size: 16px;
   transition: background var(--transition);
 }
@@ -819,7 +877,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--violet);
   background: transparent;
   color: var(--violet);
-  font: inherit;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 15px;
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
@@ -829,8 +887,8 @@ body.adm { background: var(--fond); }
   padding: 0 9px;
   border: 1px solid var(--succes);
   color: var(--succes);
+  font-family: var(--police-ui); font-weight: 400;
   font-size: 12px;
-  font-style: normal;
   line-height: 1.7;
 }
 .admin-badge--avenir { border-color: var(--violet-doux); color: var(--violet); }
@@ -840,7 +898,11 @@ body.adm { background: var(--fond); }
    -------------------------------------------------------------------------- */
 .adm-carte-connexion { max-width: 560px; margin: 0 0 20px; }
 .adm-carte-connexion fieldset { margin: 0; padding: 0; border: 0; }
-.adm-carte-connexion legend { padding: 0 0 12px; color: var(--violet); font-size: 20px; font-style: italic; }
+.adm-carte-connexion legend {
+  padding: 0 0 12px;
+  font-family: var(--police-ui); font-weight: 600;
+  color: var(--violet); font-size: 20px;
+}
 .adm-carte-connexion .admin-outils { margin-top: 8px; }
 .adm-carte-connexion .admin-outils button {
   min-height: 40px;
@@ -864,7 +926,7 @@ body.adm { background: var(--fond); }
   border-radius: 0;
   background: transparent;
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
   font-size: var(--t-base);
 }
 .notes-outils input::placeholder { color: var(--texte-doux); font-style: italic; opacity: 1; }
@@ -875,8 +937,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--violet);
   background: transparent;
   color: var(--violet);
-  font: inherit;
-  font-style: italic;
+  font-family: var(--police-ui); font-weight: 600;
   cursor: pointer;
   transition: background var(--transition), color var(--transition);
 }
@@ -891,7 +952,8 @@ body.adm { background: var(--fond); }
   border: 0;
   background: transparent;
   color: var(--texte);
-  font: inherit;
+  font-family: var(--police);
+  font-size: var(--t-base);
   text-align: left;
   cursor: pointer;
   transition: background var(--transition);
@@ -900,10 +962,21 @@ body.adm { background: var(--fond); }
 .notes-element[aria-current="true"] { background: var(--brume); }
 .notes-element[aria-current="true"] { box-shadow: inset 2px 0 0 var(--violet); }
 .notes-element span { overflow-wrap: anywhere; }
-.notes-element small { color: var(--texte-doux); font-size: 13px; }
-.notes-vide { padding: 14px 10px; color: var(--texte-doux); font-style: italic; }
+.notes-element small {
+  font-family: var(--police-ui); font-weight: 400;
+  color: var(--texte-doux); font-size: 13px;
+}
+.notes-vide {
+  padding: 14px 10px;
+  font-family: var(--police); font-style: italic;
+  color: var(--texte-doux);
+}
 .notes-edition { display: grid; gap: 16px; }
-.notes-edition textarea { min-height: 340px; line-height: 1.6; }
+.notes-edition textarea {
+  min-height: 340px; line-height: 1.6;
+  font-family: var(--police);
+  font-size: var(--t-base);
+}
 .notes-edition .admin-outils button.admin-publier { padding: 8px 22px; color: var(--texte-sur-accent); }
 .notes-edition .admin-outils button.admin-publier:hover { color: var(--texte-sur-accent); }
 

@@ -1,9 +1,6 @@
 /* ==========================================================================
   LA TORTUE — Charte des articles
-   Pages de lecture : à charger APRÈS charte.css (elle réutilise ses variables).
-
-   <link rel="stylesheet" href="../charte.css">
-   <link rel="stylesheet" href="../article.css">
+   À charger APRÈS charte.css.
 
    Sommaire
    1. Variables de lecture
@@ -29,13 +26,11 @@
   --t-soustitre:     clamp(18px, 2.4vw, 21px);
   --t-lecture:       20px;
   --interligne:      1.8;
-  --retrait:         1.6em;     /* alinéa en début de paragraphe */
+  --retrait:         1.6em;
 }
 
 
 /* 2. LIGNE DE PROGRESSION
-   Un filet violet en haut de l'écran qui avance avec la lecture.
-   Invisible sur les navigateurs qui ne savent pas l'animer.
    -------------------------------------------------------------------------- */
 .progression {
   position: fixed; top: 0; left: 0; right: 0; z-index: 10;
@@ -60,6 +55,8 @@
 
 .billet-entete h1 {
   max-width: 14ch; margin: 0 auto;
+  font-family: var(--police-titre);
+  font-weight: 700;
   font-size: var(--t-article-titre);
   line-height: 1.1;
   text-wrap: balance;
@@ -68,7 +65,8 @@
 
 .sous-titre {
   max-width: 34em; margin: 0 auto;
-  font-size: var(--t-lead); font-style: normal;
+  font-family: var(--police);
+  font-size: var(--t-lead);
   color: var(--texte);
   text-wrap: balance;
 }
@@ -76,7 +74,8 @@
 .billet-meta {
   display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 0;
   margin: 34px 0 0;
-  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+  font-family: var(--police-ui); font-weight: 400;
+  font-size: var(--t-petit); color: var(--texte-doux);
 }
 .billet-meta > * + *::before {
   content: ""; display: inline-block; vertical-align: -2px;
@@ -86,10 +85,7 @@
 
 
 /* 4. TEXTE
-   Colonne de lecture étroite, paragraphes aérés sans alinéa,
-   lettrine au début de l'article.
    -------------------------------------------------------------------------- */
-
 .billet-texte,
 .billet-fin,
 .notes {
@@ -99,55 +95,49 @@
 }
 
 .billet-texte {
+  font-family: var(--police);
   font-size: var(--t-lecture);
   line-height: var(--interligne);
   hyphens: auto;
   text-wrap: pretty;
   text-align: justify;
-  animation: none; /* seul le titre apparaît en douceur */
+  animation: none;
 }
 
-/* Paragraphes : aucun alinéa, espace entre les paragraphes */
 .billet-texte > p {
   margin: 0 0 0.8em;
   text-indent: 0;
 }
 
-/* Lettrine sur le premier paragraphe uniquement */
 .billet-texte > p:first-of-type::first-letter {
   float: left;
   margin: .06em .1em 0 0;
+  font-family: var(--police-titre);
+  font-weight: 700;
   font-size: 3.7em;
   line-height: .8;
   color: var(--violet);
 }
 
-/* Liens */
 .billet-texte a {
   color: var(--violet);
   border-bottom: 1px solid var(--lilas);
   transition: border-color var(--transition);
 }
+.billet-texte a:hover { border-color: var(--violet); }
 
-.billet-texte a:hover {
-  border-color: var(--violet);
-}
-
-/* Emphase : couleur et filet, sans gras artificiel */
 .billet-texte strong {
-  font-weight: 400;
+  font-weight: 700;
   color: var(--violet-profond);
-  box-shadow: inset 0 -1px var(--lilas);
 }
 
 
 /* 5. INTERTITRES, LISTES, CITATIONS
    -------------------------------------------------------------------------- */
-
 .billet-texte h2 {
   margin: 2.8em 0 .9em;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 1.45em;
-  font-style: italic;
   line-height: 1.3;
   color: var(--violet);
   text-wrap: balance;
@@ -157,8 +147,8 @@
 
 .billet-texte h3 {
   margin: 2.4em 0 .8em;
+  font-family: var(--police-ui); font-weight: 600;
   font-size: 1.15em;
-  font-style: italic;
   line-height: 1.3;
   color: var(--violet);
   text-wrap: balance;
@@ -176,15 +166,13 @@
 .billet-texte blockquote {
   margin: 2.2em 0; padding: 0 0 0 1.6em;
   border-left: 1px solid var(--lilas);
+  font-family: var(--police);
   font-style: italic; color: var(--violet);
 }
 .billet-texte blockquote p { margin: 0 0 1em; text-indent: 0; }
 
 
 /* 6. FIGURES
-   Les schémas sont affichés à leur taille réelle, jamais agrandis :
-   une image étirée perd en netteté. Fournir des images larges (≥ 1200 px)
-   pour un rendu parfait sur écran haute définition.
    -------------------------------------------------------------------------- */
 .billet-texte figure { margin: 3em 0; text-align: center; }
 .billet-texte figure img {
@@ -194,10 +182,15 @@
   background: var(--blanc);
   border: 1px solid var(--lilas);
 }
-.billet-texte figcaption { margin-top: 12px; text-indent: 0; }
+.billet-texte figcaption {
+  margin-top: 12px; text-indent: 0;
+  font-family: var(--police-ui); font-weight: 400;
+}
 .billet-texte .description-schema {
   max-width: 52em; margin: 12px auto 0;
-  text-align: left; font-size: .78em; line-height: 1.55;
+  text-align: left;
+  font-family: var(--police-ui); font-weight: 400;
+  font-size: .78em; line-height: 1.55;
 }
 .billet-texte .description-schema summary {
   width: fit-content;
@@ -213,11 +206,11 @@
 
 
 /* 6 bis. TABLEAUX
-   Tableaux de données (annexe) : filets lilas, chiffres alignés à droite.
    -------------------------------------------------------------------------- */
 .billet-texte table {
   width: 100%; margin: 2.4em 0;
   border-collapse: collapse;
+  font-family: var(--police);
   font-size: .8em; line-height: 1.4;
   font-variant-numeric: tabular-nums;
   hyphens: manual;
@@ -225,7 +218,9 @@
 }
 .billet-texte caption {
   padding: 0 0 .9em;
-  text-align: left; font-style: italic; color: var(--violet);
+  text-align: left;
+  font-family: var(--police-ui); font-weight: 600;
+  color: var(--violet);
 }
 .billet-texte th,
 .billet-texte td {
@@ -236,7 +231,9 @@
 .billet-texte th:first-child,
 .billet-texte td:first-child { padding-left: 0; text-align: left; }
 .billet-texte thead th {
-  font-weight: 400; font-style: italic; vertical-align: bottom;
+  font-weight: 600;
+  font-family: var(--police-ui);
+  vertical-align: bottom;
   color: var(--texte-doux);
   border-bottom-color: var(--violet-doux);
 }
@@ -244,10 +241,6 @@
 
 
 /* 6 ter. TABLEAUX LONGS
-   Chaque tableau est enveloppé dans .tableau-defile : sur mobile il défile
-   horizontalement au lieu d'écraser ses colonnes.
-   .large = beaucoup de colonnes ; .texte = cellules de texte (alignées à gauche) ;
-   tr.total = ligne de total ou de moyenne.
    -------------------------------------------------------------------------- */
 .billet-texte .tableau-defile { margin: 2.4em 0; overflow-x: auto; }
 .billet-texte .tableau-defile table { margin: 0; break-inside: auto; }
@@ -259,14 +252,9 @@
 
 
 /* 6 quater. FORMULES DE MATHÉMATIQUES
-   Les formules sont écrites en LaTeX directement dans le HTML et mises en forme
-   par KaTeX (voir les trois lignes à copier dans le <head> de l'article) :
-     - dans une phrase :  \( B_i = \beta_0 \cdot v_i^{\alpha} \)
-     - isolée, centrée :  <div class="formule">\[ V_{ij} = B_i \cdot \varepsilon_{ij} \]</div>
-   .formule peut aussi porter .numerotee pour afficher (1), (2)… à droite.
    -------------------------------------------------------------------------- */
 .billet-texte .katex {
-  font-size: 1.1em;            /* KaTeX est un peu petit à côté du Baskerville */
+  font-size: 1.1em;
   color: var(--texte);
   text-indent: 0;
   hyphens: manual;
@@ -275,7 +263,7 @@
 .billet-texte .formule {
   margin: 1.7em 0;
   padding: .2em 0;
-  overflow-x: auto;            /* une formule trop large défile au lieu de déborder */
+  overflow-x: auto;
   overflow-y: hidden;
   text-align: center;
   text-indent: 0;
@@ -284,18 +272,17 @@
 .billet-texte .formule .katex-display { margin: 0; }
 .billet-texte .formule .katex { font-size: 1.2em; }
 
-/* Numérotation facultative : <div class="formule numerotee"> */
 .billet-texte { counter-reset: formule; }
 .billet-texte .formule.numerotee { position: relative; counter-increment: formule; padding-right: 3em; }
 .billet-texte .formule.numerotee::after {
   content: "(" counter(formule) ")";
   position: absolute; right: 0; top: 50%; transform: translateY(-50%);
-  font-size: var(--t-petit); font-style: italic; color: var(--texte-doux);
+  font-family: var(--police-ui); font-weight: 400;
+  font-size: var(--t-petit); color: var(--texte-doux);
 }
 
 
 /* 7. NOTES
-   Appels de note dans le texte, liste des notes en fin d'article.
    -------------------------------------------------------------------------- */
 .footnote-ref { border-bottom: 0 !important; }
 .footnote-ref sup {
@@ -307,6 +294,7 @@
 .notes {
   margin-top: 6em; padding-top: 1.8em;
   border-top: 1px solid var(--lilas);
+  font-family: var(--police);
   font-size: 16px; line-height: 1.6;
   color: var(--texte-doux);
   hyphens: manual;
@@ -321,7 +309,11 @@
 
 /* 8. FIN D'ARTICLE
    -------------------------------------------------------------------------- */
-.billet-fin { margin-top: 7em; text-align: center; font-style: italic; font-size: var(--t-petit); }
+.billet-fin {
+  margin-top: 7em; text-align: center;
+  font-family: var(--police-ui); font-weight: 400;
+  font-size: var(--t-petit);
+}
 .billet-fin .ornement { margin: 0 auto 28px; }
 
 
@@ -364,8 +356,8 @@
   border: 1px solid var(--lilas);
   background: transparent;
   color: var(--violet);
-  font: inherit;
-  font-size: 15px;
+  font-family: var(--police-ui); font-weight: 600;
+  font-size: var(--t-petit);
   cursor: pointer;
   transition: background .2s, color .2s;
 }
