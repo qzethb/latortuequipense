@@ -174,6 +174,55 @@
   margin-top: 28px;
 }
 
+.outils-critiques .menu-tags-panneau {
+  display: flex;
+  flex-direction: column;
+  width: min(320px, calc(100vw - 2 * var(--marge)));
+  min-width: 0;
+  max-height: min(70vh, 480px);
+  padding: 8px 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.outils-critiques .menu-tags-panneau[hidden] {
+  display: none;
+}
+
+.outils-critiques .menu-tags-panneau--droite {
+  right: 0;
+  left: auto;
+}
+
+.outils-critiques .menu-tags-panneau--haut {
+  top: auto;
+  bottom: calc(100% + 6px);
+}
+
+.outils-critiques .menu-tags-recherche {
+  flex: none;
+  width: calc(100% - 24px);
+  margin: 0 12px 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--lilas);
+  background: var(--fond);
+  color: var(--texte);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.outils-critiques .menu-tags-recherche:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 1px;
+}
+
+.outils-critiques .menu-tags-options {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+}
+
 @media (min-width: 641px) {
   .accueil-critiques .critique-lire,
   #section-critiques .critique-lire {
@@ -201,10 +250,6 @@
     display: block;
   }
   
-  .critique-corps {
-    text-align: left; /* Plus lisible sur mobile */
-  }
-  
   .critique-liste {
     gap: 56px;
   }
@@ -212,5 +257,14 @@
   .critique-meta {
     margin-top: 24px;
     font-size: 14px;
+  }
+
+  .outils-critiques .menu-tags-panneau,
+  .outils-critiques .menu-tags-panneau--droite {
+    left: 0;
+    right: auto;
+    width: min(360px, calc(100vw - 2 * var(--marge)));
+    max-height: min(60vh, 420px);
+    max-height: min(60dvh, 420px);
   }
 }

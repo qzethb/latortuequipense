@@ -11,6 +11,8 @@
     count: element.querySelector(".menu-tags-nombre"),
     reset: element.querySelector(".menu-tags-reset"),
     checkboxes: Array.from(element.querySelectorAll('input[type="checkbox"]')),
+    options: null,
+    search: null,
   }));
   const searchForm = document.getElementById("formulaire");
   const searchInput = document.getElementById("recherche");
@@ -54,6 +56,26 @@
         menu.checkboxes.push(checkbox);
       });
     });
+    menu.options = document.createElement("div");
+    menu.options.className = "menu-tags-options";
+    menu.checkboxes.forEach((checkbox) => {
+      menu.options.append(checkbox.closest(".menu-tags-option"));
+    });
+    menu.panel.insertBefore(menu.options, menu.reset);
+    if (menu.checkboxes.length >= 8) {
+      menu.search = document.createElement("input");
+      menu.search.type = "search";
+      menu.search.className = "menu-tags-recherche";
+      menu.search.placeholder = "Rechercher un filtre";
+      menu.search.setAttribute("aria-label", "Rechercher parmi les filtres");
+      menu.panel.insertBefore(menu.search, menu.options);
+      menu.search.addEventListener("input", () => {
+        const query = normalize(menu.search.value.trim());
+        menu.options.querySelectorAll(".menu-tags-option").forEach((option) => {
+          option.hidden = !normalize(option.textContent).includes(query);
+        });
+      });
+    }
   });
 
   cards.forEach((card) => {
@@ -139,6 +161,21 @@
   const openMenu = (menu, open) => {
     menu.panel.hidden = !open;
     menu.button.setAttribute("aria-expanded", String(open));
+    menu.panel.classList.remove("menu-tags-panneau--droite", "menu-tags-panneau--haut");
+    if (open) {
+      const panelBounds = menu.panel.getBoundingClientRect();
+      menu.panel.classList.toggle(
+        "menu-tags-panneau--droite",
+        panelBounds.right > window.innerWidth - 8,
+      );
+      const buttonBounds = menu.button.getBoundingClientRect();
+      const availableBelow = window.innerHeight - buttonBounds.bottom - 8;
+      const availableAbove = buttonBounds.top - 8;
+      menu.panel.classList.toggle(
+        "menu-tags-panneau--haut",
+        menu.panel.getBoundingClientRect().height > availableBelow && availableAbove > availableBelow,
+      );
+    }
   };
   const closeOtherMenus = (except) => {
     menus.forEach((menu) => {
