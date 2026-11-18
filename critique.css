@@ -5,20 +5,20 @@
 /* 3. Liste des critiques */
 .critique-section {
   max-width: 880px;
-  margin: 0 auto 100px;
+  margin: 0 auto 64px;
   padding: 0 24px;
 }
 
 .critique-liste {
   display: flex;
   flex-direction: column;
-  gap: 80px; /* Grand espace entre chaque critique */
+  gap: 48px;
 }
 
 .critique-article {
   display: block;
   border-bottom: 1px solid var(--lilas);
-  padding-bottom: 48px;
+  padding-bottom: 32px;
 }
 
 .critique-article[hidden] {
@@ -32,13 +32,14 @@
   font: 700 clamp(32px, 5vw, 42px)/1.2 var(--police-titre);
   text-wrap: balance;
 }
+.critique-titre em { font-style: italic; }
 
 .critique-article:not(.admin-critique-carte) > .critique-titre {
   color: var(--violet-profond);
 }
 
 .critique-sous-titre {
-  margin: 0 0 32px;
+  margin: 0 0 22px;
   color: var(--violet-profond);
   font: italic 400 24px/1.4 var(--police);
   text-wrap: balance;
@@ -68,6 +69,14 @@
 
 .critique-corps p {
   margin: 0 0 1.2em;
+}
+
+/* Les images flottantes ne doivent jamais remonter dans les métadonnées
+   ni dans la critique suivante. */
+.critique-corps::after {
+  display: block;
+  clear: both;
+  content: "";
 }
 
 .critique-article:not(.admin-critique-carte) .critique-corps h2 {
@@ -132,7 +141,7 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-top: 32px;
+  margin-top: 14px;
   font-family: var(--police-ui);
   font-weight: 400;
   font-size: var(--t-petit);
@@ -251,11 +260,11 @@
   }
   
   .critique-liste {
-    gap: 56px;
+    gap: 36px;
   }
   
   .critique-meta {
-    margin-top: 24px;
+    margin-top: 12px;
     font-size: 14px;
   }
 

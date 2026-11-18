@@ -416,6 +416,14 @@
     return `${excerpt.trimEnd()}…`;
   };
 
+  const setCritiqueTitle = (element, title, author, fallback = "Titre de l’œuvre") => {
+    element.replaceChildren();
+    const workTitle = document.createElement("em");
+    workTitle.textContent = title || fallback;
+    element.append(workTitle);
+    if (author) element.append(document.createTextNode(` — ${author}`));
+  };
+
   const updatePreview = () => {
     const title = titleInput.value.trim();
     const author = authorInput.value.trim();
@@ -424,8 +432,7 @@
       ? new Intl.DateTimeFormat("fr-FR", { dateStyle: "long", timeZone: "UTC" }).format(new Date(`${dateInput.value}T00:00:00Z`))
       : "";
     const slug = slugInput.value.trim() || "identifiant";
-    const displayTitle = author ? `${title || "Titre de l’œuvre"} — ${author}` : title || "Titre de l’œuvre";
-    previewTitle.textContent = author ? `${title || "Titre de l’œuvre"} — ${author}` : title || "Titre de l’œuvre";
+    setCritiqueTitle(previewTitle, title, author);
     previewSubtitle.textContent = subtitle;
     previewSubtitle.hidden = !previewSubtitle.textContent;
     previewDate.textContent = date;
@@ -435,7 +442,7 @@
     previewCover.alt = `${typeInput.value === "Livre" ? "Couverture" : "Affiche"} de ${title || "l’œuvre"}`;
     if (!previewCover.hidden) previewCover.src = imagePreview.getAttribute("src");
 
-    infoPreviewTitle.textContent = displayTitle;
+    setCritiqueTitle(infoPreviewTitle, title, author);
     infoPreviewSubtitle.textContent = subtitle;
     infoPreviewSubtitle.hidden = !subtitle;
     infoPreviewImage.hidden = !imagePreview.getAttribute("src");
@@ -448,9 +455,9 @@
     infoPreviewLink.href = `critiques/${encodeURIComponent(slug)}.html`;
     infoPreviewDate.textContent = date;
 
-    const pageTitle = author ? `${title || "Titre de l’œuvre"} — ${author}` : title || "Titre de l’œuvre";
     infoSerpUrl.textContent = `https://latortuequipense.fr/critiques/${slug}.html`;
-    infoSerpTitle.textContent = `${pageTitle} — Critique — La Tortue`;
+    setCritiqueTitle(infoSerpTitle, title, author);
+    infoSerpTitle.append(document.createTextNode(" — Critique — La Tortue"));
     const plainReview = richTextToPlainText(reviewPreview.innerHTML);
     infoSerpDescription.textContent = truncateText(plainReview, 160) || "Le début de la critique s’affichera ici.";
     infoSerpDescription.classList.toggle("is-vide", !plainReview);

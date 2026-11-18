@@ -21,7 +21,7 @@
    13. Impression
    ========================================================================== */
 
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;500;600&family=Playfair+Display:wght@700;800&display=swap");
 
 
 /* 1. VARIABLES
@@ -102,6 +102,39 @@
     --texte:            #E5EAED;
     --texte-doux:       #829BB0;
   }
+}
+
+/* Séparateurs et intitulés de sections en blanc dans le mode nocturne. */
+:root[data-theme="dark"] header,
+:root[data-theme="dark"] footer.pied,
+:root[data-theme="dark"] .billet-entete {
+  border-color: #fff;
+}
+
+:root[data-theme="dark"] .ornement,
+:root[data-theme="dark"] .page-accueil main > section > .etiquette::after,
+:root[data-theme="dark"] #articles::after {
+  background: #fff;
+}
+
+:root[data-theme="dark"] .page-accueil main > section > .etiquette,
+:root[data-theme="dark"] .etiquette,
+:root[data-theme="dark"] .article .fleche,
+:root[data-theme="dark"] .tag {
+  color: #fff;
+}
+
+:root[data-theme="dark"] .liste {
+  border-top-color: #fff;
+}
+
+:root[data-theme="dark"] .article,
+:root[data-theme="dark"] .critique-article {
+  border-bottom-color: #666;
+}
+
+:root[data-theme="dark"] .billet-texte blockquote {
+  border-left-color: #fff;
 }
 
 
@@ -607,6 +640,151 @@ nav.pied-col { display: block; gap: 0; font-family: var(--police); font-size: in
 }
 
 
+/* ===========================================================================
+   REFONTE "VIEUX JOURNAL"
+   --------------------------------------------------------------------------
+   Une palette d'encre et de papier, des filets éditoriaux et une hiérarchie
+   inspirée des unes imprimées. Cette couche reste volontairement globale :
+   elle habille aussi les pages générées et les articles existants.
+   ========================================================================== */
+:root {
+  --fond: #e9e0cf;
+  --surface: #f6f0e4;
+  --texte-sur-accent: #f6f0e4;
+  --blanc: #f6f0e4;
+  --brume: #ded1bb;
+  --lilas: #9d8c73;
+  --violet-doux: #786a58;
+  --violet: #7b271c;
+  --violet-profond: #211d18;
+  --texte: #2d2821;
+  --texte-doux: #685d4e;
+  --police: "Libre Baskerville", Georgia, "Times New Roman", serif;
+  --police-titre: "Playfair Display", Georgia, "Times New Roman", serif;
+  --police-ui: "Oswald", Arial, sans-serif;
+  --largeur: 1080px;
+  --largeur-lecture: 720px;
+  --marge: 30px;
+  --transition: .22s ease;
+}
+
+:root[data-theme="dark"] {
+  --fond: #211d18;
+  --surface: #2b251e;
+  --texte-sur-accent: #211d18;
+  --blanc: #f6f0e4;
+  --brume: #3b3126;
+  --lilas: #756650;
+  --violet-doux: #b39d7d;
+  --violet: #d07054;
+  --violet-profond: #f2e8d5;
+  --texte: #eadfce;
+  --texte-doux: #c0ad91;
+}
+
+body {
+  background-color: var(--fond);
+  background-image: radial-gradient(rgba(56, 38, 19, .08) .7px, transparent .8px);
+  background-size: 5px 5px;
+  color: var(--texte);
+}
+
+.page {
+  position: relative;
+  background: var(--surface);
+  box-shadow: 0 0 0 1px rgba(69, 49, 28, .18), 0 18px 60px rgba(57, 39, 20, .12);
+}
+
+header {
+  position: relative;
+  align-items: flex-end;
+  padding: 26px 0 14px;
+  border-bottom: 4px double var(--violet-profond);
+}
+
+header::before {
+  content: "ÉDITION DU JOUR  •  RÉFLEXIONS, CULTURE & SOCIÉTÉ";
+  position: absolute;
+  top: 8px;
+  left: 0;
+  color: var(--texte-doux);
+  font: 500 10px/1 var(--police-ui);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.marque { gap: 10px; color: var(--violet-profond); letter-spacing: .08em; }
+.marque .logo { height: 58px; filter: grayscale(1) contrast(1.5); }
+
+nav { gap: 20px; font-size: 15px; letter-spacing: .06em; text-transform: uppercase; }
+nav a { color: var(--texte); }
+nav a:hover, nav a[aria-current="page"] { color: var(--violet); }
+
+.theme-toggle { color: var(--texte-doux); font-family: var(--police-ui); }
+
+.intro { padding: 11vh 0 9vh; border-bottom: 1px solid var(--lilas); }
+.intro h1 {
+  font-size: clamp(58px, 12vw, 126px);
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 0 var(--surface), 2px 2px 0 var(--lilas);
+}
+.intro p { max-width: 620px; margin: 0 auto; font-style: italic; }
+.ornement { width: 110px; height: 5px; margin: 26px auto 22px; background: var(--violet-profond); }
+
+.etiquette {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 0 0 16px;
+  color: var(--violet);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .13em;
+}
+.etiquette::after { content: ""; flex: 1; height: 1px; background: var(--lilas); }
+
+.lecture-texte, .billet-texte { text-align: justify; }
+.lecture-texte p:first-of-type::first-letter,
+.billet-texte > p:first-of-type::first-letter { color: var(--violet); }
+
+.liste { border-top: 3px solid var(--violet-profond); }
+.article {
+  grid-template-columns: 145px 1fr auto;
+  gap: 24px;
+  padding: 24px 10px;
+  border-bottom: 1px solid var(--lilas);
+}
+.article:hover { background: var(--brume); }
+.article .date { font-family: var(--police-ui); font-size: 14px; letter-spacing: .04em; text-transform: uppercase; }
+.article h2 { font-size: clamp(22px, 3vw, 31px); line-height: 1.12; }
+.article .fleche { color: var(--violet); }
+.article-description { color: var(--texte-doux); }
+
+.tag { border-color: var(--lilas); border-radius: 0; color: var(--violet); font-family: var(--police-ui); }
+.bouton, .newsletter button, .recherche button { border-color: var(--violet); color: var(--violet); border-radius: 0; }
+.bouton:hover, .newsletter button:hover, .recherche button:hover { background: var(--violet); }
+
+.billet-entete { padding: 10vh 0 7vh; border-bottom: 1px solid var(--lilas); }
+.billet-entete h1 { text-transform: none; }
+.billet-meta { font-family: var(--police-ui); letter-spacing: .05em; text-transform: uppercase; }
+.billet-texte h2, .billet-texte h3 { color: var(--violet); font-family: var(--police-titre); }
+.billet-texte blockquote { border-left: 4px solid var(--violet); background: var(--brume); padding: 18px 22px; }
+
+footer.pied { border-top: 4px double var(--violet-profond); }
+.pied-colonnes { border-top: 0; }
+.pied h2 { color: var(--violet); font-family: var(--police-titre); font-size: 20px; text-transform: uppercase; }
+
+@media (max-width: 760px) {
+  header { align-items: center; padding-top: 30px; }
+  header::before { font-size: 8px; }
+  .marque .logo { height: 48px; }
+  .article { grid-template-columns: 1fr auto; gap: 8px; }
+  .article .date { grid-column: 1 / -1; }
+  .article h2 { font-size: 24px; }
+}
+
+
 /* ==========================================================================
    RECHERCHE ET TAGS
    ========================================================================== */
@@ -804,6 +982,237 @@ nav.pied-col { display: block; gap: 0; font-family: var(--police); font-size: in
   }
 }
 
+/* Dernière couche du thème sombre : elle doit rester après les styles de
+   présentation monochrome pour garantir un vrai mode de lecture nocturne. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fond: #10151b;
+  --surface: #171e26;
+  --texte-sur-accent: #10151b;
+  --blanc: #edf2f7;
+  --brume: #202a34;
+  --lilas: #3b4a58;
+  --violet-doux: #8da4b8;
+  --violet: #a8c8e3;
+  --violet-profond: #e1e8ef;
+  --texte: #d5dde5;
+  --texte-doux: #a7b3bf;
+}
+
+:root[data-theme="dark"] body { background: var(--fond); color: var(--texte); }
+:root[data-theme="dark"] .page { background: var(--surface); box-shadow: 0 0 0 1px rgba(140,170,195,.12), 0 18px 60px rgba(0,0,0,.28); }
+:root[data-theme="dark"] header,
+:root[data-theme="dark"] footer.pied { border-color: #526575; }
+:root[data-theme="dark"] header::before,
+:root[data-theme="dark"] .pied-copy,
+:root[data-theme="dark"] .article .date,
+:root[data-theme="dark"] .article-description,
+:root[data-theme="dark"] .critique-meta { color: var(--texte-doux); }
+:root[data-theme="dark"] nav a,
+:root[data-theme="dark"] .theme-toggle,
+:root[data-theme="dark"] .marque,
+:root[data-theme="dark"] .article h2,
+:root[data-theme="dark"] .critique-titre,
+:root[data-theme="dark"] .pied h2 { color: var(--violet-profond); }
+:root[data-theme="dark"] nav a:hover,
+:root[data-theme="dark"] nav a[aria-current="page"],
+:root[data-theme="dark"] .theme-toggle:hover,
+:root[data-theme="dark"] .article:hover h2,
+:root[data-theme="dark"] .critique-lire,
+:root[data-theme="dark"] .suite a,
+:root[data-theme="dark"] a { color: var(--violet); }
+:root[data-theme="dark"] .article:hover,
+:root[data-theme="dark"] .menu-tags-option:hover,
+:root[data-theme="dark"] .billet-texte blockquote { background: var(--brume); }
+:root[data-theme="dark"] .liste,
+:root[data-theme="dark"] .article,
+:root[data-theme="dark"] .critique-article,
+:root[data-theme="dark"] .billet-entete,
+:root[data-theme="dark"] .intro,
+:root[data-theme="dark"] .recherche input,
+:root[data-theme="dark"] .bandeau-recherche-formulaire input { border-color: var(--lilas); }
+:root[data-theme="dark"] .ornement { background: var(--violet); }
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] .bandeau-recherche,
+:root[data-theme="dark"] .menu-tags-panneau { background: #1b242d; color: var(--texte); }
+:root[data-theme="dark"] button,
+:root[data-theme="dark"] .menu-tags-bouton,
+:root[data-theme="dark"] .actualiser-filtres,
+:root[data-theme="dark"] .bouton,
+:root[data-theme="dark"] .newsletter button,
+:root[data-theme="dark"] .recherche button { color: var(--violet); border-color: var(--violet-doux); }
+:root[data-theme="dark"] .critique-couverture,
+:root[data-theme="dark"] img:not(.logo) { filter: brightness(.82) saturate(.86); }
+:root[data-theme="dark"] ::selection { background: #42627d; color: #f2f6fa; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --fond: #10151b; --surface: #171e26; --texte-sur-accent: #10151b;
+    --blanc: #edf2f7; --brume: #202a34; --lilas: #3b4a58;
+    --violet-doux: #8da4b8; --violet: #a8c8e3; --violet-profond: #e1e8ef;
+    --texte: #d5dde5; --texte-doux: #a7b3bf;
+  }
+  :root:not([data-theme]) body { background: var(--fond); color: var(--texte); }
+  :root:not([data-theme]) .page { background: var(--surface); }
+}
+
+/* ========================================================================
+   MODE DE LECTURE NOCTURNE
+   ========================================================================
+   Une nuit bleutée, un texte légèrement cassé et des accents désaturés
+   réduisent l'éblouissement tout en conservant la hiérarchie éditoriale.
+   Cette couche finale remplace les anciens contrastes noir/blanc du thème
+   sombre sur toutes les pages du site.
+   */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fond: #10151b;
+  --surface: #171e26;
+  --texte-sur-accent: #10151b;
+  --blanc: #edf2f7;
+  --brume: #202a34;
+  --lilas: #3b4a58;
+  --violet-doux: #8da4b8;
+  --violet: #a8c8e3;
+  --violet-profond: #e1e8ef;
+  --texte: #d5dde5;
+  --texte-doux: #a7b3bf;
+}
+
+:root[data-theme="dark"] body {
+  background: var(--fond);
+  color: var(--texte);
+}
+
+:root[data-theme="dark"] .page {
+  background: var(--surface);
+  box-shadow: 0 0 0 1px rgba(140, 170, 195, .12), 0 18px 60px rgba(0, 0, 0, .28);
+}
+
+:root[data-theme="dark"] header,
+:root[data-theme="dark"] footer.pied {
+  border-color: #526575;
+}
+
+:root[data-theme="dark"] header::before,
+:root[data-theme="dark"] .pied-copy,
+:root[data-theme="dark"] .article .date,
+:root[data-theme="dark"] .article-description,
+:root[data-theme="dark"] .critique-meta {
+  color: var(--texte-doux);
+}
+
+:root[data-theme="dark"] nav a,
+:root[data-theme="dark"] .theme-toggle,
+:root[data-theme="dark"] .marque,
+:root[data-theme="dark"] .article h2,
+:root[data-theme="dark"] .critique-titre,
+:root[data-theme="dark"] .pied h2 {
+  color: var(--violet-profond);
+}
+
+:root[data-theme="dark"] nav a:hover,
+:root[data-theme="dark"] nav a[aria-current="page"],
+:root[data-theme="dark"] .theme-toggle:hover,
+:root[data-theme="dark"] .article:hover h2,
+:root[data-theme="dark"] .critique-lire,
+:root[data-theme="dark"] .suite a,
+:root[data-theme="dark"] a {
+  color: var(--violet);
+}
+
+:root[data-theme="dark"] .article:hover,
+:root[data-theme="dark"] .menu-tags-option:hover,
+:root[data-theme="dark"] .billet-texte blockquote {
+  background: var(--brume);
+}
+
+:root[data-theme="dark"] .liste,
+:root[data-theme="dark"] .article,
+:root[data-theme="dark"] .critique-article,
+:root[data-theme="dark"] .billet-entete,
+:root[data-theme="dark"] .intro,
+:root[data-theme="dark"] .recherche input,
+:root[data-theme="dark"] .bandeau-recherche-formulaire input {
+  border-color: var(--lilas);
+}
+
+:root[data-theme="dark"] .ornement {
+  background: var(--violet);
+}
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] .bandeau-recherche,
+:root[data-theme="dark"] .menu-tags-panneau {
+  background: #1b242d;
+  color: var(--texte);
+}
+
+:root[data-theme="dark"] button,
+:root[data-theme="dark"] .menu-tags-bouton,
+:root[data-theme="dark"] .actualiser-filtres,
+:root[data-theme="dark"] .bouton,
+:root[data-theme="dark"] .newsletter button,
+:root[data-theme="dark"] .recherche button {
+  color: var(--violet);
+  border-color: var(--violet-doux);
+}
+
+:root[data-theme="dark"] button:hover,
+:root[data-theme="dark"] .bouton:hover,
+:root[data-theme="dark"] .newsletter button:hover,
+:root[data-theme="dark"] .recherche button:hover {
+  background: var(--violet);
+  color: var(--texte-sur-accent);
+}
+
+:root[data-theme="dark"] .tag,
+:root[data-theme="dark"] .menu-tags-nombre {
+  background: transparent;
+  color: var(--violet);
+  border-color: var(--violet-doux);
+}
+
+:root[data-theme="dark"] .menu-tags-nombre {
+  background: var(--violet);
+  color: var(--texte-sur-accent);
+}
+
+:root[data-theme="dark"] .critique-couverture,
+:root[data-theme="dark"] img:not(.logo) {
+  filter: brightness(.82) saturate(.86);
+}
+
+:root[data-theme="dark"] ::selection {
+  background: #42627d;
+  color: #f2f6fa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --fond: #10151b;
+    --surface: #171e26;
+    --texte-sur-accent: #10151b;
+    --blanc: #edf2f7;
+    --brume: #202a34;
+    --lilas: #3b4a58;
+    --violet-doux: #8da4b8;
+    --violet: #a8c8e3;
+    --violet-profond: #e1e8ef;
+    --texte: #d5dde5;
+    --texte-doux: #a7b3bf;
+  }
+
+  :root:not([data-theme]) body { background: var(--fond); }
+  :root:not([data-theme]) .page { background: var(--surface); }
+}
+
 .resultats {
   min-height: 1.6em;
   margin: 40px 0 14px;
@@ -927,4 +1336,463 @@ nav.pied-col { display: block; gap: 0; font-family: var(--police); font-size: in
   header, nav, footer, .pagination, .video { display: none; }
   body { font-size: 12pt; color: #000; }
   a { color: #000; }
+}
+
+
+/* ==========================================================================\n+   VERSION MONOCHROME — PAGE OUVERTE & RUBRIQUES VERTICALES
+   ========================================================================== */
+:root {
+  --fond: #fff;
+  --surface: #fff;
+  --texte-sur-accent: #fff;
+  --blanc: #fff;
+  --brume: #f1f1f1;
+  --lilas: #999;
+  --violet-doux: #666;
+  --violet: #111;
+  --violet-profond: #000;
+  --texte: #111;
+  --texte-doux: #555;
+}
+
+:root[data-theme="dark"] {
+  --fond: #111;
+  --surface: #181818;
+  --texte-sur-accent: #111;
+  --blanc: #fff;
+  --brume: #262626;
+  --lilas: #777;
+  --violet-doux: #aaa;
+  --violet: #fff;
+  --violet-profond: #fff;
+  --texte: #eee;
+  --texte-doux: #bbb;
+}
+
+body {
+  background: var(--fond);
+  color: var(--texte);
+}
+
+.page {
+  max-width: var(--largeur);
+  background: var(--surface);
+  box-shadow: none;
+}
+
+header {
+  border-bottom-color: #000;
+}
+
+header::before { color: #555; }
+.marque { color: #000; }
+.marque .logo { filter: grayscale(1) contrast(2); }
+nav a, .theme-toggle { color: #222; }
+nav a:hover, nav a[aria-current="page"], .theme-toggle:hover { color: #000; }
+
+.intro h1 { text-shadow: none; }
+.ornement { background: #000; }
+
+/* Les sections deviennent des colonnes éditoriales, avec leur nom en marge. */
+main > section {
+  position: relative;
+  padding-left: 56px;
+}
+
+main > section > .etiquette {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 100%;
+  min-height: 120px;
+  margin: 0;
+  align-items: flex-start;
+  justify-content: flex-start;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: #000;
+  font-size: 13px;
+  letter-spacing: .12em;
+  white-space: nowrap;
+}
+
+main > section > .etiquette::after {
+  flex: none;
+  width: 1px;
+  height: 42px;
+  margin-top: 12px;
+  background: #000;
+}
+
+.liste { border-top-color: #000; }
+.article { border-bottom-color: #999; }
+.article:hover { background: #f1f1f1; }
+.article .date, .article-description { color: #555; }
+.article .fleche, .tag, .bouton, .newsletter button, .recherche button { color: #000; }
+.tag, .bouton, .newsletter button, .recherche button { border-color: #000; }
+.bouton:hover, .newsletter button:hover, .recherche button:hover { background: #000; color: #fff; }
+
+.billet-entete { border-bottom-color: #999; }
+.billet-texte blockquote { border-left-color: #000; background: #f1f1f1; }
+footer.pied { border-top-color: #000; }
+
+@media (max-width: 760px) {
+  main > section { padding-left: 42px; }
+  main > section > .etiquette { width: 20px; font-size: 11px; }
+}
+
+/* L'en-tête porte déjà le nom du journal : l'accueil respire davantage sans
+   le doublon géant ni le faux bandeau de une. */
+header::before { display: none; }
+.intro {
+  padding: 7vh 0 6vh;
+  text-align: left;
+}
+.intro h1 { display: none; }
+.intro .ornement {
+  width: 72px;
+  height: 3px;
+  margin: 0 0 22px;
+}
+.intro p {
+  max-width: 670px;
+  margin: 0;
+  font-size: clamp(19px, 2.5vw, 25px);
+  line-height: 1.45;
+}
+
+/* Répétition graphique du nom de la rubrique le long des longues sections. */
+main > section > .etiquette-echo {
+  position: absolute;
+  left: 5px;
+  z-index: 0;
+  color: #777;
+  font: 600 11px/1 var(--police-ui);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+main > section > .etiquette-echo--one { top: 24%; }
+main > section > .etiquette-echo--two { top: 51%; }
+main > section > .etiquette-echo--three { top: 78%; }
+
+#articles > .etiquette-echo { color: #000; font-weight: 600; }
+
+#articles::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 32px;
+  width: 1px;
+  background: #000;
+  pointer-events: none;
+}
+
+#articles > .etiquette-echo {
+  border-right: 1px solid #000;
+  padding-right: 8px;
+}
+
+/* La date reste proche de l'extrait, comme une vraie notice éditoriale. */
+.critique-meta {
+  margin-top: 10px;
+  font-size: 12px;
+}
+
+/* Sur les critiques, les marges servent de sommaire des œuvres elles-mêmes. */
+#critiques > .etiquette { visibility: hidden; }
+#critiques > .etiquette-echo {
+  color: #000;
+  font-size: 0;
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: .08em;
+}
+#critiques > .etiquette-echo::after {
+  display: block;
+  width: 12px;
+  font-size: 11px;
+  white-space: normal;
+}
+#critiques > .etiquette-echo--one { top: 14%; }
+#critiques > .etiquette-echo--one::after { content: "Et l’évolution créa la femme — Pascal Picq"; }
+#critiques > .etiquette-echo--two { top: 60%; }
+#critiques > .etiquette-echo--two::after { content: "L’Ironie de l’évolution — Thomas Durand"; }
+#critiques > .etiquette-echo--three { display: none; }
+
+footer.pied {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.pied-colonnes {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  gap: 24px;
+  padding: 30px 0 34px;
+}
+.pied h2 {
+  margin-bottom: 10px;
+  font-family: var(--police-ui);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .04em;
+}
+.pied li + li { margin-top: 6px; }
+.pied a { overflow-wrap: anywhere; font-size: 12px; }
+.pied-copy { font-size: 11px; }
+
+@media (max-width: 760px) {
+  main > section > .etiquette-echo { left: 2px; font-size: 9px; }
+  .pied-colonnes { gap: 24px; padding: 26px 0 30px; }
+}
+
+/* ========================================================================
+   ALIGNEMENT DES PAGES D'ACCUEIL ET DE CRITIQUES
+   ======================================================================== */
+
+/* Les outils et les extraits reposent sur la même grille horizontale. */
+.page-critiques .critique-section,
+.page-accueil #critiques .critique-section {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.page-critiques .critique-liste,
+.page-accueil #critiques .critique-liste {
+  width: 100%;
+}
+
+/* Même rythme sur la page dédiée et sur l'aperçu de l'accueil. */
+.page-accueil #critiques .critique-liste {
+  gap: 48px;
+}
+
+.page-accueil #critiques .critique-article {
+  padding-bottom: 32px;
+}
+
+.page-accueil #critiques .critique-sous-titre {
+  margin-bottom: 22px;
+}
+
+.page-accueil #critiques .critique-meta {
+  margin-top: 14px;
+}
+
+/* À l'accueil, les titres de rubriques restent lisibles et alignés avec les
+   listes ; les répétitions verticales étaient trop proches du contenu. */
+.page-accueil main > section {
+  padding-left: 0;
+}
+
+.page-accueil main > section > .etiquette {
+  position: static;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  margin: 0 0 16px;
+  writing-mode: horizontal-tb;
+  transform: none;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.page-accueil main > section > .etiquette::after {
+  flex: 1;
+  width: auto;
+  height: 1px;
+  margin-top: 0;
+}
+
+.page-accueil #critiques > .etiquette {
+  visibility: visible;
+}
+
+/* Les pages éditoriales n'ont pas besoin d'un filet sous leur en-tête. */
+.billet-entete {
+  border-bottom: 0;
+}
+
+.page-accueil main > section > .etiquette-echo,
+.page-accueil #articles::after,
+.page-accueil #critiques > .etiquette-echo {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .page-critiques .critique-section,
+  .page-accueil #critiques .critique-section {
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .page-accueil main > section {
+    padding-left: 0;
+  }
+
+  .page-accueil #critiques .critique-liste {
+    gap: 36px;
+  }
+}
+
+/* Couche finale : le thème sombre reste prioritaire sur la charte claire. */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fond: #10151b; --surface: #171e26; --texte-sur-accent: #10151b;
+  --blanc: #edf2f7; --brume: #202a34; --lilas: #3b4a58;
+  --violet-doux: #8da4b8; --violet: #a8c8e3; --violet-profond: #e1e8ef;
+  --texte: #d5dde5; --texte-doux: #a7b3bf;
+}
+:root[data-theme="dark"] body { background: var(--fond); color: var(--texte); }
+:root[data-theme="dark"] .page { background: var(--surface); box-shadow: 0 0 0 1px rgba(140,170,195,.12), 0 18px 60px rgba(0,0,0,.28); }
+:root[data-theme="dark"] header,
+:root[data-theme="dark"] footer.pied { border-color: #526575; }
+:root[data-theme="dark"] header::before,
+:root[data-theme="dark"] .pied-copy,
+:root[data-theme="dark"] .article .date,
+:root[data-theme="dark"] .article-description,
+:root[data-theme="dark"] .critique-meta { color: var(--texte-doux); }
+:root[data-theme="dark"] nav a,
+:root[data-theme="dark"] .theme-toggle,
+:root[data-theme="dark"] .marque,
+:root[data-theme="dark"] .article h2,
+:root[data-theme="dark"] .critique-titre,
+:root[data-theme="dark"] .pied h2 { color: var(--violet-profond); }
+:root[data-theme="dark"] nav a:hover,
+:root[data-theme="dark"] nav a[aria-current="page"],
+:root[data-theme="dark"] .theme-toggle:hover,
+:root[data-theme="dark"] .article:hover h2,
+:root[data-theme="dark"] .critique-lire,
+:root[data-theme="dark"] .suite a,
+:root[data-theme="dark"] a { color: var(--violet); }
+:root[data-theme="dark"] .article:hover,
+:root[data-theme="dark"] .menu-tags-option:hover,
+:root[data-theme="dark"] .billet-texte blockquote { background: var(--brume); }
+:root[data-theme="dark"] .liste,
+:root[data-theme="dark"] .article,
+:root[data-theme="dark"] .critique-article,
+:root[data-theme="dark"] .billet-entete,
+:root[data-theme="dark"] .intro,
+:root[data-theme="dark"] .recherche input,
+:root[data-theme="dark"] .bandeau-recherche-formulaire input { border-color: var(--lilas); }
+:root[data-theme="dark"] .ornement { background: var(--violet); }
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] .bandeau-recherche,
+:root[data-theme="dark"] .menu-tags-panneau { background: #1b242d; color: var(--texte); }
+:root[data-theme="dark"] button,
+:root[data-theme="dark"] .menu-tags-bouton,
+:root[data-theme="dark"] .actualiser-filtres,
+:root[data-theme="dark"] .bouton,
+:root[data-theme="dark"] .newsletter button,
+:root[data-theme="dark"] .recherche button { color: var(--violet); border-color: var(--violet-doux); }
+:root[data-theme="dark"] .critique-couverture,
+:root[data-theme="dark"] img:not(.logo) { filter: brightness(.82) saturate(.86); }
+:root[data-theme="dark"] ::selection { background: #42627d; color: #f2f6fa; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --fond: #10151b; --surface: #171e26; --texte-sur-accent: #10151b;
+    --blanc: #edf2f7; --brume: #202a34; --lilas: #3b4a58;
+    --violet-doux: #8da4b8; --violet: #a8c8e3; --violet-profond: #e1e8ef;
+    --texte: #d5dde5; --texte-doux: #a7b3bf;
+  }
+  :root:not([data-theme]) body { background: var(--fond); color: var(--texte); }
+  :root:not([data-theme]) .page { background: var(--surface); }
+}
+
+/* Mode nocturne monochrome : aucune dominante bleue ou colorée. */
+:root[data-theme="dark"] {
+  --fond: #111;
+  --surface: #181818;
+  --texte-sur-accent: #111;
+  --blanc: #fff;
+  --brume: #262626;
+  --lilas: #666;
+  --violet-doux: #aaa;
+  --violet: #fff;
+  --violet-profond: #fff;
+  --texte: #eee;
+  --texte-doux: #bbb;
+}
+
+:root[data-theme="dark"] header,
+:root[data-theme="dark"] footer.pied {
+  border-color: #777;
+}
+
+:root[data-theme="dark"] .page {
+  box-shadow: 0 0 0 1px #333, 0 18px 60px rgba(0, 0, 0, .45);
+}
+
+:root[data-theme="dark"] .critique-couverture,
+:root[data-theme="dark"] img:not(.logo) {
+  filter: grayscale(1) brightness(.82);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    --fond: #111; --surface: #181818; --texte-sur-accent: #111;
+    --blanc: #fff; --brume: #262626; --lilas: #666;
+    --violet-doux: #aaa; --violet: #fff; --violet-profond: #fff;
+    --texte: #eee; --texte-doux: #bbb;
+  }
+}
+
+/* Séparateurs et intitulés de sections en blanc dans le mode nocturne. */
+:root[data-theme="dark"] header,
+:root[data-theme="dark"] footer.pied,
+:root[data-theme="dark"] .billet-entete { border-color: #fff; }
+:root[data-theme="dark"] .ornement,
+:root[data-theme="dark"] .page-accueil main > section > .etiquette::after,
+:root[data-theme="dark"] #articles::after { background: #fff; }
+:root[data-theme="dark"] .page-accueil main > section > .etiquette,
+:root[data-theme="dark"] .etiquette,
+:root[data-theme="dark"] .article .fleche,
+:root[data-theme="dark"] .tag { color: #fff; }
+:root[data-theme="dark"] .liste { border-top-color: #fff; }
+:root[data-theme="dark"] .article,
+:root[data-theme="dark"] .critique-article { border-bottom-color: #666; }
+:root[data-theme="dark"] .billet-texte blockquote { border-left-color: #fff; }
+
+/* Champs de recherche : neutralité stricte en mode sombre, sans ancien bleu. */
+:root[data-theme="dark"] .recherche input,
+:root[data-theme="dark"] .bandeau-recherche-formulaire input,
+:root[data-theme="dark"] .menu-tags-recherche,
+:root[data-theme="dark"] .menu-tags-panneau,
+:root[data-theme="dark"] .bandeau-recherche {
+  background: #181818;
+  color: #eeeeee;
+  border-color: #666666;
+}
+:root[data-theme="dark"] .recherche input::placeholder,
+:root[data-theme="dark"] .bandeau-recherche-formulaire input::placeholder,
+:root[data-theme="dark"] .menu-tags-recherche::placeholder {
+  color: #aaaaaa;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .recherche input,
+  :root:not([data-theme]) .bandeau-recherche-formulaire input,
+  :root:not([data-theme]) .menu-tags-recherche,
+  :root:not([data-theme]) .menu-tags-panneau,
+  :root:not([data-theme]) .bandeau-recherche {
+    background: #181818;
+    color: #eeeeee;
+    border-color: #666666;
+  }
+  :root:not([data-theme]) .recherche input::placeholder,
+  :root:not([data-theme]) .bandeau-recherche-formulaire input::placeholder,
+  :root:not([data-theme]) .menu-tags-recherche::placeholder { color: #aaaaaa; }
 }

@@ -17,27 +17,27 @@
   <aside class="adm-lateral" aria-label="Administration">
     <a class="marque adm-marque" href="index.html"><img class="logo" src="logo.svg" alt="La Tortue"></a>
     <p class="etiquette">Espace administration</p>
-    <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration des critiques">
+    <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration">
       <button type="button" class="adm-onglet" role="tab" id="onglet-nouvelle-critique" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-critique">
-        <span>Nouvelle critique</span><small>Rédiger et publier</small>
+        <span>Rédiger</span><small>Critique</small>
       </button>
       <button type="button" class="adm-onglet" role="tab" id="onglet-modifier-critique" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier-critiques">
-        <span>Modifier ou supprimer</span><small>Gérer les critiques publiées</small>
+        <span>Gérer</span><small>Critiques publiées</small>
       </button>
     </div>
     <details class="adm-connexion" open>
       <summary>Connexion GitHub <span class="adm-pastille" id="etat-connexion" data-etat="absent">Non connecté</span></summary>
       <label class="admin-champ" for="jeton">
         <span>Jeton à granularité fine</span>
-        <input id="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
-        <small>Jeton limité à qzethb/latortuequipense, avec Contents : Read and write.</small>
+        <input id="jeton" name="jeton" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" required>
+        <small>Requis pour toutes les actions.</small>
       </label>
       <label class="admin-case">
         <input id="memoriser" type="checkbox">
         <span>Se souvenir de ce jeton sur cet appareil</span>
       </label>
       <button type="button" class="admin-lien" id="oublier" hidden>Oublier le jeton</button>
-      <p class="admin-aide"><a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">Créer un jeton GitHub</a></p>
+      <p class="admin-aide">Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>.</p>
     </details>
     <div class="adm-liens">
       <a href="admin.html">Administration des articles</a>
@@ -78,15 +78,15 @@
         </div>
         <p id="statut-critique" class="admin-statut" role="status" aria-live="polite"></p>
       </div>
-      <section class="adm-panneau">
+      <section class="adm-critique-formulaire">
         <div class="admin-critique-form-entete">
           <h2 id="titre-formulaire-critique">Nouvelle critique</h2>
           <button type="button" class="admin-lien" id="nouvelle-critique">Effacer le formulaire</button>
           <button type="button" class="admin-lien" id="changer-critique" hidden>Changer de critique</button>
         </div>
         <div id="etape-redaction-critique" class="adm-etape" role="tabpanel" aria-labelledby="etape-bouton-redaction-critique" data-critique-etape="redaction">
-          <section class="admin-champ admin-champ--large">
-            <span>Critique détaillée</span>
+          <section class="adm-critique-redaction-bloc">
+            <h2 class="adm-intertitre">Critique détaillée</h2>
             <div class="admin-vues">
               <div class="admin-segment" role="group" aria-label="Disposition de l’éditeur">
                 <button type="button" data-critique-vue="redaction" aria-pressed="false">Rédaction</button>

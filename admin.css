@@ -682,7 +682,7 @@ body.adm { background: var(--fond); }
   margin: 18px auto;
   padding: 0 16px 20px;
   border: 1px solid var(--lilas);
-  box-shadow: 0 8px 22px -14px rgb(20 43 69 / 30%);
+  box-shadow: 0 8px 22px -14px rgb(0 0 0 / 22%);
   --t-lecture: 18.5px;
   --interligne: 1.7;
 }
@@ -856,7 +856,7 @@ body.adm { background: var(--fond); }
   padding: 4px;
   border: 1px solid var(--lilas);
   background: var(--surface);
-  box-shadow: 0 6px 20px rgb(20 43 69 / 15%);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
   font-family: var(--police-ui); font-weight: 400;
   font-size: 13px;
 }
@@ -892,7 +892,7 @@ body.adm { background: var(--fond); }
   border: 1px solid var(--lilas);
   border-left: 2px solid var(--violet);
   background: var(--surface);
-  box-shadow: 0 6px 20px rgb(20 43 69 / 15%);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
 }
 .admin-menu-contextuel-avance--gauche { right: 100%; left: auto; margin-right: 4px; margin-left: 0; }
 .admin-menu-contextuel-formule {
@@ -1159,4 +1159,607 @@ body.adm { background: var(--fond); }
 
 @media print {
   .adm-lateral, .adm-barre-bloc, .admin-vues, .admin-apercu-barre { display: none; }
+}
+
+
+/* 14. RAFFINEMENT DE L'INTERFACE D'ADMINISTRATION
+   --------------------------------------------------------------------------
+   Une couche de finition commune aux trois espaces : surfaces plus lisibles,
+   hiérarchie plus nette et actions importantes immédiatement repérables.
+   -------------------------------------------------------------------------- */
+body.adm {
+  background:
+    radial-gradient(circle at 92% 0%, rgb(197 209 217 / 28%), transparent 30rem),
+    var(--fond);
+}
+
+.adm-app { max-width: 1760px; }
+
+.adm-lateral {
+  background: rgb(255 255 255 / 58%);
+  border-right-color: rgb(197 209 217 / 80%);
+}
+
+.adm-marque {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 8px 12px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+  box-shadow: 0 12px 30px -22px rgb(20 43 69 / 60%);
+}
+.adm-marque .logo { height: 48px; }
+.adm-lateral .etiquette {
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+.adm-onglets { gap: 6px; }
+.adm-onglet {
+  min-height: 50px;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-left-width: 3px;
+  border-radius: 2px;
+}
+.adm-onglet:hover { border-color: var(--lilas); }
+.adm-onglet[aria-selected="true"],
+.adm-onglet[aria-current="page"] {
+  border-color: var(--lilas);
+  border-left-color: var(--violet);
+  background: var(--surface);
+  box-shadow: 0 10px 24px -22px rgb(20 43 69 / 70%);
+}
+
+.adm-connexion {
+  padding: 16px 14px 0;
+  border: 1px solid var(--lilas);
+  border-radius: 2px;
+  background: rgb(255 255 255 / 42%);
+}
+.adm-connexion[open] > summary { margin-bottom: 16px; }
+.adm-connexion > summary::after {
+  content: "⌄";
+  color: var(--texte-doux);
+  font-size: 18px;
+  line-height: 1;
+}
+.adm-connexion[open] > summary::after { content: "⌃"; }
+
+.adm-liens { padding-top: 20px; }
+.adm-liens a::before {
+  content: "→";
+  display: inline-block;
+  margin-right: 8px;
+  color: var(--violet-doux);
+  transition: transform var(--transition);
+}
+.adm-liens a:hover::before { transform: translateX(3px); }
+
+.adm-principal { max-width: 1320px; }
+.adm-entete {
+  max-width: 960px;
+  padding: 54px 0 30px;
+}
+.adm-entete h1 { letter-spacing: -.025em; }
+.adm-entete p { font-size: 19px; line-height: 1.55; }
+
+.adm-barre-bloc {
+  border: 1px solid var(--lilas);
+  border-top: 3px solid var(--violet);
+  background: rgb(240 242 242 / 94%);
+  box-shadow: 0 14px 34px -28px rgb(20 43 69 / 70%);
+}
+.adm-barre { padding: 8px 16px; }
+.adm-etape-bouton:first-child { padding-left: 8px; }
+.admin-publier { box-shadow: 0 8px 18px -12px rgb(69 107 139 / 90%); }
+
+.adm-panneau,
+.adm-formulaire > section.adm-panneau,
+.adm-carte-connexion,
+.notes-espace {
+  border: 1px solid var(--lilas);
+  background: rgb(255 255 255 / 68%);
+  box-shadow: 0 18px 40px -34px rgb(20 43 69 / 75%);
+}
+.adm-panneau { padding: 20px 22px; }
+.adm-panneau .adm-panneau { padding: 0; border: 0; box-shadow: none; background: transparent; }
+.adm-bib-outils { padding-bottom: 14px; }
+.admin-critique-bibliotheque h2 { margin-top: 6px; }
+
+.adm-formulaire { min-width: 0; }
+.adm-document { padding-top: 6px; }
+.admin-editeur,
+.admin-apercu-defilant,
+.admin-choix,
+.admin-serp {
+  border-color: var(--lilas);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 70%);
+}
+.admin-editeur { border-radius: 2px; }
+.adm-outils-editeur { padding: 12px 0 14px; }
+.admin-outils { gap: 7px; }
+.admin-outils button { border-radius: 2px; }
+.admin-outils button:hover { background: var(--brume); }
+
+.admin-champ input,
+.admin-champ textarea,
+.admin-champ select,
+.admin-formule-saisie input,
+.admin-image-fields input {
+  border-radius: 2px;
+  background: rgb(255 255 255 / 82%);
+  transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+}
+.admin-champ input:hover,
+.admin-champ textarea:hover,
+.admin-champ select:hover { border-color: var(--violet-doux); }
+.admin-champ input:focus,
+.admin-champ textarea:focus,
+.admin-champ select:focus,
+.admin-editeur:focus {
+  background: var(--surface);
+  box-shadow: 0 0 0 3px rgb(69 107 139 / 12%);
+}
+
+.admin-articles-liste {
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 0;
+  border-top: 0;
+}
+.admin-article-row {
+  padding: 14px 16px;
+  border: 1px solid var(--lilas);
+  background: rgb(255 255 255 / 70%);
+  border-radius: 2px;
+}
+.admin-article-row:hover { background: var(--surface); border-color: var(--violet-doux); }
+.admin-article-actions button { border-radius: 2px; }
+
+.admin-apercu-barre {
+  padding: 10px 12px;
+  border: 1px solid var(--lilas);
+  background: var(--brume);
+}
+.admin-apercu-defilant { background: var(--surface); }
+
+.adm-carte-connexion {
+  max-width: 620px;
+  padding: 22px 24px;
+}
+.adm-carte-connexion legend { padding-bottom: 16px; }
+.admin-avertissement { border: 1px solid var(--lilas); border-left: 4px solid var(--violet); }
+
+.notes-espace {
+  padding: 20px;
+  gap: 24px;
+}
+.notes-colonne { min-width: 0; }
+.notes-liste { border: 1px solid var(--lilas); background: rgb(255 255 255 / 55%); }
+.notes-element { padding: 14px 13px; }
+.notes-element[aria-current="true"] { background: var(--surface); box-shadow: inset 3px 0 0 var(--violet); }
+.notes-edition {
+  padding: 22px;
+  border: 1px solid var(--lilas);
+  background: var(--surface);
+}
+
+@media (max-width: 999px) {
+  .adm-lateral { background: rgb(255 255 255 / 78%); }
+  .adm-connexion { padding: 12px 0 0; border: 0; border-top: 1px solid var(--lilas); }
+  .adm-principal { max-width: none; }
+  .adm-entete { padding-top: 38px; }
+}
+
+@media (max-width: 700px) {
+  .adm-panneau { padding: 16px; }
+  .adm-barre { padding: 8px 12px; }
+  .adm-entete p { font-size: 17px; }
+  .notes-espace { padding: 12px; }
+  .notes-edition { padding: 16px; }
+}
+
+
+/* 15. SYSTÈME VISUEL COMMUN AUX ESPACES ADMIN
+   -------------------------------------------------------------------------- */
+:root {
+  --adm-rayon: 3px;
+  --adm-ombre: 0 20px 50px -38px rgb(20 43 69 / 72%);
+  --adm-ombre-fine: 0 9px 24px -18px rgb(20 43 69 / 55%);
+}
+
+body.adm { min-width: 320px; }
+.adm-app { position: relative; }
+.adm-lateral {
+  z-index: 2;
+  box-shadow: 16px 0 42px -42px rgb(20 43 69 / 70%);
+}
+.adm-lateral::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: -1px;
+  width: 1px;
+  height: 92px;
+  background: var(--violet);
+}
+
+.adm-onglet { border-radius: var(--adm-rayon); }
+.adm-onglet span { display: block; line-height: 1.25; }
+.adm-onglet small { line-height: 1.35; }
+.adm-onglet:focus-visible,
+.adm-liens a:focus-visible,
+.adm-marque:focus-visible { outline-offset: 3px; }
+
+.adm-entete {
+  position: relative;
+  margin-bottom: 4px;
+}
+.adm-entete .ornement { width: 84px; }
+
+.adm-barre-bloc {
+  border-radius: var(--adm-rayon);
+  box-shadow: var(--adm-ombre-fine);
+}
+.adm-barre { min-height: 68px; }
+.adm-etape-bouton { letter-spacing: .01em; }
+.adm-etat { padding-right: 8px; }
+
+.adm-panneau,
+.adm-carte-connexion,
+.notes-espace,
+.admin-critique-bibliotheque {
+  border-radius: var(--adm-rayon);
+  box-shadow: var(--adm-ombre);
+}
+.adm-panneau > .adm-bandeau { margin: -20px -22px 20px; }
+.admin-critique-bibliotheque > .adm-bib-outils { margin: -2px 0 4px; }
+
+.adm-bandeau,
+.admin-avertissement {
+  border-radius: var(--adm-rayon);
+  box-shadow: inset 3px 0 0 var(--violet);
+}
+.adm-bandeau { border-left-width: 0; }
+.admin-avertissement { box-shadow: inset 3px 0 0 var(--violet); }
+
+.admin-publier,
+.adm-bib-outils > button:not(.admin-lien),
+.notes-outils button,
+.admin-article-row button {
+  border-radius: var(--adm-rayon);
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), color var(--transition);
+}
+.admin-publier:hover,
+.adm-bib-outils > button:not(.admin-lien):hover,
+.notes-outils button:hover,
+.admin-article-row button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--adm-ombre-fine);
+}
+.admin-publier:active,
+.adm-bib-outils > button:not(.admin-lien):active,
+.notes-outils button:active,
+.admin-article-row button:active { transform: translateY(0); }
+
+.admin-critique-form-entete {
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--lilas);
+}
+.admin-critique-form-entete h2,
+.admin-critique-bibliotheque h2 { letter-spacing: -.015em; }
+
+.adm-infos { align-items: start; }
+.adm-infos-champs .adm-bloc,
+.adm-infos-apercus .admin-apercu-bloc {
+  padding: 20px;
+  border: 1px solid var(--lilas);
+  border-radius: var(--adm-rayon);
+  background: rgb(255 255 255 / 54%);
+}
+.adm-infos-champs .adm-bloc:first-child { padding-top: 20px; border-top: 1px solid var(--lilas); }
+.adm-infos-apercus .admin-apercu-bloc { background: var(--surface); }
+
+.admin-apercu-titre {
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--lilas);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.admin-apercu-barre { border-radius: var(--adm-rayon); }
+.admin-editeur,
+.admin-apercu-defilant,
+.admin-serp,
+.admin-choix { border-radius: var(--adm-rayon); }
+
+.notes-espace { align-items: stretch; }
+.notes-colonne {
+  padding-right: 24px;
+  border-right: 1px solid var(--lilas);
+}
+.notes-outils button { width: 100%; }
+.notes-edition { border-radius: var(--adm-rayon); box-shadow: var(--adm-ombre-fine); }
+.notes-edition .admin-outils { padding-top: 4px; }
+
+@media (max-width: 999px) {
+  .notes-colonne { padding-right: 0; padding-bottom: 20px; border-right: 0; border-bottom: 1px solid var(--lilas); }
+}
+
+@media (max-width: 700px) {
+  .adm-panneau > .adm-bandeau { margin: -16px -16px 16px; }
+  .adm-infos-champs .adm-bloc,
+  .adm-infos-apercus .admin-apercu-bloc { padding: 16px; }
+  .notes-espace { gap: 16px; }
+}
+
+
+/* 16. ÉDITEURS ET CHOIX : MÊME COMPORTEMENT ARTICLES / CRITIQUES
+   -------------------------------------------------------------------------- */
+.adm-critique-formulaire {
+  min-width: 0;
+  padding-top: 26px;
+}
+.adm-critique-form-entete {
+  display: flex;
+  align-items: center;
+  min-height: 42px;
+  margin-bottom: 22px;
+}
+.adm-critique-form-entete h2 { margin-right: auto; }
+.adm-critique-form-entete .admin-lien + .admin-lien { margin-left: 16px; }
+.adm-critique-redaction-bloc > .adm-intertitre { margin-bottom: 14px; }
+.adm-critique-redaction-bloc > .admin-vues { margin-top: 0; }
+.admin-critique-redaction > .admin-outils {
+  position: sticky;
+  top: var(--adm-barre-h);
+  z-index: 20;
+  min-height: 58px;
+  align-items: center;
+  padding: 10px 0 12px;
+  background: var(--fond);
+}
+.admin-critique-redaction > .admin-editeur { min-height: 460px; }
+
+.admin-vues {
+  position: relative;
+  padding: 12px 0 14px;
+}
+.admin-vues .adm-intertitre { letter-spacing: -.01em; }
+.admin-segment {
+  padding: 3px;
+  border: 1px solid var(--lilas);
+  border-radius: var(--adm-rayon);
+  background: var(--surface);
+}
+.admin-segment button,
+.admin-bascule {
+  border: 0;
+  border-radius: 2px;
+}
+.admin-segment button + button { margin-left: 2px; }
+.admin-segment button[aria-pressed="true"] { box-shadow: 0 3px 9px -6px rgb(20 43 69 / 90%); }
+
+.adm-bib-outils {
+  padding: 12px;
+  border: 1px solid var(--lilas);
+  border-radius: var(--adm-rayon);
+  background: var(--brume);
+}
+.adm-bib-outils input[type="search"] {
+  min-height: 40px;
+  padding: 7px 12px;
+  border: 1px solid var(--lilas);
+  border-radius: var(--adm-rayon);
+  background: var(--surface);
+}
+.adm-bib-outils > button:not(.admin-lien) { min-height: 40px; }
+
+.admin-choix {
+  display: grid;
+  gap: 8px;
+  max-height: 300px;
+  padding: 12px;
+  background: var(--surface);
+}
+.admin-choix-groupe {
+  padding: 0 0 10px;
+}
+.admin-choix-groupe:last-child { padding-bottom: 0; }
+.admin-choix-groupe > legend {
+  margin-bottom: 8px;
+  color: var(--violet);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.admin-choix-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+.admin-choix-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 34px;
+  padding: 6px 10px;
+  border: 1px solid var(--lilas);
+  border-radius: 999px;
+  background: var(--fond);
+  color: var(--texte);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), color var(--transition), transform var(--transition);
+}
+.admin-choix-option:hover { border-color: var(--violet); transform: translateY(-1px); }
+.admin-choix-option input { margin: 0; }
+.admin-choix-option:has(input:checked) {
+  border-color: var(--violet);
+  background: var(--violet);
+  color: var(--texte-sur-accent);
+}
+.admin-classement > .admin-champ { margin-top: 12px; }
+
+@media (max-width: 700px) {
+  .adm-critique-formulaire { padding-top: 18px; }
+  .adm-critique-form-entete { align-items: flex-start; flex-direction: column; gap: 10px; }
+  .adm-critique-form-entete .admin-lien + .admin-lien { margin-left: 0; }
+  .admin-critique-redaction > .admin-outils { position: static; }
+  .admin-choix { max-height: none; }
+}
+
+
+/* 17. SÉLECTEURS DE CATÉGORIES, DISCIPLINES ET TAGS
+   -------------------------------------------------------------------------- */
+.adm-entete > p { display: none; }
+.admin-critique-form-entete { justify-content: flex-end; }
+.admin-critique-form-entete h2 { display: none; }
+
+.admin-choix {
+  display: grid;
+  gap: 12px;
+  max-height: 360px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow-y: auto;
+}
+.admin-choix-groupe {
+  margin: 0;
+  padding: 14px;
+  border: 1px solid var(--lilas);
+  border-radius: 4px;
+  background: var(--surface);
+  box-shadow: 0 6px 18px -18px rgb(20 43 69 / 70%);
+}
+.admin-choix-groupe + .admin-choix-groupe { border-top: 1px solid var(--lilas); }
+.admin-choix-groupe > legend {
+  margin: 0 0 11px;
+  padding: 0;
+  color: var(--violet-profond);
+  font: 600 12px/1.3 var(--police-ui);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.admin-choix-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 8px;
+}
+.admin-choix-option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 42px;
+  padding: 8px 10px;
+  border: 1px solid var(--lilas);
+  border-radius: 4px;
+  background: var(--fond);
+  color: var(--texte);
+  font: 500 14px/1.3 var(--police-ui);
+  cursor: pointer;
+  transition: border-color var(--transition), background var(--transition), color var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+.admin-choix-option:hover {
+  border-color: var(--violet-doux);
+  background: var(--surface);
+  box-shadow: 0 5px 12px -10px rgb(20 43 69 / 70%);
+  transform: translateY(-1px);
+}
+.admin-choix-option input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+.admin-choix-option span {
+  display: block;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.admin-choix-option::before {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  margin-right: 9px;
+  border: 1px solid var(--violet-doux);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--texte-sur-accent);
+  content: "";
+  font: 700 12px/1 var(--police-ui);
+  transition: background var(--transition), border-color var(--transition);
+}
+.admin-choix-option:has(input:checked) {
+  border-color: var(--violet);
+  background: color-mix(in srgb, var(--violet) 10%, var(--surface));
+  color: var(--violet-profond);
+  box-shadow: inset 3px 0 0 var(--violet);
+}
+.admin-choix-option:has(input:checked)::before {
+  border-color: var(--violet);
+  background: var(--violet);
+  content: "✓";
+}
+.admin-choix-option:has(input:focus-visible) {
+  outline: 2px solid var(--violet);
+  outline-offset: 2px;
+}
+.admin-classement > .admin-champ { margin-top: 14px; }
+.admin-classement > .admin-champ input { background: var(--surface); }
+
+@media (max-width: 700px) {
+  .admin-choix { max-height: none; }
+  .admin-choix-options { grid-template-columns: 1fr; }
+}
+
+
+/* Recherche admin en mode sombre : neutre, sans dominante bleue. */
+:root[data-theme="dark"] .adm-bib-outils,
+:root[data-theme="dark"] .adm-bib-outils input[type="search"],
+:root[data-theme="dark"] .notes-outils input,
+:root[data-theme="dark"] .menu-tags-recherche {
+  background: #1b1b1b;
+  color: #eeeeee;
+  border-color: #484848;
+}
+:root[data-theme="dark"] .adm-bib-outils input[type="search"]::placeholder,
+:root[data-theme="dark"] .notes-outils input::placeholder,
+:root[data-theme="dark"] .menu-tags-recherche::placeholder {
+  color: #a8a8a8;
+}
+:root[data-theme="dark"] .adm-bib-outils input[type="search"]:focus,
+:root[data-theme="dark"] .notes-outils input:focus,
+:root[data-theme="dark"] .menu-tags-recherche:focus {
+  border-color: #d0d0d0;
+  box-shadow: 0 0 0 3px rgb(255 255 255 / 10%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .adm-bib-outils,
+  :root:not([data-theme]) .adm-bib-outils input[type="search"],
+  :root:not([data-theme]) .notes-outils input,
+  :root:not([data-theme]) .menu-tags-recherche {
+    background: #1b1b1b;
+    color: #eeeeee;
+    border-color: #484848;
+  }
+  :root:not([data-theme]) .adm-bib-outils input[type="search"]::placeholder,
+  :root:not([data-theme]) .notes-outils input::placeholder,
+  :root:not([data-theme]) .menu-tags-recherche::placeholder { color: #a8a8a8; }
+  :root:not([data-theme]) .adm-bib-outils input[type="search"]:focus,
+  :root:not([data-theme]) .notes-outils input:focus,
+  :root:not([data-theme]) .menu-tags-recherche:focus {
+    border-color: #d0d0d0;
+    box-shadow: 0 0 0 3px rgb(255 255 255 / 10%);
+  }
 }

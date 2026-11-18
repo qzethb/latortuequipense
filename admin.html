@@ -23,10 +23,10 @@
     <p class="etiquette">Espace administration</p>
 
     <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration">
-      <button type="button" class="adm-onglet" role="tab" id="onglet-nouveau" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-article"><span>Nouvel article</span></button>
-      <button type="button" class="adm-onglet" role="tab" id="onglet-avenir" data-mode="avenir" aria-selected="false" tabindex="-1" aria-controls="formulaire-article"><span>Ajouter un article à venir</span></button>
-      <button type="button" class="adm-onglet" role="tab" id="onglet-modifier" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier"><span>Éditer un article</span></button>
-      <button type="button" class="adm-onglet" role="tab" id="onglet-edito" data-mode="edito" aria-selected="false" tabindex="-1" aria-controls="panneau-edito"><span>Édito</span></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-nouveau" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-article"><span>Rédiger</span><small>Article</small></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-avenir" data-mode="avenir" aria-selected="false" tabindex="-1" aria-controls="formulaire-article"><span>Programmer</span><small>Article à venir</small></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-modifier" data-mode="modifier" aria-selected="false" tabindex="-1" aria-controls="panneau-modifier"><span>Gérer</span><small>Articles</small></button>
+      <button type="button" class="adm-onglet" role="tab" id="onglet-edito" data-mode="edito" aria-selected="false" tabindex="-1" aria-controls="panneau-edito"><span>Édito</span><small>Accueil</small></button>
     </div>
     <details class="adm-connexion" open>
       <summary>Connexion GitHub <span class="adm-pastille" id="etat-connexion" data-etat="absent">Non connecté</span></summary>
@@ -104,17 +104,6 @@
       <!-- Étape 1 : rédaction -->
       <div id="etape-redaction" class="adm-etape" role="tabpanel" aria-labelledby="etape-bouton-redaction" data-etape="redaction">
         <div id="fieldset-corps" class="adm-redaction" data-vue="cote">
-
-          <div class="adm-document" data-hors-edito>
-            <label class="adm-saisie-titre">
-              <span class="sr-only">Titre</span>
-              <input id="titre" name="titre" type="text" required maxlength="180" autocomplete="off" placeholder="Titre de l’article">
-            </label>
-            <label class="adm-saisie-soustitre">
-              <span class="sr-only">Sous-titre</span>
-              <input id="soustitre" name="soustitre" type="text" required maxlength="240" placeholder="Sous-titre">
-            </label>
-          </div>
 
           <div class="admin-vues">
             <h2 class="adm-intertitre" id="legende-corps">Corps de l’article</h2>
@@ -212,6 +201,14 @@
             <section class="adm-bloc">
               <h2 class="adm-intertitre">Identification</h2>
               <div class="admin-grille">
+                <label class="admin-champ admin-champ--large" data-hors-edito>
+                  <span>Titre de l’article</span>
+                  <input id="titre" name="titre" type="text" required maxlength="180" autocomplete="off" placeholder="Titre de l’article">
+                </label>
+                <label class="admin-champ admin-champ--large" data-hors-edito>
+                  <span>Sous-titre</span>
+                  <input id="soustitre" name="soustitre" type="text" required maxlength="240" placeholder="Sous-titre">
+                </label>
                 <label class="admin-champ admin-champ--large">
                   <span>Identifiant d’URL (slug)</span>
                   <input id="slug" name="slug" type="text" pattern="[a-z0-9]+(?:-[a-z0-9]+)*" required maxlength="100" autocapitalize="off" spellcheck="false">

@@ -51,7 +51,7 @@
 
 /* 3. TITRE DE L'ARTICLE
    -------------------------------------------------------------------------- */
-.billet-entete { padding: 14vh 0 9vh; text-align: center; }
+.billet-entete { padding: 10vh 0 7vh; text-align: center; }
 
 .billet-entete h1 {
   max-width: 14ch; margin: 0 auto;
@@ -322,7 +322,7 @@
 @media (max-width: 640px) {
   :root { --t-lecture: 18.5px; --interligne: 1.7; --retrait: 1.3em; }
 
-  .billet-entete { padding: 10vh 0 6vh; }
+  .billet-entete { padding: 8vh 0 5vh; }
   .billet-meta > * + *::before { margin: 0 14px; }
 
   .billet-texte h2 { margin-top: 2.4em; font-size: 1.35em; }

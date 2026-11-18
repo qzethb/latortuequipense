@@ -552,7 +552,7 @@ def generer_page_article(article: dict[str, Any]) -> None:
 <link rel="manifest" href="../favicon/site.webmanifest">
 <script type="application/ld+json">{structured_data}</script>
 </head>
-<body>
+<body class="page-article">
   <div class="progression" aria-hidden="true"></div>
   <div class="page">
 
@@ -607,6 +607,7 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
     image = "../" + echapper(critique["image"])
     paragraphes = "\n".join(f"        {ligne}" for ligne in texte_html.splitlines()) if "\n" in texte_html else f"        {texte_html}"
     titre_affiche = f"{titre} — {auteur}" if auteur else titre
+    titre_affiche_html = f"<em>{titre}</em> — {auteur}" if auteur else f"<em>{titre}</em>"
     titre_affiche_brut = f"{titre_brut} — {auteur_brut}" if auteur_brut else titre_brut
     structured_data = json.dumps(
         {
@@ -645,13 +646,13 @@ def generer_page_critique(critique: dict[str, Any]) -> None:
 <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg">
 <script type="application/ld+json">{structured_data}</script>
 </head>
-<body>
+<body class="page-critique-detail">
   <div class="page">
 {ENTETE_NAVIGATION}
     <main class="critique-section critique-detail">
       <article class="critique-article" data-type="{type_media}">
         <header class="billet-entete">
-          <h1 class="critique-titre">{titre_affiche}</h1>
+          <h1 class="critique-titre">{titre_affiche_html}</h1>
           <div class="ornement"></div>
           {f'<p class="sous-titre">{soustitre}</p>' if soustitre else ""}
         </header>
@@ -821,6 +822,7 @@ def generer_apercu_critique(critique: dict[str, Any]) -> str:
     titre = echapper(critique["titre"])
     auteur = echapper(critique["auteur"])
     titre_affiche = f"{titre} — {auteur}" if auteur else titre
+    titre_affiche_html = f"<em>{titre}</em> — {auteur}" if auteur else f"<em>{titre}</em>"
     type_media = echapper(critique["type"])
     image = echapper(critique["image"])
     tags = echapper(", ".join(critique["tags"]))
@@ -834,7 +836,7 @@ def generer_apercu_critique(critique: dict[str, Any]) -> str:
     )
     alt = "Couverture" if critique["type"] == "Livre" else "Affiche"
     return f"""<article class="critique-article" data-type="{type_media}" data-tags="{tags}" data-disciplines="{disciplines}" data-categories="{categories_attr}">
-  <h2 class="critique-titre">{titre_affiche}</h2>
+  <h2 class="critique-titre">{titre_affiche_html}</h2>
 {soustitre_html}  <div class="critique-corps">
     <img src="{image}" alt="{alt} de {titre}" class="critique-couverture" loading="lazy">
     {extrait}
