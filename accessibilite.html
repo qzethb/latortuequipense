@@ -21,7 +21,23 @@
 </head>
 <body>
 
-  <main class="page page--lecture">
+  <div class="page page--lecture">
+
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="critique.html">Critiques</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </header>
+
+    <main id="contenu">
 
     <div class="billet-entete">
       <h1>Déclaration d’accessibilité</h1>
@@ -29,30 +45,45 @@
 
     <div class="billet-texte">
 
-      <p>L’éditeur de ce site s’engage à rendre ses contenus accessibles à tous les utilisateurs, quelle que soit leur situation, conformément aux meilleures pratiques de conception web inclusive et aux recommandations du RGAA (Référentiel Général d’Amélioration de l’Accessibilité).</p>
+      <p class="billet-meta">Dernière mise à jour : 25 novembre 2026</p>
+
+      <p>La Tortue est un site personnel et non commercial. Il n’est pas soumis à l’obligation légale d’accessibilité qui s’applique aux services publics et à certaines entreprises, mais son éditeur s’efforce de suivre les recommandations du RGAA (Référentiel général d’amélioration de l’accessibilité) et des WCAG 2.1 afin que chacun puisse lire les articles et les critiques.</p>
 
       <h2>1. État de conformité</h2>
-      <p>Ce site web est <strong>partiellement conforme</strong> aux normes d’accessibilité (RGAA / WCAG 2.1 niveau AA), en raison des éléments et contraintes énumérés ci-dessous.</p>
+      <p>Le site n’a pas fait l’objet d’un audit de conformité réalisé par un organisme extérieur. D’après une auto-évaluation, il est <strong>partiellement conforme</strong> au niveau AA des WCAG 2.1, en raison des limites énumérées à la section 3.</p>
+      <p>Cette déclaration porte sur les pages publiques du site : l’accueil, les articles, les critiques, les pages « À propos », « Newsletter », « Signaler un problème » et les pages d’information. Les pages d’administration, réservées à l’éditeur et non référencées, en sont exclues.</p>
 
-      <h2>2. Démarche et éléments mis en œuvre</h2>
-      <p>Afin d’offrir la meilleure expérience de lecture possible, une attention particulière est portée aux points suivants lors de la publication des articles :</p>
+      <h2>2. Aménagements mis en œuvre</h2>
       <ul>
-        <li><strong>Lisibilité et typographie :</strong> choix de polices lisibles, contrastes de couleurs adaptés entre le texte et le fond, et respect de la taille minimale des caractères.</li>
-        <li><strong>Structure du contenu :</strong> utilisation de balises HTML sémantiques (titres <code>&lt;h1&gt;</code>, <code>&lt;h2&gt;</code>, paragraphes, listes) pour faciliter la navigation au clavier et via les lecteurs d’écran.</li>
-        <li><strong>Images et médias :</strong> présence d’une alternative textuelle (attribut <code>alt</code>) pour les images informatives. Les descriptions détaillées des schémas peuvent aussi être affichées dans un volet sous chaque image, ouvrable à la souris ou au clavier.</li>
-        <li><strong>Adaptabilité (Responsive design) :</strong> disposition optimisée pour les différents écrans (ordinateurs, tablettes, smartphones).</li>
+        <li><strong>Structure :</strong> balises sémantiques (en-tête, navigation, contenu principal, pied de page), titres hiérarchisés et langue de la page déclarée en français.</li>
+        <li><strong>Navigation au clavier :</strong> tous les liens, menus et boutons sont utilisables au clavier, avec un indicateur de focus visible. Sur mobile, le menu s’ouvre par un bouton qui annonce son état (ouvert ou fermé) et se referme avec la touche Échap.</li>
+        <li><strong>Mode clair et mode sombre :</strong> le site suit le réglage de votre système ; un bouton dans le menu permet de changer de mode, et ce choix est mémorisé sur votre appareil. Les deux modes sont en noir et blanc, avec un contraste élevé.</li>
+        <li><strong>Animations réduites :</strong> les animations d’apparition sont désactivées lorsque votre système demande de réduire les animations.</li>
+        <li><strong>Images et graphiques :</strong> les images informatives ont une alternative textuelle. Dans les articles, la description détaillée de chaque graphique peut aussi être affichée sous l’image, dans un volet « Description détaillée » ouvrable à la souris ou au clavier.</li>
+        <li><strong>Notes de bas de page :</strong> chaque appel de note mène à sa note, et chaque note propose un lien de retour vers le texte.</li>
+        <li><strong>Listes d’articles :</strong> la description d’un article peut être dépliée par un bouton qui annonce son état aux lecteurs d’écran.</li>
+        <li><strong>Recherche et filtres :</strong> la page des critiques propose une recherche et des filtres (type, tags, disciplines) dont les panneaux s’ouvrent par des boutons accessibles au clavier.</li>
+        <li><strong>Formulaires :</strong> les champs des formulaires « Signaler un problème » et « Newsletter » ont tous une étiquette visible.</li>
+        <li><strong>Adaptation aux écrans :</strong> la mise en page s’adapte aux ordinateurs, tablettes et téléphones, et le texte peut être agrandi jusqu’à 200 % sans perte de contenu.</li>
       </ul>
 
-      <h2>3. Contenus non accessibles et limites</h2>
-      <p>Malgré le soin apporté à la rédaction et à l’intégration :</p>
+      <h2>3. Limites connues</h2>
       <ul>
-        <li>Certains documents anciens ou contenus externes intégrés (ex. cartes, vidéos ou modules tiers) peuvent ne pas répondre totalement aux critères d’accessibilité.</li>
-        <li>Des oublis d'alternatives textuelles ou des erreurs dans la hiérarchie des titres peuvent subsister.</li>
+        <li>Il n’existe pas encore de lien d’évitement permettant d’aller directement au contenu principal.</li>
+        <li>Le texte des articles est justifié et coupé automatiquement en fin de ligne, ce qui peut gêner certaines personnes dyslexiques.</li>
+        <li>Certaines mentions secondaires (dates, pied de page) sont écrites en petits caractères.</li>
+        <li>Les formules mathématiques de certains articles sont affichées avec la bibliothèque KaTeX ; leur lecture par les lecteurs d’écran peut être imparfaite.</li>
+        <li>Les documents PDF joints à certains articles (dossier <code>pj/</code>) n’ont pas été vérifiés et peuvent ne pas être accessibles.</li>
+        <li>Les sites externes vers lesquels pointent les articles, ainsi que le service FormSubmit qui reçoit les formulaires, ne dépendent pas de l’éditeur.</li>
+        <li>Des oublis d’alternatives textuelles ou des erreurs dans la hiérarchie des titres peuvent subsister dans les articles les plus anciens.</li>
       </ul>
 
-      <h2>4. Retour d’information et contact</h2>
-      <p>Si vous rencontrez une difficulté pour accéder à un article ou à un contenu de ce site, ou si vous constatez un défaut d’accessibilité, vous êtes invité à le signaler afin qu’une solution d’accès alternative puisse vous être proposée.</p>
-      <p>Vous pouvez transmettre vos remarques ou vos demandes par le biais du moyen de contact mis à disposition sur le site (ou à l’adresse électronique indiquée sur la page de contact).</p>
+      <h2>4. Signaler une difficulté</h2>
+      <p>Si vous ne parvenez pas à accéder à un contenu, ou si vous constatez un défaut d’accessibilité, signalez-le : une version accessible du contenu (par exemple un texte brut) pourra vous être envoyée.</p>
+      <ul>
+        <li>par le formulaire <a href="report.html">Signaler un problème</a> (en choisissant « Erreur technique ou bug ») ;</li>
+        <li>par courriel, à l’adresse indiquée dans la rubrique <a href="a-propos.html#contact">Contact</a> de la page « À propos ».</li>
+      </ul>
 
       <h2>5. Voies de recours</h2>
       <p>Cette procédure est à utiliser dans le cas où vous auriez signalé à l’éditeur du site un défaut d’accessibilité qui vous empêche d’accéder à un contenu et que vous n’auriez pas obtenu de réponse satisfaisante.</p>
@@ -68,13 +99,16 @@
       </ul>
 
     </div>
-      <footer class="pied">
+    </main>
+
+    <footer class="pied">
       <div class="pied-colonnes">
         <nav class="pied-col" aria-label="Plan du site">
           <h2>Plan du site</h2>
           <ul>
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
+            <li><a href="critique.html">Critiques</a></li>
             <li><a href="a-propos.html">À propos</a></li>
           </ul>
         </nav>
@@ -94,8 +128,8 @@
         </nav>
       </div>
       <p class="pied-copy">© 2026 La Tortue</p>
-    </footer>  
-  </main>
+    </footer>
+  </div>
 
 </body>
 </html>

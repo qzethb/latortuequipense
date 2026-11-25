@@ -806,11 +806,10 @@ def generer_avenir(articles: list[dict[str, Any]]) -> str:
     for article in articles:
         libelle = f"Prévu le {article['date_affichee']}" if AFFICHER_DATE_AVENIR else "À venir"
         elements.append(
-            f'''        <a class="article" href="error.html">
+            f'''        <div class="article article--avenir">
           <span class="date">{echapper(libelle)}</span>
           <h2>{echapper(article["titre"])}</h2>
-          <span class="fleche">→</span>
-        </a>'''
+        </div>'''
         )
     if not elements:
         return "\n        "

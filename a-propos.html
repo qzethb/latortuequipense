@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>À propos — La Tortue</title>
-<meta name="description" content="Découvrez la démarche de La Tortue : un espace indépendant de réflexion sur la société et ses mécanismes, à travers plusieurs disciplines.">
+<meta name="description" content="La Tortue, journal en ligne d’analyse de l’actualité au prisme des sciences humaines et sociales : ligne éditoriale, méthode, contact et newsletter.">
 <link rel="stylesheet" href="charte.css">
 <link rel="stylesheet" href="report.css">
 <script src="menu.js" defer></script>
@@ -14,7 +14,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png" />
 <link rel="manifest" href="favicon/site.webmanifest" />
 </head>
-<body>
+<body class="page-apropos">
   <div class="page">
 
     <header>
@@ -38,8 +38,9 @@
           <div class="ornement"></div>
         </div>
         <div class="lecture-texte">
-        <p>Ce site doit être approché comme un espace de réflexion. L’objectif est de traiter les thèmes d’actualité sous l'éclairage de la sociologie, de l’économie, des sciences politiques, de la littérature ou de la philosophie. Il s'enrichit parfois de critiques, d'avis plus subjectifs sur des livres et des films de toute sorte.</p>
-        <p>Il n’a pas de vocation journalistique ou scientifique : à ce titre, ce qui est écrit ici ne peut être pris comme une vérité générale et doit être considéré avec recul. Pour voir les travaux récents de la recherche, nous vous conseillons de vous renseigner sur les sources placées en bas d'article ou de vous rendre sur des plateformes institutionnelles comme Cairn.</p>
+          <p><em>La Tortue</em> est un journal en ligne consacré à l’analyse de l’actualité au prisme des sciences humaines et sociales. Chaque texte part d’un fait, d’un discours ou d’un débat public pour le mettre à distance à l’aide des outils de la sociologie, de la science politique, de l’économie, du droit, de la philosophie ou des études littéraires.</p>
+          <p>Le journal publie deux types de textes. Les <a class="lien" href="articles.html">articles</a> proposent une analyse argumentée, adossée à une bibliographie et, lorsque c’est pertinent, à des données. Les <a class="lien" href="critique.html">critiques</a> rendent compte d’ouvrages et d’œuvres (essais, romans, films) en les replaçant dans les débats intellectuels dont ils relèvent.</p>
+          <p>Les textes publiés ici ne sont pas soumis à une évaluation par les pairs et ne se substituent pas à la littérature scientifique. Ils s’efforcent néanmoins d’en respecter les exigences&nbsp;: citation systématique des sources, distinction entre faits établis et interprétation, mention des limites de chaque démonstration. Pour approfondir, nous invitons le lecteur à se reporter aux références données en fin d’article ainsi qu’aux plateformes de diffusion de la recherche, comme Cairn.info ou OpenEdition. Les conditions dans lesquelles des outils d’intelligence artificielle peuvent intervenir sont précisées dans la <a class="lien" href="charte-utilisation-IA.html">charte d’utilisation de l’IA</a>.</p>
         </div>
       </section>
 
@@ -50,7 +51,7 @@
         </div>
 
         <div class="lecture-texte">
-          <p>Une remarque, une question ou une réflexion à partager à propos d'un article, voire même un article à proposer ? Vous pouvez nous contacter par courriel.</p>
+          <p>Pour toute remarque, question ou proposition d’article, vous pouvez écrire à la rédaction par courriel ou nous joindre sur Instagram.</p>
         </div>
 
         <ul class="contacts">
@@ -63,13 +64,20 @@
             <a href="https://www.instagram.com/latortuequipense/" target="_blank" rel="noopener noreferrer">@latortuequipense</a>
           </li>
           <li>
-            <span>Autre</span>
+            <span>Signalement</span>
             <a href="report.html">Signaler un problème</a>
           </li>
         </ul>
+      </section>
 
-        <div class="lecture-texte" style="margin-top: 5rem;">
-          <p>Pour vous abonner à notre newsletter, vous pouvez remplir le formulaire ci-dessous (veillez à cocher la case « Envoi manuel »). En cliquant sur envoyer, vous acceptez que <strong>votre adresse e-mail soit utilisée pour recevoir la newsletter</strong>.</p>
+      <section id="newsletter" aria-labelledby="newsletter-titre">
+        <div class="billet-entete">
+          <h2 id="newsletter-titre">Newsletter</h2>
+          <div class="ornement"></div>
+        </div>
+
+        <div class="lecture-texte">
+          <p>Pour être informé des nouvelles publications, inscrivez votre adresse ci-dessous en cochant la case «&nbsp;Envoi manuel&nbsp;». En validant, vous acceptez que <strong>votre adresse e-mail soit utilisée pour l’envoi de la newsletter</strong>.</p>
         </div>
         <form class="report-form report-form--newsletter" action="https://formsubmit.app/f/yrwzty2rxq" method="POST">
           <input type="hidden" name="_subject" value="Nouvel abonnement à la newsletter — La Tortue">
@@ -101,6 +109,7 @@
           <ul>
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
+            <li><a href="critique.html">Critiques</a></li>
             <li><a href="a-propos.html">À propos et contact</a></li>
           </ul>
         </nav>

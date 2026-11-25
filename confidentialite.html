@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Confidentialité — La Tortue</title>
-  <meta name="description" content="Politique de confidentialité de La Tortue : informations sur les données, les formulaires (FormSubmit), les cookies, les journaux techniques de l’hébergeur et les droits des visiteurs.">
+  <meta name="description" content="Politique de confidentialité de La Tortue : formulaires (FormSubmit), absence de cookies, ressources tierces (Google Fonts, jsDelivr), journaux de l’hébergeur et droits des visiteurs.">
   <link rel="stylesheet" href="charte.css">
   <script src="menu.js" defer></script>
   <style>
@@ -21,7 +21,23 @@
 </head>
 <body>
 
-  <main class="page page--lecture">
+  <div class="page page--lecture">
+
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="critique.html">Critiques</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </header>
+
+    <main id="contenu">
 
     <div class="billet-entete">
       <h1>Politique de confidentialité</h1>
@@ -29,43 +45,58 @@
 
     <div class="billet-texte">
 
+      <p class="billet-meta">Dernière mise à jour : 25 novembre 2026</p>
+
       <h2>1. Principes généraux</h2>
-      <p>Le respect de la vie privée et la protection des données personnelles sont une priorité. Cette politique vous informe des données traitées lors de votre navigation, de l’éventuel envoi d’un message via un formulaire de contact et de votre éventuelle inscription à la newsletter.</p>
+      <p>Le respect de la vie privée et la protection des données personnelles sont une priorité. Cette politique vous informe des données traitées lors de votre navigation, lors de l’envoi d’un signalement et lors de votre éventuelle inscription à la newsletter.</p>
 
-      <h2>2. Collecte et traitement des données personnelles</h2>
-      <p>Ce site est un site statique, sans base de données ni espace membre : aucun traitement ni analyse automatisée de vos habitudes de navigation ne sont effectués.</p>
-      <p>Les formulaires du site (contact, newsletter) s’appuient sur le service tiers <strong>FormSubmit</strong> (<a href="https://formsubmit.app" rel="noopener">formsubmit.app</a>), qui joue le rôle de sous-traitant : il transmet les informations saisies (par exemple votre adresse e-mail et le contenu de votre message) à l’adresse e-mail du responsable de la publication, sous forme d’e-mail. FormSubmit conserve ces données uniquement le temps nécessaire à la transmission, et ne les utilise pas à d’autres fins.</p>
-      <p>La soumission d’un formulaire est facultative : seules les informations que vous choisissez d’y saisir sont transmises. Pour en savoir plus, vous pouvez consulter la <a href="https://formsubmit.co/privacy-policy" rel="noopener">politique de confidentialité de FormSubmit</a>.</p>
-
-      <h2>3. Cookies et traceurs</h2>
-      <p>Afin de garantir le strict respect de votre vie privée :</p>
+      <h2>2. Formulaires</h2>
+      <p>Ce site est un site statique, sans base de données ni espace membre : aucun profilage ni analyse automatisée de vos habitudes de navigation n’est effectué.</p>
+      <p>Les deux formulaires du site s’appuient sur le service tiers <strong>FormSubmit</strong> (<a href="https://formsubmit.app" rel="noopener">formsubmit.app</a>), qui agit comme sous-traitant : il transmet par courriel au responsable de la publication les informations saisies.</p>
       <ul>
-        <li>Ce site n’utilise <strong>aucun cookie</strong> (ni cookie technique, ni cookie publicitaire, ni cookie tiers).</li>
-        <li>Ce site n’embarque <strong>aucun outil de mesure d’audience ou d’analyse de trafic</strong> (type Google Analytics ou équivalent) déposant des traceurs dans votre navigateur.</li>
+        <li><strong>Signaler un problème :</strong> seuls le type de signalement et votre description sont transmis. Aucun nom ni aucune adresse électronique ne vous sont demandés ; évitez d’indiquer des informations personnelles dans la description.</li>
+        <li><strong>Newsletter :</strong> votre adresse électronique est transmise afin de vous envoyer les nouvelles publications. Elle n’est utilisée qu’à cette fin et n’est ni vendue ni cédée à des tiers. Vous pouvez demander votre désinscription à tout moment.</li>
       </ul>
-      <p>Le choix du mode clair ou sombre est enregistré dans le stockage local de votre navigateur afin d’être conservé lors de vos prochaines visites. Cette préférence reste sur votre appareil et n’est pas transmise au site. Vous pouvez la supprimer depuis les paramètres de stockage de votre navigateur.</p>
-      <p>Conformément aux recommandations de la CNIL et au Règlement Général sur la Protection des Données (RGPD), aucun bandeau de consentement relatif aux cookies n’est donc nécessaire sur ce site.</p>
+      <p>L’envoi d’un formulaire est toujours facultatif. Pour en savoir plus sur le traitement par FormSubmit, consultez sa <a href="https://formsubmit.co/privacy-policy" rel="noopener">politique de confidentialité</a>.</p>
+      <p>Si vous écrivez par courriel ou sur Instagram (voir la rubrique <a href="a-propos.html#contact">Contact</a>), votre message est traité par ces services selon leurs propres conditions et n’est utilisé que pour vous répondre.</p>
 
-      <h2>4. Journaux d’accès et hébergement</h2>
+      <h2>3. Cookies et stockage local</h2>
+      <ul>
+        <li>Ce site ne dépose <strong>aucun cookie</strong> (ni cookie technique, ni cookie publicitaire, ni cookie tiers).</li>
+        <li>Ce site n’utilise <strong>aucun outil de mesure d’audience</strong> (Google Analytics ou équivalent).</li>
+      </ul>
+      <p>Seul votre choix entre le mode clair et le mode sombre est enregistré dans le stockage local de votre navigateur, afin d’être conservé lors de vos prochaines visites. Cette préférence reste sur votre appareil et n’est jamais transmise au site ; vous pouvez l’effacer depuis les réglages de votre navigateur. Elle est strictement nécessaire au service que vous avez demandé et ne requiert donc pas de consentement.</p>
+
+      <h2>4. Ressources chargées depuis des services tiers</h2>
+      <p>Pour afficher correctement les pages, votre navigateur télécharge certaines ressources hébergées par des tiers. Comme pour toute connexion à un serveur, ces services reçoivent alors techniquement votre adresse IP et des informations sur votre navigateur :</p>
+      <ul>
+        <li><strong>Google Fonts</strong> (Google LLC) : les polices de caractères du site, chargées sur toutes les pages. Voir la <a href="https://policies.google.com/privacy?hl=fr" rel="noopener">politique de confidentialité de Google</a>.</li>
+        <li><strong>jsDelivr</strong> : la bibliothèque KaTeX, chargée uniquement sur les articles qui contiennent des formules mathématiques. Voir la <a href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net" rel="noopener">politique de confidentialité de jsDelivr</a>.</li>
+      </ul>
+      <p>Aucun de ces services ne dépose de cookie par l’intermédiaire de ce site.</p>
+
+      <h2>5. Journaux d’accès et hébergement</h2>
       <p>Le site est hébergé par la société GitHub, Inc. (via le service GitHub Pages). Lors de votre navigation, l’infrastructure technique de l’hébergeur peut enregistrer de manière automatisée des journaux d’accès serveur (logs comprenant notamment l'adresse IP, le type de navigateur et la date de la requête).</p>
       <p>Ces journaux sont gérés directement et exclusivement par l’hébergeur pour des motifs strictement techniques et de sécurité réseau. Pour en savoir plus sur la gestion des données par l’hébergeur, vous pouvez consulter la <a href="https://docs.github.com/fr/site-policy/privacy-policies/github-privacy-statement">déclaration de confidentialité de GitHub</a>.</p>
 
-      <h2>5. Vos droits (RGPD)</h2>
+      <h2>6. Vos droits (RGPD)</h2>
       <p>Pour les données que vous transmettez via les formulaires du site (notamment l’adresse e-mail fournie lors de l’inscription à la newsletter), vous disposez conformément au RGPD et à la loi « Informatique et Libertés » de droits d’accès, de rectification et d’effacement. Vous pouvez les exercer en contactant le responsable de la publication.</p>
-      <p>Si vous souhaitez exercer un droit ou poser une question relative au fonctionnement du site, vous pouvez contacter le responsable de la publication via le moyen de contact indiqué sur le site.</p>
+      <p>Si vous souhaitez exercer un droit ou poser une question relative au fonctionnement du site, vous pouvez contacter le responsable de la publication à l’adresse indiquée dans la rubrique <a href="a-propos.html#contact">Contact</a>. Vous pouvez également adresser une réclamation à la <a href="https://www.cnil.fr/fr/plaintes" rel="noopener">CNIL</a>.</p>
 
-      <h2>6. Évolution de la politique</h2>
+      <h2>7. Évolution de la politique</h2>
       <p>Dans l’hypothèse où les fonctionnalités du site viendraient à évoluer (par exemple en intégrant de nouveaux services), la présente politique de confidentialité sera mise à jour au préalable pour refléter ces changements de manière transparente.</p>
 
     </div>
+    </main>
 
-      <footer class="pied">
+    <footer class="pied">
       <div class="pied-colonnes">
         <nav class="pied-col" aria-label="Plan du site">
           <h2>Plan du site</h2>
           <ul>
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
+            <li><a href="critique.html">Critiques</a></li>
             <li><a href="a-propos.html">À propos</a></li>
           </ul>
         </nav>
@@ -85,8 +116,8 @@
         </nav>
       </div>
       <p class="pied-copy">© 2026 La Tortue</p>
-    </footer>  
-  </main>
+    </footer>
+  </div>
 
 </body>
 </html>

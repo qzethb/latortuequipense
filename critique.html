@@ -44,11 +44,15 @@
     <main>
       <section class="billet-entete">
         <h1>Critiques</h1>
-        <div class="ornement"></div>
+        <p id="critique-resultats" class="resultats" aria-live="polite"></p>
       </section>
 
       <div class="outils outils-critiques" aria-label="Filtrer les critiques">
         <form class="recherche" role="search" id="formulaire">
+          <svg class="recherche-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <circle cx="10.8" cy="10.8" r="6.8"></circle>
+            <path d="m16 16 4.2 4.2"></path>
+          </svg>
           <label class="sr-only" for="recherche">Rechercher une critique</label>
           <input type="search" id="recherche" name="q" placeholder="Rechercher un titre, un auteur…" autocomplete="off">
           <button type="button" id="effacer" hidden>Effacer</button>
@@ -106,8 +110,6 @@
         </div>
 
       </div>
-
-      <p id="critique-resultats" class="resultats" aria-live="polite"></p>
 
       <!-- Liste des critiques façon "Le Culte d'Apophis" -->
       <section class="critique-section" id="section-critiques" aria-label="Liste des critiques">

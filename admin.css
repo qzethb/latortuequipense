@@ -1763,3 +1763,124 @@ body.adm { min-width: 320px; }
     box-shadow: 0 0 0 3px rgb(255 255 255 / 10%);
   }
 }
+
+
+/* 18. FINITIONS : NAVIGATION ENTRE ESPACES, AIDE CONTEXTUELLE, LISIBILITÉ
+   -------------------------------------------------------------------------- */
+/* L'attribut hidden doit toujours l'emporter (ex. l'étiquette « Édito » de
+   l'aperçu, que .etiquette { display: flex } faisait réapparaître). */
+body.adm [hidden] { display: none !important; }
+
+/* Sélecteur d'espace commun aux trois pages. */
+.adm-espaces {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding: 3px;
+  border: 1px solid var(--lilas);
+  border-radius: var(--adm-rayon);
+  background: var(--surface);
+}
+.adm-espaces a {
+  min-width: 0;
+  padding: 8px 2px;
+  border-radius: 2px;
+  color: var(--texte-doux);
+  font: 600 12px/1.2 var(--police-ui);
+  letter-spacing: .02em;
+  text-align: center;
+  text-transform: uppercase;
+  transition: background var(--transition), color var(--transition);
+}
+.adm-espaces a:hover { background: var(--brume); color: var(--violet-profond); }
+.adm-espaces a[aria-current="page"] {
+  background: var(--violet-profond);
+  color: var(--texte-sur-accent);
+}
+
+/* En-tête plus compact, avec l'aide propre à chaque mode de nouveau visible. */
+.adm-entete { padding: 40px 0 24px; }
+.adm-entete .ornement { margin: 16px 0 14px; }
+.adm-entete > p {
+  display: block;
+  max-width: 72ch;
+  color: var(--texte-doux);
+  font: 400 15px/1.5 var(--police-ui);
+}
+.adm-entete > p:empty { display: none; }
+
+/* Case « Se souvenir » : même typographie que le reste de l'interface. */
+.admin-case {
+  align-items: flex-start;
+  font: 400 14px/1.4 var(--police-ui);
+}
+.admin-case input { flex: 0 0 auto; margin-top: 2px; }
+
+/* Pastille de connexion : un point de couleur rend l'état lisible d'un coup d'œil. */
+.adm-pastille[data-etat]::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: currentColor;
+  vertical-align: 1px;
+}
+
+/* Focus clavier bien visible sur tous les contrôles de l'administration. */
+body.adm button:focus-visible,
+body.adm a:focus-visible,
+body.adm summary:focus-visible,
+body.adm input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--violet-profond);
+  outline-offset: 2px;
+}
+
+/* Statut de publication : un bandeau plutôt qu'une ligne de texte perdue. */
+.admin-statut[data-type] {
+  margin: 0 16px 10px;
+  padding: 9px 12px;
+  border-left: 3px solid currentColor;
+  background: var(--brume);
+}
+
+@media (max-width: 999px) {
+  .adm-espaces { max-width: 420px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.adm *, body.adm *::before { transition: none !important; }
+}
+
+/* Mode sombre : les surfaces blanches translucides deviennent des surfaces sombres. */
+:root[data-theme="dark"] body.adm { background: var(--fond); }
+:root[data-theme="dark"] .adm-lateral,
+:root[data-theme="dark"] .adm-connexion,
+:root[data-theme="dark"] .adm-panneau,
+:root[data-theme="dark"] .adm-carte-connexion,
+:root[data-theme="dark"] .notes-espace,
+:root[data-theme="dark"] .notes-liste,
+:root[data-theme="dark"] .admin-article-row,
+:root[data-theme="dark"] .adm-infos-champs .adm-bloc,
+:root[data-theme="dark"] .admin-champ input,
+:root[data-theme="dark"] .admin-champ textarea,
+:root[data-theme="dark"] .admin-champ select,
+:root[data-theme="dark"] .admin-formule-saisie input,
+:root[data-theme="dark"] .admin-image-fields input { background: var(--surface); color: var(--texte); }
+:root[data-theme="dark"] .adm-barre-bloc { background: var(--fond); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) body.adm { background: var(--fond); }
+  :root:not([data-theme]) .adm-lateral,
+  :root:not([data-theme]) .adm-connexion,
+  :root:not([data-theme]) .adm-panneau,
+  :root:not([data-theme]) .adm-carte-connexion,
+  :root:not([data-theme]) .notes-espace,
+  :root:not([data-theme]) .notes-liste,
+  :root:not([data-theme]) .admin-article-row,
+  :root:not([data-theme]) .adm-infos-champs .adm-bloc,
+  :root:not([data-theme]) .admin-champ input,
+  :root:not([data-theme]) .admin-champ textarea,
+  :root:not([data-theme]) .admin-champ select,
+  :root:not([data-theme]) .admin-formule-saisie input,
+  :root:not([data-theme]) .admin-image-fields input { background: var(--surface); color: var(--texte); }
+  :root:not([data-theme]) .adm-barre-bloc { background: var(--fond); }
+}

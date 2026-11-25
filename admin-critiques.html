@@ -16,7 +16,12 @@
 <div class="adm-app">
   <aside class="adm-lateral" aria-label="Administration">
     <a class="marque adm-marque" href="index.html"><img class="logo" src="logo.svg" alt="La Tortue"></a>
-    <p class="etiquette">Espace administration</p>
+    <nav class="adm-espaces" aria-label="Espaces d’administration">
+      <a href="admin.html">Articles</a>
+      <a href="admin-critiques.html" aria-current="page">Critiques</a>
+      <a href="admin-notes.html">Notes</a>
+    </nav>
+    <p class="etiquette">Actions · Critiques</p>
     <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration">
       <button type="button" class="adm-onglet" role="tab" id="onglet-nouvelle-critique" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-critique">
         <span>Rédiger</span><small>Critique</small>
@@ -40,8 +45,6 @@
       <p class="admin-aide">Créez un <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer">jeton à granularité fine</a> limité au dépôt <code>qzethb/latortuequipense</code>, avec la permission <code>Contents : Read and write</code>.</p>
     </details>
     <div class="adm-liens">
-      <a href="admin.html">Administration des articles</a>
-      <a href="admin-notes.html">Notes privées</a>
       <a href="index.html">Retour au site</a>
     </div>
   </aside>

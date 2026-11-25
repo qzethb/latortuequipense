@@ -4,9 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>La Tortue</title>
-<meta name="description" content="Des réflexions sur la société, la philosophie, la sociologie, la littérature et l’actualité, nourries par l’analyse et les données.">
+<meta name="description" content="La Tortue, journal en ligne d’analyse de l’actualité au prisme des sciences humaines et sociales : études argumentées et comptes rendus critiques d’ouvrages.">
 <link rel="stylesheet" href="charte.css">
 <link rel="stylesheet" href="critique.css">
+<link rel="stylesheet" href="accueil.css">
 <script src="menu.js" defer></script>
 <link rel="icon" type="image/png" href="favicon/favicon-96x96.png" sizes="96x96" />
 <link rel="icon" type="image/svg+xml" href="favicon/favicon.svg" />
@@ -31,64 +32,53 @@
       </nav>
     </header>
 
-    <section class="intro">
-      <h1>La Tortue</h1>
-      <div class="ornement"></div>
-      <p>Bienvenue sur le site de la Tortue ! Vous trouverez ici toutes mes réflexions et des comptes-rendus de mes dernières lectures !</p>
+    <main id="contenu">
+    <section class="intro accueil-une" aria-labelledby="titre-accueil">
+      <h1 id="titre-accueil">La <em>Tortue</em></h1>
+      <div class="une-corps">
+        <p class="une-chapo"></p>
+        <nav class="accueil-raccourcis" aria-label="Accès rapides">
+          <a href="#articles"><span>Derniers articles</span><span aria-hidden="true">↓</span></a>
+          <a href="#critiques"><span>Dernières critiques</span><span aria-hidden="true">↓</span></a>
+          <a href="newsletter.html"><span>Newsletter</span><span aria-hidden="true">→</span></a>
+        </nav>
+      </div>
     </section>
 
+    <section id="edito" class="accueil-edito" aria-label="Édito">
       <p class="etiquette">Édito</p>
       <div class="lecture-texte">
         <!-- EDITO_DEBUT -->
-        <p>Les élections de mi-mandat ont eu lieu ce 3 novembre aux États-Unis, et on a vu, dans l'espace médiatique, des qualificatifs qui laissent à entendre qu'il s'agit d'une victoire <em>historique</em>, une véritable vague bleue. Pourtant, est-ce que cette victoire est aussi exceptionnelle qu'on ne le laisse entendre ? N'est-elle pas, au contraire, attendue, au sens où elle est le résultat normal d'un schéma classique des élections américaines. Analysons les chiffres et voyons en quoi cette victoire est réellement historique <a href="https://latortuequipense.fr/articles/mi-mandat-usa.html" rel="noopener noreferrer" class="lien">à cet endroit !</a></p>
         <!-- EDITO_FIN -->
       </div>
+    </section>
 
-    <main>
-      <section id="articles-a-venir" style="margin-top: 5rem;">
+      <section id="articles-a-venir" aria-label="Articles à venir">
         <p class="etiquette">Articles à venir</p>
-        <div class="liste">
+        <div class="liste liste-avenir">
           <!-- AVENIR_DEBUT -->
         <!-- AVENIR_FIN -->
-          <a class="article" href="error.html">
+          <div class="article article--avenir">
             <span class="date">À venir</span>
-            <h2>Une analyse économique du jeu Wikimasters</h2>
-            <span class="fleche">→</span>
-          </a>
-          <a class="article" href="error.html">
+            <h2>Psycho-évolution, sociobiologie, mémétique&nbsp;: travers d’une science pas si dure que ça</h2>
+          </div>
+          <div class="article article--avenir">
             <span class="date">À venir</span>
-            <h2>Les sites Internet de classements, objectifs ?</h2>
-            <span class="fleche">→</span>
-          </a>
-          <a class="article" href="error.html">
+            <h2>Qui se trouve derrière ces nouveaux «&nbsp;médias&nbsp;IA&nbsp;» nés à la suite des mouvements lycéens&nbsp;?</h2>
+          </div>
+          <div class="article article--avenir">
             <span class="date">À venir</span>
             <h2>La non-violence, un privilège ?</h2>
-            <span class="fleche">→</span>
-          </a>
+          </div>
         </div>
       </section>
 
-      <section id="articles" style="margin-top: 5rem;">
+      <section id="articles" aria-label="Derniers articles">
       <p class="etiquette">Derniers articles</p>
       <span class="etiquette-echo etiquette-echo--one" aria-hidden="true">Derniers articles</span>
       <span class="etiquette-echo etiquette-echo--two" aria-hidden="true">Derniers articles</span>
       <span class="etiquette-echo etiquette-echo--three" aria-hidden="true">Derniers articles</span>
       <div class="liste">
-        <article class="article-row">
-          <a class="article" href="articles/mi-mandat-usa.html">
-            <span class="date">5 novembre 2026</span>
-            <span class="article-corps">
-              <h2>Les élections de mi-mandat de 2026 sont-elles vraiment une défaite historique&nbsp;?</h2>
-              <span class="article-description" id="description-mi-mandat-usa" aria-hidden="true">
-                Les médias parlent d'une défaite « historique » pour Trump aux midterms 2026. Analyse critique des résultats au Sénat et à la Chambre des représentants.
-              </span>
-            </span>
-            <span class="fleche" aria-hidden="true">→</span>
-          </a>
-          <button class="article-toggle" type="button" aria-label="Afficher la description de l’article" aria-expanded="false" aria-controls="description-mi-mandat-usa">
-            <span class="fleche" aria-hidden="true">↓</span>
-          </button>
-        </article>
         <!-- ARTICLES_GENERES_DEBUT -->
 <article class="article-row">
   <a class="article" href="articles/peine-de-mort-usa.html">
@@ -116,21 +106,6 @@
             <span class="fleche" aria-hidden="true">→</span>
           </a>
           <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-hussard">
-            <span class="fleche" aria-hidden="true">↓</span>
-          </button>
-        </article>
-        <article class="article-row">
-          <a class="article" href="articles/decryptage-discours-presidentiel.html">
-            <span class="date">20 octobre 2026</span>
-            <span class="article-corps">
-              <h2>Décryptage du discours présidentiel du 18 octobre 2026</h2>
-              <span class="article-description" id="description-discours-presidentiel" aria-hidden="true">
-                Au lendemain des manifestations violentes du 17 octobre 2026, l’allocution solennelle du Président de la République prétend ramener le calme. Mais à travers un cadrage centré sur le maintien de l’ordre et l’évitement des causes profondes de la colère sociale, le discours présidentiel opère un verrouillage démocratique inquiétant. Analyse d’une stratégie de langage qui préfère la répression au dialogue.
-              </span>
-            </span>
-            <span class="fleche" aria-hidden="true">→</span>
-          </a>
-          <button class="article-toggle" type="button" aria-label="Afficher la description de l'article" aria-expanded="false" aria-controls="description-discours-presidentiel">
             <span class="fleche" aria-hidden="true">↓</span>
           </button>
         </article>
@@ -168,7 +143,7 @@
       <p class="suite"><a href="articles.html">Tous les articles</a></p>
       </section>
 
-      <section id="critiques" style="margin-top: 5rem;">
+      <section id="critiques" aria-label="Dernières critiques">
         <p class="etiquette">Dernières critiques</p>
         <span class="etiquette-echo etiquette-echo--one" aria-hidden="true">Dernières critiques</span>
         <span class="etiquette-echo etiquette-echo--two" aria-hidden="true">Dernières critiques</span>
@@ -264,6 +239,7 @@ indistinctes et floues, psychologie évolutionnaire, biologie comportementale,�
           <ul>
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
+            <li><a href="critique.html">Critiques</a></li>
             <li><a href="a-propos.html">À propos</a></li>
           </ul>
         </nav>

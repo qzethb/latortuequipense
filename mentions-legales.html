@@ -21,7 +21,23 @@
 </head>
 <body>
 
-  <main class="page page--lecture">
+  <div class="page page--lecture">
+
+    <header>
+      <a class="marque" href="index.html">
+        <img class="logo" src="logo.svg" alt="La Tortue">
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="navigation-principale">
+        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+      </button>
+      <nav id="navigation-principale" class="navigation" aria-label="Navigation principale">
+        <a href="articles.html">Articles</a>
+        <a href="critique.html">Critiques</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </header>
+
+    <main id="contenu">
 
     <div class="billet-entete">
       <h1>Mentions légales</h1>
@@ -32,6 +48,7 @@
       <h2>1. Édition du site</h2>
       <p>Le présent site est édité à titre non professionnel par un particulier, dans le cadre d’une activité personnelle et non commerciale.</p>
       <p>Conformément à l’article 1-1, II, de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique (LCEN), l’éditeur a choisi de préserver son anonymat. Ses éléments d’identification personnelle ont été communiqués à son fournisseur d’hébergement, dans les conditions prévues par la législation applicable.</p>
+      <p>Pour contacter l’éditeur : <a href="mailto:latortuequipense@yahoo.com">latortuequipense@yahoo.com</a> (voir aussi la rubrique <a href="a-propos.html#contact">Contact</a>).</p>
 
       <h2>2. Hébergement</h2>
       <p>Le présent site est hébergé par :</p>
@@ -62,13 +79,16 @@
       <p>Les principaux textes de référence sont la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l’économie numérique, notamment son article 1-1, ainsi que le Code de la propriété intellectuelle.</p>
 
     </div>
-      <footer class="pied">
+    </main>
+
+    <footer class="pied">
       <div class="pied-colonnes">
         <nav class="pied-col" aria-label="Plan du site">
           <h2>Plan du site</h2>
           <ul>
             <li><a href="index.html">Accueil</a></li>
             <li><a href="articles.html">Articles</a></li>
+            <li><a href="critique.html">Critiques</a></li>
             <li><a href="a-propos.html">À propos</a></li>
           </ul>
         </nav>
@@ -88,8 +108,8 @@
         </nav>
       </div>
       <p class="pied-copy">© 2026 La Tortue</p>
-    </footer>  
-  </main>
+    </footer>
+  </div>
 
 </body>
 </html>

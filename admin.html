@@ -20,7 +20,12 @@
 
   <aside class="adm-lateral" aria-label="Administration">
     <a class="marque adm-marque" href="index.html"><img class="logo" src="logo.svg" alt="La Tortue"></a>
-    <p class="etiquette">Espace administration</p>
+    <nav class="adm-espaces" aria-label="Espaces d’administration">
+      <a href="admin.html" aria-current="page">Articles</a>
+      <a href="admin-critiques.html">Critiques</a>
+      <a href="admin-notes.html">Notes</a>
+    </nav>
+    <p class="etiquette">Actions · Articles</p>
 
     <div class="adm-onglets" role="tablist" aria-orientation="vertical" aria-label="Mode d’administration">
       <button type="button" class="adm-onglet" role="tab" id="onglet-nouveau" data-mode="nouveau" aria-selected="true" tabindex="0" aria-controls="formulaire-article"><span>Rédiger</span><small>Article</small></button>
@@ -44,8 +49,6 @@
     </details>
 
     <div class="adm-liens">
-      <a href="admin-critiques.html">Administration des critiques</a>
-      <a href="admin-notes.html">Notes privées</a>
       <a href="index.html">Retour au site</a>
     </div>
   </aside>
@@ -54,7 +57,7 @@
     <section class="adm-entete">
       <h1 id="titre-page">Nouvel article</h1>
       <div class="ornement"></div>
-      <p id="intro-page">Rédigez un nouvel article ici. Pensez à remplir toutes les sections et à demander l'autorisation de publication.</p>
+      <p id="intro-page">Rédigez votre article ici. Sa page et ses aperçus seront générés automatiquement après son envoi sur GitHub.</p>
     </section>
 
     <section id="panneau-modifier" class="adm-panneau" hidden>

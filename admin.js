@@ -1868,7 +1868,8 @@
       showStep("redaction");
       updateFormVisibility();
       refreshState();
-      form.scrollIntoView({ behavior: "smooth", block: "start" });
+      const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      form.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "start" });
       setStatus("");
     } catch (error) {
       listStatus.textContent = `Chargement impossible : ${error.message}.`;
